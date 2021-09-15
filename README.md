@@ -1,6 +1,6 @@
 # vector
 ## notes
-### iterator
+#### iterator
 - Input Iterator : utilisés pour lire !=, ++, *</br>
 - Output Iterator : utilisés pour écrire dans un container </br>
 - Forward Iterator : est un InputIterator et un OutputIterator</br>
