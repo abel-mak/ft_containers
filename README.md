@@ -8,16 +8,16 @@
 - Random Access Iterator
 Il peut être vu comme un pointeur sur un élément d'un container et utilise des fonctions comme :
 
-operator* : retourne l'élément pointé par l'itérateur
-operator++ : permet de passer à l'élément suivant
-operator== et operator!= permet de comparer deux itérateurs et s'ils pointent sur le même élément
+operator* : retourne l'élément pointé par l'itérateur. 
+operator++ : permet de passer à l'élément suivant. 
+operator== et operator!= permet de comparer deux itérateurs et s'ils pointent sur le même élément<br/>
 Chaque container possède 4 fonctions à utiliser avec les itérateurs :
 
-begin() : retourne un pointeur sur le premier élément du container
-end() : retourne un pointeur situé après le dernier élément du container
-cbegin() : comme begin() mais constant (read-only)
-cend() :comme end() mais constant (read-only)
+begin() : retourne un pointeur sur le premier élément du container. 
+end() : retourne un pointeur situé après le dernier élément du container. 
+cbegin() : comme begin() mais constant (read-only). 
+cend() :comme end() mais constant (read-only). 
 Chaque container possède au moins 2 types d'itérateurs :
 
-container::iterator : itérateur (read/write)
-container::const_iterator() : itérateur (read-only)
+container::iterator : itérateur (read/write). 
+container::const_iterator() : itérateur (read-only). 
