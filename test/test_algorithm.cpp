@@ -6,13 +6,13 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 15:25:01 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/20 17:20:10 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/20 18:23:38 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src/algorithm.hpp"
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "./doctest/doctest/doctest.h"
+#include "doctest.h"
 
 template <typename T1, typename T2>
 bool comp(T1 a, T2 b)
