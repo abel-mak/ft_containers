@@ -6,15 +6,19 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:49 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/15 15:56:07 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/18 16:59:19 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <iterator>
+/// /Library/Developer/CommandLineTools/usr/include/c++/v1/
 #include <iostream>
+#include <iterator>
+
+#include "iterator.hpp"
+
 namespace ft
 {
 	template <typename T>
@@ -28,10 +32,9 @@ namespace ft
 			int b;
 		};
 
-		class iterator : public std::iterator
-		{
-
-		};
+		// class iterator : public std::iterator<>
+		//{
+		//};
 
 	public:
 		vector(void);
