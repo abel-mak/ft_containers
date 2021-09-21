@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 17:27:08 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/20 18:11:14 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/21 17:20:53 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 namespace ft
 {
+	/*
+	 * pair
+	 */
 	template <typename T1, typename T2>
 	struct pair
 	{
@@ -25,6 +28,12 @@ namespace ft
 		first_type first;
 		second_type second;
 		pair &operator=(const pair &rhs);
+		bool operator==(const pair &rhs) const;
+		bool operator!=(const pair &rhs) const;
+		bool operator<(const pair &rhs) const;
+		bool operator>(const pair &rhs) const;
+		bool operator>=(const pair &rhs) const;
+		bool operator<=(const pair &rhs) const;
 		pair(const pair &src);
 		pair(void);
 		pair(const T1 &a, const T2 &b);
@@ -49,6 +58,47 @@ namespace ft
 	template <typename T1, typename T2>
 	pair<T1, T2>::pair(const T1 &a, const T2 &b) : first(a), second(b)
 	{
+	}
+	template <typename T1, typename T2>
+	bool pair<T1, T2>::operator==(const pair<T1, T2> &rhs) const
+	{
+		return (this->first == rhs.first && this->second == rhs.second);
+	}
+	template <typename T1, typename T2>
+	bool pair<T1, T2>::operator!=(const pair<T1, T2> &rhs) const
+	{
+		return (this->first != rhs.first || this->second != rhs.second);
+	}
+	template <typename T1, typename T2>
+	bool pair<T1, T2>::operator<(const pair<T1, T2> &rhs) const
+	{
+		if (this->first < rhs.first ||
+		    (this->first == rhs.first && this->second < rhs.second))
+			return (true);
+		return (false);
+	}
+	template <typename T1, typename T2>
+	bool pair<T1, T2>::operator>(const pair<T1, T2> &rhs) const
+	{
+		return (rhs < (*this));
+	}
+	template <typename T1, typename T2>
+	bool pair<T1, T2>::operator>=(const pair<T1, T2> &rhs) const
+	{
+		return (!(*this < rhs));
+	}
+	template <typename T1, typename T2>
+	bool pair<T1, T2>::operator<=(const pair<T1, T2> &rhs) const
+	{
+		return (!(*this > rhs));
+	}
+	/*
+	 * make_pair
+	 */
+	template <typename T1, typename T2>
+	pair<T1, T2> make_pair(T1 a, T2 b)
+	{
+		return pair<T1, T2>(a, b);
 	}
 }  // namespace ft
 

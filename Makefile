@@ -6,7 +6,7 @@
 #    By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/10 17:10:37 by abel-mak          #+#    #+#              #
-#    Updated: 2021/09/20 18:01:08 by abel-mak         ###   ########.fr        #
+#    Updated: 2021/09/21 13:43:01 by abel-mak         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME=ft
 
 SRC=main.cpp 
 
-TEST_SRC=test_algorithm.cpp
+TEST_SRC:=$(wildcard ./test/test*.cpp)
 
 TEST_OUT=ft_test
 
@@ -31,8 +31,8 @@ all: $(NAME)
 $(NAME): $(SRC) $(HDR) 
 	clang++ $(FLAGS) $(SRC) -o $(NAME) 
 
-test1: $(addprefix test/, $(TEST_SRC))
-	clang++ -std=c++11 $< -o $(TEST_OUT) && ./$(TEST_OUT)
+test1: $(TEST_SRC) 
+	clang++ -std=c++11 $(TEST_SRC) -o $(TEST_OUT) && ./$(TEST_OUT)
 
 clean:
 	rm -f $(NAME) $(TEST_OUT)
