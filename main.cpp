@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/20 18:11:16 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/22 18:10:36 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,18 @@ int main()
 	std::string s2 = "abcdef";
 	ft::pair<int, int> a;
 	ft::pair<int, int> b;
+	ft::vector<int> x;
+	ft::vector<int>::iterator iter = x.begin();
+	int i;
 
-	a = b;
-	std::cout << std::lexicographical_compare(s1.begin(), s1.end(), s2.begin(),
-	                                          s2.end())
-	          << std::endl;
-	std::cout << ft::lexicographical_compare(s1.begin(), s1.end(), s2.begin(),
-	                                         s2.end())
-	          << std::endl;
-	std::equal(s1.begin(), s1.end(), s2.begin());
+	i = 0;
+	while (i < 4)
+	{
+		std::cout << *iter << std::endl;
+		iter++;
+		i++;
+	}
+	// std::equal(s1.begin(), s1.end(), s2.begin());
 	//	std::cout << ft::is_integral<std::vector<int> >::value << std::endl;
 	//	std::cout << std::is_integral<std::vector<int> >::value <<
 	// std::endl;
@@ -70,6 +73,6 @@ int main()
 	// put(a[0]);
 	// put(a.size());
 	// put(a.capacity());
-	myints.push_back(10);
+	// myints.push_back(10);
 	return (0);
 }
