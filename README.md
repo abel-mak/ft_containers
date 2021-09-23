@@ -21,3 +21,22 @@ Chaque container possède au moins 2 types d'itérateurs :
 
 container::iterator : itérateur (read/write)</br>
 container::const_iterator() : itérateur (read-only)</br> 
+
+#### initializtion
+###### types
+- Value initialization, e.g. std::string s{};</br>
+- Direct initialization, e.g. std::string s("hello");</br>
+- Copy initialization, e.g. std::string s = "hello";</br>
+- List initialization, e.g. std::string s{'a', 'b', 'c'};</br>
+- Aggregate initialization, e.g. char a[3] = {'a', 'b'};</br>
+- Reference initialization, e.g. char& c = a[0];</br>
+###### Copy initialization
+- Copy-initialization is less permissive than direct-initialization: explicit constructors are not converting constructors and are not considered for copy-initialization.<br>
+<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="cpp source-cpp"><pre class="de1"><span class="kw1">struct</span> Exp <span class="br0">{</span> <span class="kw1">explicit</span> Exp<span class="br0">(</span><span class="kw4">const</span> <span class="kw4">char</span><span class="sy2">*</span><span class="br0">)</span> <span class="br0">{</span><span class="br0">}</span> <span class="br0">}</span><span class="sy4">;</span> <span class="co1">// not convertible from const char*</span>
+Exp e1<span class="br0">(</span><span class="st0">"abc"</span><span class="br0">)</span><span class="sy4">;</span>  <span class="co1">// OK</span>
+Exp e2 <span class="sy1">=</span> <span class="st0">"abc"</span><span class="sy4">;</span> <span class="co1">// Error, copy-initialization does not consider explicit constructor</span>
+&nbsp;
+<span class="kw1">struct</span> Imp <span class="br0">{</span> Imp<span class="br0">(</span><span class="kw4">const</span> <span class="kw4">char</span><span class="sy2">*</span><span class="br0">)</span> <span class="br0">{</span><span class="br0">}</span> <span class="br0">}</span><span class="sy4">;</span> <span class="co1">// convertible from const char*</span>
+Imp i1<span class="br0">(</span><span class="st0">"abc"</span><span class="br0">)</span><span class="sy4">;</span>  <span class="co1">// OK</span>
+Imp i2 <span class="sy1">=</span> <span class="st0">"abc"</span><span class="sy4">;</span> <span class="co1">// OK</span></pre></div></div>
+
