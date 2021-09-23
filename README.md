@@ -40,3 +40,6 @@ Exp e2 <span class="sy1">=</span> <span class="st0">"abc"</span><span class="sy4
 Imp i1<span class="br0">(</span><span class="st0">"abc"</span><span class="br0">)</span><span class="sy4">;</span>  <span class="co1">// OK</span>
 Imp i2 <span class="sy1">=</span> <span class="st0">"abc"</span><span class="sy4">;</span> <span class="co1">// OK</span></pre></div></div>
 
+## Links
+- [Why is the copy constructor not called?](https://stackoverflow.com/questions/3663506/why-is-the-copy-constructor-not-called)
+- 
