@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/22 18:10:35 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/23 17:48:19 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define ITERATOR_HPP
 
 #include <iterator>
+
 /*
  * iterator tags are used so that for example a function has different
  * implementation for each type of iterator, it will specify that in the
@@ -70,8 +71,20 @@ namespace ft
 	public:
 		normal_iterator(void);
 		normal_iterator(P current);
-		normal_iterator &operator++(int);
-		typename normal_iterator<P>::value_type &operator*();
+		explicit normal_iterator(const normal_iterator &src);
+		normal_iterator(normal_iterator &src);
+		typename normal_iterator<P>::reference operator*();
+		normal_iterator<P> &operator++(int);
+		normal_iterator<P> operator++();
+		normal_iterator<P> &operator--(int);
+		normal_iterator<P> operator--();
+		normal_iterator<P> &operator=(const normal_iterator &rhs);
+		typename normal_iterator<P>::reference operator[](
+		    const typename normal_iterator<P>::difference_type &n);
+		normal_iterator<P> &operator+=(
+		    const typename normal_iterator<P>::difference_type &n);
+		normal_iterator<P> operator+(
+		    const typename normal_iterator<P>::difference_type &n);
 	};
 	template <typename P>
 	normal_iterator<P>::normal_iterator(P current) : current(current)
@@ -82,15 +95,72 @@ namespace ft
 	{
 	}
 	template <typename P>
+	normal_iterator<P>::normal_iterator(const normal_iterator<P> &src)
+	{
+		*this = src;
+	}
+	template <typename P>
+	normal_iterator<P>::normal_iterator(normal_iterator<P> &src)
+	{
+		*this = src;
+	}
+	template <typename P>
 	normal_iterator<P> &normal_iterator<P>::operator++(int)
 	{
 		this->current++;
 		return (*this);
 	}
 	template <typename P>
-	typename normal_iterator<P>::value_type &normal_iterator<P>::operator*()
+	typename normal_iterator<P>::reference normal_iterator<P>::operator*()
 	{
 		return (*(this->current));
+	}
+	template <typename P>
+	normal_iterator<P> normal_iterator<P>::operator++()
+	{
+		normal_iterator<P> tmp(this->current);
+		this->current++;
+		return (tmp);
+	}
+	template <typename P>
+	normal_iterator<P> &normal_iterator<P>::operator--(int)
+	{
+		this->current--;
+		return (*this);
+	}
+	template <typename P>
+	normal_iterator<P> normal_iterator<P>::operator--()
+	{
+		normal_iterator<P> tmp(this->current);
+		this->current--;
+		return (tmp);
+	}
+	template <typename P>
+	normal_iterator<P> &normal_iterator<P>::operator+=(
+	    const typename normal_iterator<P>::difference_type &n)
+	{
+		this->current += n;
+		return (*this);
+	}
+	template <typename P>
+	normal_iterator<P> normal_iterator<P>::operator+(
+	    const typename normal_iterator<P>::difference_type &n)
+	{
+		normal_iterator<P> tmp(this->current + n);
+		return (tmp);
+	}
+	template <typename P>
+	normal_iterator<P> &normal_iterator<P>::operator=(
+	    const normal_iterator<P> &rhs)
+	{
+		this->current = rhs.current;
+		return (*this);
+	}
+	template <typename P>
+	typename normal_iterator<P>::reference normal_iterator<P>::operator[](
+	    const typename normal_iterator<P>::difference_type &n)
+	{
+		return this->current[n];
 	}
 	/**************************************************************************/
 	template <typename I>

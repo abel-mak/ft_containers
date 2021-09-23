@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/22 18:10:36 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/23 17:48:20 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,15 @@ int main()
 	ft::pair<int, int> a;
 	ft::pair<int, int> b;
 	ft::vector<int> x;
-	ft::vector<int>::iterator iter = x.begin();
+	ft::vector<int>::iterator iter(x.begin());
 	int i;
 
 	i = 0;
+	//(void)iter;
 	while (i < 4)
 	{
 		std::cout << *iter << std::endl;
-		iter++;
+		++iter;
 		i++;
 	}
 	// std::equal(s1.begin(), s1.end(), s2.begin());
