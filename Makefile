@@ -6,11 +6,13 @@
 #    By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/10 17:10:37 by abel-mak          #+#    #+#              #
-#    Updated: 2021/09/21 13:43:01 by abel-mak         ###   ########.fr        #
+#    Updated: 2021/09/24 14:56:55 by abel-mak         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=ft
+
+NAME_DEBUG=ft_debug
 
 SRC=main.cpp 
 
@@ -24,6 +26,8 @@ OBJ= $(SRC:.cpp=.o)
 
 FLAGS= -Wall -Wextra -Werror -std=c++98
 
+FLAGS_DEBUG= -Wall -Wextra -Werror -fno-elide-constructors -O0 -std=c++98
+
 HDR=$(wildcard ./src/*.hpp)
 
 all: $(NAME)
@@ -35,8 +39,10 @@ test1: $(TEST_SRC)
 	clang++ -std=c++11 $(TEST_SRC) -o $(TEST_OUT) && ./$(TEST_OUT)
 
 clean:
-	rm -f $(NAME) $(TEST_OUT)
+	rm -f $(NAME) $(TEST_OUT) $(NAME_DEBUG)
 
+debug: $(SRC) $(HDR)
+	clang++ $(FLAGS_DEBUG) $(SRC) -o $(NAME_DEBUG)
 #NAME=
 #
 #SRC= 

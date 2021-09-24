@@ -6,15 +6,15 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/23 17:48:19 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/24 18:04:01 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
+#include <iostream>
 #include <iterator>
-
 /*
  * iterator tags are used so that for example a function has different
  * implementation for each type of iterator, it will specify that in the
@@ -57,6 +57,20 @@ namespace ft
 		typedef Reference reference;
 	};
 	/**************************************************************************/
+	/*
+	 * __wrap_iter
+	 * [x] operator++()
+	 * [x] operator++(int)
+	 * [x] operator--()
+	 * [x] operator--(int)
+	 * [x] operator*()
+	 * [] operator->()
+	 * [x] operator+=()
+	 * [x] operator+()
+	 * [x] operator-=()
+	 * [x] operator-()
+	 * [x] base()
+	 */
 	template <typename P>
 	class normal_iterator
 	    : public iterator<typename iterator_traits<P>::iterator_category,
@@ -71,8 +85,7 @@ namespace ft
 	public:
 		normal_iterator(void);
 		normal_iterator(P current);
-		explicit normal_iterator(const normal_iterator &src);
-		normal_iterator(normal_iterator &src);
+		normal_iterator(const normal_iterator &src);
 		typename normal_iterator<P>::reference operator*();
 		normal_iterator<P> &operator++(int);
 		normal_iterator<P> operator++();
@@ -84,7 +97,12 @@ namespace ft
 		normal_iterator<P> &operator+=(
 		    const typename normal_iterator<P>::difference_type &n);
 		normal_iterator<P> operator+(
+		    const typename normal_iterator<P>::difference_type &n) const;
+		normal_iterator<P> &operator-=(
 		    const typename normal_iterator<P>::difference_type &n);
+		normal_iterator<P> operator-(
+		    const typename normal_iterator<P>::difference_type &n) const;
+		const P &base(void);
 	};
 	template <typename P>
 	normal_iterator<P>::normal_iterator(P current) : current(current)
@@ -97,12 +115,7 @@ namespace ft
 	template <typename P>
 	normal_iterator<P>::normal_iterator(const normal_iterator<P> &src)
 	{
-		*this = src;
-	}
-	template <typename P>
-	normal_iterator<P>::normal_iterator(normal_iterator<P> &src)
-	{
-		*this = src;
+		this->current = src.current;
 	}
 	template <typename P>
 	normal_iterator<P> &normal_iterator<P>::operator++(int)
@@ -136,6 +149,12 @@ namespace ft
 		return (tmp);
 	}
 	template <typename P>
+	typename normal_iterator<P>::reference normal_iterator<P>::operator[](
+	    const typename normal_iterator<P>::difference_type &n)
+	{
+		return this->current[n];
+	}
+	template <typename P>
 	normal_iterator<P> &normal_iterator<P>::operator+=(
 	    const typename normal_iterator<P>::difference_type &n)
 	{
@@ -144,23 +163,29 @@ namespace ft
 	}
 	template <typename P>
 	normal_iterator<P> normal_iterator<P>::operator+(
-	    const typename normal_iterator<P>::difference_type &n)
+	    const typename normal_iterator<P>::difference_type &n) const
 	{
 		normal_iterator<P> tmp(this->current + n);
 		return (tmp);
 	}
 	template <typename P>
-	normal_iterator<P> &normal_iterator<P>::operator=(
-	    const normal_iterator<P> &rhs)
+	normal_iterator<P> &normal_iterator<P>::operator-=(
+	    const typename normal_iterator<P>::difference_type &n)
 	{
-		this->current = rhs.current;
+		this->current += n;
 		return (*this);
 	}
 	template <typename P>
-	typename normal_iterator<P>::reference normal_iterator<P>::operator[](
-	    const typename normal_iterator<P>::difference_type &n)
+	normal_iterator<P> normal_iterator<P>::operator-(
+	    const typename normal_iterator<P>::difference_type &n) const
 	{
-		return this->current[n];
+		normal_iterator<P> tmp(this->current - n);
+		return (tmp);
+	}
+	template <typename P>
+	const P &normal_iterator<P>::base(void)
+	{
+		return (this->current);
 	}
 	/**************************************************************************/
 	template <typename I>

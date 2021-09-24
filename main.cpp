@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/23 17:48:20 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/24 18:04:02 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,20 @@ int main()
 	ft::pair<int, int> a;
 	ft::pair<int, int> b;
 	ft::vector<int> x;
-	ft::vector<int>::iterator iter(x.begin());
+	ft::vector<int>::iterator iter   = x.begin();
+	std::vector<int>::iterator iter2 = myints.begin();
 	int i;
 
+	std::cout << iter2.base() << std::endl;
+	std::cout << iter2.base() << std::endl;
 	i = 0;
-	//(void)iter;
-	while (i < 4)
-	{
-		std::cout << *iter << std::endl;
-		++iter;
-		i++;
-	}
+	(void)iter;
+	//	while (i < 4)
+	//	{
+	//		std::cout << *iter << std::endl;
+	//		iter++;
+	//		i++;
+	//	}
 	// std::equal(s1.begin(), s1.end(), s2.begin());
 	//	std::cout << ft::is_integral<std::vector<int> >::value << std::endl;
 	//	std::cout << std::is_integral<std::vector<int> >::value <<
