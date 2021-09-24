@@ -48,7 +48,7 @@ template<bool B, typename T = void>
 struct my_if 
 {
 };
-template<typename T>
+template <typename T>
 struct my_if<true,T> 
 {
  typedef T type;
@@ -56,7 +56,7 @@ struct my_if<true,T>
 </pre>
 
 <pre>
-template<typename T>
+template <typename T>
 typename my_if<std::is_integral<T>::value,T>::type uneFonction(T x);
 </pre>
 
