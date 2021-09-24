@@ -45,17 +45,20 @@ Imp i2 <span class="sy1">=</span> <span class="st0">"abc"</span><span class="sy4
 - this can be used when you want to define a function of specific type for example, an int defined function
 <pre>
 template<bool B, typename T = void>
-struct my_if {};
+struct my_if 
+{
+};
 template<typename T>
-struct my_if<true,T> {
+struct my_if<true,T> 
+{
  typedef T type;
 };
 </pre>
-template<typename T>
-typename
- my_if<std::is_integral<T>::value,T>::type
- uneFonction(T x);
+
 <pre>
+template<typename T>
+typename my_if<std::is_integral<T>::value,T>::type uneFonction(T x);
+</pre>
 
 
 
