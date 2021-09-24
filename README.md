@@ -40,6 +40,25 @@ Exp e2 <span class="sy1">=</span> <span class="st0">"abc"</span><span class="sy4
 Imp i1<span class="br0">(</span><span class="st0">"abc"</span><span class="br0">)</span><span class="sy4">;</span>  <span class="co1">// OK</span>
 Imp i2 <span class="sy1">=</span> <span class="st0">"abc"</span><span class="sy4">;</span> <span class="co1">// OK</span></pre></div></div>
 
+#### SFINAE (Substitution Failure Is Not An Error) 
+- means that when compiler try to substitute types in declaration of a function template, and this substitution fails, this is not considered an error, the compiler try to find another templates, to make the substitution, if he doens't succeed then it's an error.
+- this can be used when you want to define a function of specific type for example, an int defined function
+<pre>
+template<bool B, typename T = void>
+struct my_if {};
+template<typename T>
+struct my_if<true,T> {
+ typedef T type;
+};
+</pre>
+template<typename T>
+typename
+ my_if<std::is_integral<T>::value,T>::type
+ uneFonction(T x);
+<pre>
+
+
+
 ## Links
 - [Why is the copy constructor not called?](https://stackoverflow.com/questions/3663506/why-is-the-copy-constructor-not-called)
 - 
