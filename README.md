@@ -42,7 +42,7 @@ Imp i2 <span class="sy1">=</span> <span class="st0">"abc"</span><span class="sy4
 
 #### SFINAE (Substitution Failure Is Not An Error) [src](http://yunes.informatique.univ-paris-diderot.fr/wp-content/uploads/cours/LOA/2019/128-Idiomes.pdf)
 - means that when compiler try to substitute types in declaration of a function template, and this substitution fails, this is not considered an error, the compiler try to find another templates, to make the substitution, if he doens't succeed then it's an error.
-- this can be used when you want to define a function of specific type for example, an int defined function
+- this can be used when you want to define a function of specific type for example, an return int defined function
 ```
 template <bool B, typename T = void>
 struct my_if 
