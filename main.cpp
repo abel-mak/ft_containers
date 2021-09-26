@@ -6,11 +6,12 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/24 18:04:02 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/26 14:20:55 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cassert>
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -39,6 +40,12 @@ void put(int const s)
 	std::cout << s << std::endl;
 }
 
+struct test
+{
+	int a;
+	int b;
+};
+
 int main()
 {
 	// ft::vector<int> a(5, 2);
@@ -49,34 +56,20 @@ int main()
 	ft::pair<int, int> a;
 	ft::pair<int, int> b;
 	ft::vector<int> x;
-	ft::vector<int>::iterator iter   = x.begin();
-	std::vector<int>::iterator iter2 = myints.begin();
-	int i;
+	//	ft::vector<int>::iterator iter   = x.begin();
+	//	std::vector<int>::iterator iter2 = myints.begin();
+	//	ft::vector<int>::iterator *iterp;
+	//	int i;
+	struct test t1;
+	t1.a = 1997;
+	std::vector<struct test> t(1, t1);
+	std::vector<struct test>::iterator t_iter = t.begin();
+	// std::cout << t1.a << std::endl;
 
-	std::cout << iter2.base() << std::endl;
-	std::cout << iter2.base() << std::endl;
-	i = 0;
-	(void)iter;
-	//	while (i < 4)
-	//	{
-	//		std::cout << *iter << std::endl;
-	//		iter++;
-	//		i++;
-	//	}
-	// std::equal(s1.begin(), s1.end(), s2.begin());
-	//	std::cout << ft::is_integral<std::vector<int> >::value << std::endl;
-	//	std::cout << std::is_integral<std::vector<int> >::value <<
-	// std::endl;
-	// assert(myints[0] == a[0]);
-	// assert(myints.size() == a.size());
-	// assert(myints.capacity() == a.capacity());
-	// std::cout << "✅" << std::endl;
-	// put(myints[0]);
-	// put(myints.size());
-	// put(myints.capacity());
-	// put(a[0]);
-	// put(a.size());
-	// put(a.capacity());
-	// myints.push_back(10);
+	while (t_iter != t.end())
+	{
+		std::cout << (*t_iter).a << std::endl;
+		t_iter++;
+	}
 	return (0);
 }

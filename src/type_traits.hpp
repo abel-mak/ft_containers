@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/19 15:37:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/19 16:53:23 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/26 15:32:29 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,16 @@ namespace ft
 	template <>
 	struct is_integral<unsigned long long> : public is_integral<bool>
 	{
+	};
+	/**************************************************************************/
+	template <bool Cond, typename T = void>
+	struct enable_if
+	{
+	};
+	template <typename T>
+	struct enable_if<true, T>
+	{
+		typedef T type;
 	};
 }  // namespace ft
 

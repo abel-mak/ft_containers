@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/24 18:04:01 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/26 17:24:15 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ namespace ft
 	          typename Pointer = T *, typename Reference = T &>
 	class iterator
 	{
-	public:
 		typedef Category iterator_category;
 		typedef T value_type;
 		typedef Distance difference_type;
@@ -59,12 +58,13 @@ namespace ft
 	/**************************************************************************/
 	/*
 	 * __wrap_iter
+	 * [] other constructors
 	 * [x] operator++()
 	 * [x] operator++(int)
 	 * [x] operator--()
 	 * [x] operator--(int)
 	 * [x] operator*()
-	 * [] operator->()
+	 * [x] operator->()
 	 * [x] operator+=()
 	 * [x] operator+()
 	 * [x] operator-=()
@@ -83,26 +83,29 @@ namespace ft
 		P current;
 
 	public:
+		typedef P iterator_type;
+		typedef
+		    typename iterator_traits<P>::iterator_category iterator_category;
+		typedef typename iterator_traits<P>::value_type value_type;
+		typedef typename iterator_traits<P>::difference_type difference_type;
+		typedef typename iterator_traits<P>::pointer pointer;
+		typedef typename iterator_traits<P>::reference reference;
+
 		normal_iterator(void);
 		normal_iterator(P current);
 		normal_iterator(const normal_iterator &src);
-		typename normal_iterator<P>::reference operator*();
-		normal_iterator<P> &operator++(int);
-		normal_iterator<P> operator++();
-		normal_iterator<P> &operator--(int);
-		normal_iterator<P> operator--();
-		normal_iterator<P> &operator=(const normal_iterator &rhs);
-		typename normal_iterator<P>::reference operator[](
-		    const typename normal_iterator<P>::difference_type &n);
-		normal_iterator<P> &operator+=(
-		    const typename normal_iterator<P>::difference_type &n);
-		normal_iterator<P> operator+(
-		    const typename normal_iterator<P>::difference_type &n) const;
-		normal_iterator<P> &operator-=(
-		    const typename normal_iterator<P>::difference_type &n);
-		normal_iterator<P> operator-(
-		    const typename normal_iterator<P>::difference_type &n) const;
+		reference operator*();
+		normal_iterator &operator++(int);
+		normal_iterator operator++();
+		normal_iterator &operator--(int);
+		normal_iterator operator--();
+		reference operator[](const difference_type &n);
+		normal_iterator &operator+=(const difference_type &n);
+		normal_iterator operator+(const difference_type &n) const;
+		normal_iterator &operator-=(const difference_type &n);
+		normal_iterator operator-(const difference_type &n) const;
 		const P &base(void);
+		pointer operator->();
 	};
 	template <typename P>
 	normal_iterator<P>::normal_iterator(P current) : current(current)
@@ -183,19 +186,103 @@ namespace ft
 		return (tmp);
 	}
 	template <typename P>
+	typename normal_iterator<P>::pointer normal_iterator<P>::operator->()
+	{
+		return (this->current);
+	}
+	template <typename P>
 	const P &normal_iterator<P>::base(void)
 	{
 		return (this->current);
 	}
 	/**************************************************************************/
+	/*
+	 * reverse_iterator
+	 * [x] constructor
+	 * [x] operator=()
+	 * [x] operator*()
+	 * [x] operator->()
+	 * [] operator++()
+	 * [] operator++(int)
+	 * [] operator--()
+	 * [] operator--(int)
+	 * [] operator+=()
+	 * [] operator+()
+	 * [] operator-=()
+	 * [] operator-()
+	 * [] base()
+	 */
 	template <typename I>
 	class reverse_iterator
-	    : public iterator<typename I::iterator_category, typename I::value_type,
-	                      typename I::difference_type, typename I::pointer,
-	                      typename I::reference>
+	    : public iterator<typename iterator_traits<I>::iterator_category,
+	                      typename iterator_traits<I>::value_type,
+	                      typename iterator_traits<I>::difference_type,
+	                      typename iterator_traits<I>::pointer,
+	                      typename iterator_traits<I>::reference>
 	{
+	private:
+		I current;
+
+	public:
 		typedef I iterator_type;
+		typedef typename iterator_traits<I>::difference_type difference_type;
+		typedef typename iterator_traits<I>::pointer pointer;
+		typedef typename iterator_traits<I>::reference reference;
+
+		reverse_iterator(void);
+		explicit reverse_iterator(I tmp);
+		reverse_iterator(const reverse_iterator &src);
+		reverse_iterator &operator=(const reverse_iterator &rhs);
+		reference operator*() const;
+		pointer operator->() const;
+		reverse_iterator &operator++();
+		reverse_iterator operator++(int);
+		reverse_iterator &operator--();
+		reverse_iterator operator--(int);
+		reverse_iterator operator+(difference_type &n);
+		reverse_iterator &operator+=(difference_type &n);
+		reverse_iterator operator-(difference_type &n);
+		reverse_iterator &operator-=(difference_type &n);
+		reference &operator[](difference_type &n) const;
 	};
+	template <typename I>
+	reverse_iterator<I>::reverse_iterator(void)
+	{
+	}
+	template <typename I>
+	reverse_iterator<I>::reverse_iterator(I tmp) : current(tmp)
+	{
+	}
+	template <typename I>
+	reverse_iterator<I>::reverse_iterator(const reverse_iterator<I> &src)
+	{
+		*this = src;
+	}
+	template <typename I>
+	reverse_iterator<I> &reverse_iterator<I>::operator=(
+	    const reverse_iterator<I> &rhs)
+	{
+		this->current = rhs.current;
+		return (*this);
+	}
+	template <typename I>
+	typename reverse_iterator<I>::reference reverse_iterator<I>::operator*()
+	    const
+	{
+		return (*this->current);
+	}
+	template <typename I>
+	typename reverse_iterator<I>::pointer reverse_iterator<I>::operator->()
+	    const
+	{
+		return (this->current);
+	}
+	template <typename I>
+	reverse_iterator<I> &reverse_iterator<I>::operator++()
+	{
+		this->current--;
+		return (*this);
+	}
 }  // namespace ft
 
 #endif /* ifsdef ITERATOR_HPP */
