@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:49 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/23 16:48:53 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/27 18:05:16 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,6 @@ namespace ft
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector
 	{
-		class test
-		{
-		public:
-			int a;
-			int b;
-		};
-
-		// class iterator : public std::iterator<>
-		//{
-		//};
-
 	public:
 		typedef T value_type;
 		typedef Allocator allocator_type;
@@ -45,106 +34,48 @@ namespace ft
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
 		typedef normal_iterator<pointer> iterator;
-		vector(void);
+		typedef normal_iterator<const_pointer> const_iterator;
+		typedef ft::reverse_iterator<iterator> reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+
+		explicit vector(const allocator_type &alloc = allocator_type());
+		explicit vector(size_type n, const value_type &val = value_type(),
+		                const allocator_type &alloc = allocator_type());
+		template <typename InputIterator>
+		vector(InputIterator first, InputIterator last,
+		       const allocator_type &alloc = allocator_type());
 		vector(const vector &src);
-		virtual ~vector(void);
-		vector(size_t n, T const value);
-		vector(size_t n);
-		void hello(void);
-		void fill(T value);
-		value_type &operator[](size_t pos);
-		size_t size(void);
-		size_t capacity(void);
-		iterator begin(void);
 
 	private:
-		value_type *ptr;
-		size_t sizeVar;
-		size_t capacityVar;
-		Allocator al;
+		pointer *_begin;
+		pointer *_end;
+		pointer *endAlloc;
+		Allocator alloc;
 	};
-	template <typename T, typename Allocator>
-	void vector<T, Allocator>::hello(void)
+	template <typename T, typename A>
+	vector<T, A>::vector(const vector<T, A>::allocator_type &alloc)
+	    : _begin(0), _end(0), endAlloc(0), alloc(alloc)
 	{
-		std::cout << "hello world!" << std::endl;
 	}
-	template <typename T, typename Allocator>
-	vector<T, Allocator>::vector(void) : ptr(0)
+	template <typename T, typename A>
+	vector<T, A>::vector(vector<T, A>::size_type n,
+	                     const vector<T, A>::value_type &val,
+	                     const vector<T, A>::allocator_type &alloc)
+	    : _begin(alloc.allocate(n)),
+	      _end(this->begin + n),
+	      endAlloc(this->begin + n),
+	      alloc(alloc)
 	{
-		ptr    = al.allocate(4);
-		ptr[0] = 1;
-		ptr[1] = 3;
-		ptr[2] = 3;
-		ptr[3] = 7;
+		(void)val;
 	}
-	template <typename T, typename Allocator>
-	vector<T, Allocator>::~vector(void)
+	template <typename T, typename A>
+	template <typename InputIterator>
+	vector<T, A>::vector(InputIterator first, InputIterator last,
+	                     const vector<T, A>::allocator_type &alloc)
 	{
-		std::cout << "vector destructor called" << std::endl;
-	}
-	template <typename T, typename Allocator>
-	vector<T, Allocator>::vector(size_t n, T const value)
-	    : ptr(0), sizeVar(0), capacityVar(0)
-	{
-		sizeVar     = n;
-		capacityVar = n;
-		// while (capacityVar < sizeVar)
-		//{
-		//	if (capacityVar == 0)
-		//		capacityVar = 2;
-		//	else
-		//		capacityVar = capacityVar * 2;
-		//}
-		ptr = al.Allocatorate(n);
-		this->fill(value);
-	}
-	template <typename T, typename Allocator>
-	vector<T, Allocator>::vector(size_t n) : ptr(0), sizeVar(0), capacityVar(0)
-	{
-		sizeVar     = n;
-		capacityVar = n;
-		// while (capacityVar < sizeVar)
-		//{
-		//	if (capacityVar == 0)
-		//		capacityVar = 2;
-		//	else
-		//		capacityVar = capacityVar * 2;
-		//}
-		ptr = al.Allocatorate(n);
-		this->fill(T());
-	}
-	template <typename T, typename Allocator>
-	void vector<T, Allocator>::fill(T value)
-	{
-		int i;
-
-		i = 0;
-		while (static_cast<size_t>(i) < sizeVar)
-		{
-			ptr[i] = value;
-			i++;
-		}
-	}
-	template <typename T, typename Allocator>
-	T &vector<T, Allocator>::operator[](size_t pos)
-	{
-		return (ptr[pos]);
-	}
-	template <typename T, typename Allocator>
-	size_t vector<T, Allocator>::size(void)
-	{
-		return (this->sizeVar);
-	}
-	template <typename T, typename Allocator>
-	size_t vector<T, Allocator>::capacity(void)
-	{
-		return (this->capacityVar);
-	}
-	template <typename T, typename Allocator>
-	typename vector<T, Allocator>::iterator vector<T, Allocator>::begin(void)
-	{
-		vector<T, Allocator>::iterator i(this->ptr);
-		return i;
+		(void)first;
+		(void)last;
+		(void)alloc;
 	}
 }  // namespace ft
 

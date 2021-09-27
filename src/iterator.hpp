@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/26 17:24:15 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/27 15:03:24 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,15 +202,15 @@ namespace ft
 	 * [x] operator=()
 	 * [x] operator*()
 	 * [x] operator->()
-	 * [] operator++()
-	 * [] operator++(int)
-	 * [] operator--()
-	 * [] operator--(int)
-	 * [] operator+=()
-	 * [] operator+()
-	 * [] operator-=()
-	 * [] operator-()
-	 * [] base()
+	 * [x] operator++()
+	 * [x] operator++(int)
+	 * [x] operator--()
+	 * [x] operator--(int)
+	 * [x] operator+=()
+	 * [x] operator+()
+	 * [x] operator-=()
+	 * [x] operator-()
+	 * [x] base()
 	 */
 	template <typename I>
 	class reverse_iterator
@@ -244,6 +244,7 @@ namespace ft
 		reverse_iterator operator-(difference_type &n);
 		reverse_iterator &operator-=(difference_type &n);
 		reference &operator[](difference_type &n) const;
+		I base(void) const;
 	};
 	template <typename I>
 	reverse_iterator<I>::reverse_iterator(void)
@@ -283,6 +284,60 @@ namespace ft
 		this->current--;
 		return (*this);
 	}
+	template <typename I>
+	reverse_iterator<I> reverse_iterator<I>::operator++(int)
+	{
+		reverse_iterator<I> tmp(this->current);
+		this->current--;
+		return (tmp);
+	}
+	template <typename I>
+	reverse_iterator<I> &reverse_iterator<I>::operator--()
+	{
+		this->current++;
+		return (*this);
+	}
+	template <typename I>
+	reverse_iterator<I> reverse_iterator<I>::operator--(int)
+	{
+		reverse_iterator<I> tmp(this->current);
+		this->current++;
+		return (tmp);
+	}
+	template <typename I>
+	reverse_iterator<I> reverse_iterator<I>::operator+(
+	    typename reverse_iterator<I>::difference_type &n)
+	{
+		reverse_iterator<I> tmp(this->current - n);
+		return (tmp);
+	}
+	template <typename I>
+	reverse_iterator<I> &reverse_iterator<I>::operator+=(
+	    typename reverse_iterator<I>::difference_type &n)
+	{
+		this->current -= n;
+		return (*this);
+	}
+	template <typename I>
+	reverse_iterator<I> reverse_iterator<I>::operator-(
+	    typename reverse_iterator<I>::difference_type &n)
+	{
+		reverse_iterator<I> tmp(this->current + n);
+		return (tmp);
+	}
+	template <typename I>
+	reverse_iterator<I> &reverse_iterator<I>::operator-=(
+	    typename reverse_iterator<I>::difference_type &n)
+	{
+		this->current += n;
+		return (*this);
+	}
+	template <typename I>
+	I reverse_iterator<I>::base(void) const
+	{
+		return (this->current);
+	}
+
 }  // namespace ft
 
 #endif /* ifsdef ITERATOR_HPP */

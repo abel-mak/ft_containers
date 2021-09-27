@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/26 14:20:55 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/27 18:05:17 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ int main()
 	std::string s2 = "abcdef";
 	ft::pair<int, int> a;
 	ft::pair<int, int> b;
-	ft::vector<int> x;
+	std::vector<int> x(10);
+
+	std::cout << "size: " << x.size() << std::endl;
+	std::cout << "capL " << x.capacity() << std::endl;
 	//	ft::vector<int>::iterator iter   = x.begin();
 	//	std::vector<int>::iterator iter2 = myints.begin();
 	//	ft::vector<int>::iterator *iterp;
