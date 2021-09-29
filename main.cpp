@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/27 18:05:17 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/29 18:12:57 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,16 @@ struct test
 {
 	int a;
 	int b;
+	test(void)
+	{
+		a = 5;
+		std::cout << "contructor called!" << std::endl;
+	}
+	test(const test &src)
+	{
+		a = 3;
+		std::cout << "copy contructor called!" << std::endl;
+	}
 };
 
 int main()
@@ -56,23 +66,34 @@ int main()
 	ft::pair<int, int> a;
 	ft::pair<int, int> b;
 	std::vector<int> x(10);
+	struct test t1;
+	struct test t2;
+	struct test t3;
+	struct test az[] = {t1, t2, t3};
 
-	std::cout << "size: " << x.size() << std::endl;
-	std::cout << "capL " << x.capacity() << std::endl;
+	//	std::vector<struct test> azv1(std::begin(az), std::end(az));
+	//	std::vector<struct test> azv11(azv1);
+
+	ft::vector<struct test> azv2(std::begin(az), std::end(az));
+	ft::vector<struct test> azv22(azv2);
+
+	// ft::vector<struct test> azv2(std::begin(az), std::end(az));
+	// std::cout << "size: " << x.size() << std::endl;
+	// std::cout << "capL " << x.capacity() << std::endl;
 	//	ft::vector<int>::iterator iter   = x.begin();
 	//	std::vector<int>::iterator iter2 = myints.begin();
 	//	ft::vector<int>::iterator *iterp;
 	//	int i;
-	struct test t1;
-	t1.a = 1997;
-	std::vector<struct test> t(1, t1);
-	std::vector<struct test>::iterator t_iter = t.begin();
+	// std::vector<struct test> v(10, t1);
+	// ft::vector<struct test> v(10, t1);
 	// std::cout << t1.a << std::endl;
 
-	while (t_iter != t.end())
-	{
-		std::cout << (*t_iter).a << std::endl;
-		t_iter++;
-	}
+	//	std::vector<struct test> t(1, t1);
+	//	std::vector<struct test>::iterator t_iter = t.begin();
+	//	while (t_iter != t.end())
+	//	{
+	//		std::cout << (*t_iter).a << std::endl;
+	//		t_iter++;
+	//	}
 	return (0);
 }

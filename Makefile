@@ -6,7 +6,7 @@
 #    By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/10 17:10:37 by abel-mak          #+#    #+#              #
-#    Updated: 2021/09/24 14:56:55 by abel-mak         ###   ########.fr        #
+#    Updated: 2021/09/28 14:26:29 by abel-mak         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ OBJ= $(SRC:.cpp=.o)
 
 FLAGS= -Wall -Wextra -Werror -std=c++98
 
-FLAGS_DEBUG= -Wall -Wextra -Werror -fno-elide-constructors -O0 -std=c++98
+FLAGS_DEBUG= -fno-elide-constructors -O0 
 
 HDR=$(wildcard ./src/*.hpp)
 

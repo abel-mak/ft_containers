@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/27 15:03:24 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/29 17:59:57 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,7 +337,12 @@ namespace ft
 	{
 		return (this->current);
 	}
-
+	/**************************************************************************/
+	template <typename Iterator1, typename Iterator2>
+	bool operator!=(Iterator1 a, Iterator2 b)
+	{
+		return (a.base() != b.base());
+	}
 }  // namespace ft
 
 #endif /* ifsdef ITERATOR_HPP */
