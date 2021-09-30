@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/29 17:59:57 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/09/30 17:51:52 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,16 @@ namespace ft
 		normal_iterator(P current);
 		normal_iterator(const normal_iterator &src);
 		reference operator*();
-		normal_iterator &operator++(int);
-		normal_iterator operator++();
-		normal_iterator &operator--(int);
-		normal_iterator operator--();
+		normal_iterator operator++(int);
+		normal_iterator &operator++();
+		normal_iterator operator--(int);
+		normal_iterator &operator--();
 		reference operator[](const difference_type &n);
 		normal_iterator &operator+=(const difference_type &n);
 		normal_iterator operator+(const difference_type &n) const;
 		normal_iterator &operator-=(const difference_type &n);
 		normal_iterator operator-(const difference_type &n) const;
-		const P &base(void);
+		P base(void) const;
 		pointer operator->();
 	};
 	template <typename P>
@@ -121,10 +121,11 @@ namespace ft
 		this->current = src.current;
 	}
 	template <typename P>
-	normal_iterator<P> &normal_iterator<P>::operator++(int)
+	normal_iterator<P> normal_iterator<P>::operator++(int)
 	{
+		normal_iterator<P> tmp(this->current);
 		this->current++;
-		return (*this);
+		return (tmp);
 	}
 	template <typename P>
 	typename normal_iterator<P>::reference normal_iterator<P>::operator*()
@@ -132,24 +133,23 @@ namespace ft
 		return (*(this->current));
 	}
 	template <typename P>
-	normal_iterator<P> normal_iterator<P>::operator++()
+	normal_iterator<P> &normal_iterator<P>::operator++()
 	{
-		normal_iterator<P> tmp(this->current);
 		this->current++;
-		return (tmp);
-	}
-	template <typename P>
-	normal_iterator<P> &normal_iterator<P>::operator--(int)
-	{
-		this->current--;
 		return (*this);
 	}
 	template <typename P>
-	normal_iterator<P> normal_iterator<P>::operator--()
+	normal_iterator<P> normal_iterator<P>::operator--(int)
 	{
 		normal_iterator<P> tmp(this->current);
 		this->current--;
 		return (tmp);
+	}
+	template <typename P>
+	normal_iterator<P> &normal_iterator<P>::operator--()
+	{
+		this->current--;
+		return (*this);
 	}
 	template <typename P>
 	typename normal_iterator<P>::reference normal_iterator<P>::operator[](
@@ -175,7 +175,7 @@ namespace ft
 	normal_iterator<P> &normal_iterator<P>::operator-=(
 	    const typename normal_iterator<P>::difference_type &n)
 	{
-		this->current += n;
+		this->current -= n;
 		return (*this);
 	}
 	template <typename P>
@@ -191,7 +191,7 @@ namespace ft
 		return (this->current);
 	}
 	template <typename P>
-	const P &normal_iterator<P>::base(void)
+	P normal_iterator<P>::base(void) const
 	{
 		return (this->current);
 	}
@@ -210,6 +210,7 @@ namespace ft
 	 * [x] operator+()
 	 * [x] operator-=()
 	 * [x] operator-()
+	 * [x] operator[]()
 	 * [x] base()
 	 */
 	template <typename I>
@@ -230,7 +231,7 @@ namespace ft
 		typedef typename iterator_traits<I>::reference reference;
 
 		reverse_iterator(void);
-		explicit reverse_iterator(I tmp);
+		explicit reverse_iterator(const I &tmp);
 		reverse_iterator(const reverse_iterator &src);
 		reverse_iterator &operator=(const reverse_iterator &rhs);
 		reference operator*() const;
@@ -239,11 +240,11 @@ namespace ft
 		reverse_iterator operator++(int);
 		reverse_iterator &operator--();
 		reverse_iterator operator--(int);
-		reverse_iterator operator+(difference_type &n);
-		reverse_iterator &operator+=(difference_type &n);
-		reverse_iterator operator-(difference_type &n);
-		reverse_iterator &operator-=(difference_type &n);
-		reference &operator[](difference_type &n) const;
+		reverse_iterator operator+(const difference_type &n);
+		reverse_iterator &operator+=(const difference_type &n);
+		reverse_iterator operator-(const difference_type &n);
+		reverse_iterator &operator-=(const difference_type &n);
+		reference &operator[](const difference_type &n) const;
 		I base(void) const;
 	};
 	template <typename I>
@@ -251,7 +252,7 @@ namespace ft
 	{
 	}
 	template <typename I>
-	reverse_iterator<I>::reverse_iterator(I tmp) : current(tmp)
+	reverse_iterator<I>::reverse_iterator(const I &tmp) : current(tmp)
 	{
 	}
 	template <typename I>
@@ -306,31 +307,37 @@ namespace ft
 	}
 	template <typename I>
 	reverse_iterator<I> reverse_iterator<I>::operator+(
-	    typename reverse_iterator<I>::difference_type &n)
+	    const typename reverse_iterator<I>::difference_type &n)
 	{
 		reverse_iterator<I> tmp(this->current - n);
 		return (tmp);
 	}
 	template <typename I>
 	reverse_iterator<I> &reverse_iterator<I>::operator+=(
-	    typename reverse_iterator<I>::difference_type &n)
+	    const typename reverse_iterator<I>::difference_type &n)
 	{
 		this->current -= n;
 		return (*this);
 	}
 	template <typename I>
 	reverse_iterator<I> reverse_iterator<I>::operator-(
-	    typename reverse_iterator<I>::difference_type &n)
+	    const typename reverse_iterator<I>::difference_type &n)
 	{
 		reverse_iterator<I> tmp(this->current + n);
 		return (tmp);
 	}
 	template <typename I>
 	reverse_iterator<I> &reverse_iterator<I>::operator-=(
-	    typename reverse_iterator<I>::difference_type &n)
+	    const typename reverse_iterator<I>::difference_type &n)
 	{
 		this->current += n;
 		return (*this);
+	}
+	template <typename I>
+	typename reverse_iterator<I>::reference &reverse_iterator<I>::operator[](
+	    const reverse_iterator<I>::difference_type &n) const
+	{
+		return (this->current[n]);
 	}
 	template <typename I>
 	I reverse_iterator<I>::base(void) const
@@ -338,10 +345,43 @@ namespace ft
 		return (this->current);
 	}
 	/**************************************************************************/
-	template <typename Iterator1, typename Iterator2>
-	bool operator!=(Iterator1 a, Iterator2 b)
+	/*
+	 * [x] operator==
+	 * [x] operator!=
+	 * [x] operator<
+	 * [x] operator>
+	 * [x] operator<=
+	 * [x] operator>=
+	 */
+	template <typename Iterator>
+	bool operator==(const Iterator &a, const Iterator &b)
 	{
-		return (a.base() != b.base());
+		return (a.base() == b.base());
+	}
+	template <typename Iterator>
+	bool operator!=(const Iterator &a, const Iterator &b)
+	{
+		return (!(a == b));
+	}
+	template <typename Iterator>
+	bool operator<(const Iterator &a, const Iterator &b)
+	{
+		return (a.base() < b.base());
+	}
+	template <typename Iterator>
+	bool operator>(const Iterator &a, const Iterator &b)
+	{
+		return (!(a < b) && (a != b));
+	}
+	template <typename Iterator>
+	bool operator<=(const Iterator &a, const Iterator &b)
+	{
+		return (!(a > b));
+	}
+	template <typename Iterator>
+	bool operator>=(const Iterator &a, const Iterator &b)
+	{
+		return (!(a < b));
 	}
 }  // namespace ft
 
