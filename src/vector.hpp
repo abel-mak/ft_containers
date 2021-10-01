@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/29 18:12:56 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/01 17:55:52 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <iostream>
 #include <iterator>
 
+#include "./type_traits.hpp"
 #include "iterator.hpp"
 
 namespace ft
@@ -44,7 +45,9 @@ namespace ft
 		vector(size_type n, const value_type &val,
 		       const allocator_type &alloc = allocator_type());
 		template <typename InputIterator>
-		vector(InputIterator first, InputIterator last,
+		vector(typename enable_if<!is_integral<InputIterator>::value,
+		                          InputIterator>::type first,
+		       InputIterator last,
 		       const allocator_type &alloc = allocator_type());
 		vector(const vector &src);
 		size_type size(void) const;
@@ -79,7 +82,7 @@ namespace ft
 	{
 	}
 	template <typename T, typename A>
-	vector<T, A>::vector(vector<T, A>::size_type n,
+	vector<T, A>::vector(typename vector<T, A>::size_type n,
 	                     const vector<T, A>::value_type &val,
 	                     const vector<T, A>::allocator_type &alloc)
 	    : _alloc(alloc),
@@ -96,9 +99,13 @@ namespace ft
 			i++;
 		}
 	}
+	// enable_if Check whether it's an integral type.  If so, it's not an
+	// iterator.
 	template <typename T, typename A>
 	template <typename InputIterator>
-	vector<T, A>::vector(InputIterator first, InputIterator last,
+	vector<T, A>::vector(typename enable_if<!is_integral<InputIterator>::value,
+	                                        InputIterator>::type first,
+	                     InputIterator last,
 	                     const vector<T, A>::allocator_type &alloc)
 	    : _alloc(alloc),
 	      _begin(_alloc.allocate(std::distance(first, last))),

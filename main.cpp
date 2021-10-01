@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/09/29 18:12:57 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/01 17:52:01 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,15 @@ int main()
 	struct test t1;
 	struct test t2;
 	struct test t3;
-	struct test az[] = {t1, t2, t3};
+	//	struct test az[] = {t1, t2, t3};
 
 	//	std::vector<struct test> azv1(std::begin(az), std::end(az));
 	//	std::vector<struct test> azv11(azv1);
 
-	ft::vector<struct test> azv2(std::begin(az), std::end(az));
-	ft::vector<struct test> azv22(azv2);
+	//	ft::vector<struct test> azv2(std::begin(az), std::end(az));
+	//	ft::vector<struct test> azv22(azv2);
 
+	ft::vector<int> g(3, 1337);
 	// ft::vector<struct test> azv2(std::begin(az), std::end(az));
 	// std::cout << "size: " << x.size() << std::endl;
 	// std::cout << "capL " << x.capacity() << std::endl;
