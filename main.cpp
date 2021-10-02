@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/01 17:52:01 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/02 18:20:33 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,12 @@ struct test
 	test(const test &src)
 	{
 		a = 3;
+		(void)src;
 		std::cout << "copy contructor called!" << std::endl;
+	}
+	~test(void)
+	{
+		std::cout << "destructor called" << std::endl;
 	}
 };
 
@@ -67,17 +72,15 @@ int main()
 	ft::pair<int, int> b;
 	std::vector<int> x(10);
 	struct test t1;
-	struct test t2;
-	struct test t3;
-	//	struct test az[] = {t1, t2, t3};
+	struct test az[] = {t1, t1, t1};
 
-	//	std::vector<struct test> azv1(std::begin(az), std::end(az));
-	//	std::vector<struct test> azv11(azv1);
+	std::vector<struct test> azv1(std::begin(az), std::end(az));
+	azv1.reserve(5);
+	// std::vector<struct test> azv11(azv1);
 
-	//	ft::vector<struct test> azv2(std::begin(az), std::end(az));
+	// ft::vector<struct test> azv2(std::begin(az), std::end(az));
 	//	ft::vector<struct test> azv22(azv2);
-
-	ft::vector<int> g(3, 1337);
+	// azv2.reserve(5);
 	// ft::vector<struct test> azv2(std::begin(az), std::end(az));
 	// std::cout << "size: " << x.size() << std::endl;
 	// std::cout << "capL " << x.capacity() << std::endl;

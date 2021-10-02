@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/01 18:33:29 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/02 12:26:55 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,6 +346,7 @@ namespace ft
 	}
 	/**************************************************************************/
 	/*
+	 * comparaison for normal_iterator
 	 * [x] operator==
 	 * [x] operator!=
 	 * [x] operator<
@@ -353,36 +354,77 @@ namespace ft
 	 * [x] operator<=
 	 * [x] operator>=
 	 */
-	template <typename Iterator>
-	bool operator==(const Iterator &a, const Iterator &b)
+	template <typename P>
+	bool operator==(const normal_iterator<P> &a, const normal_iterator<P> &b)
 	{
 		return (a.base() == b.base());
 	}
-	template <typename Iterator>
-	bool operator!=(const Iterator &a, const Iterator &b)
+	template <typename P>
+	bool operator!=(const normal_iterator<P> &a, const normal_iterator<P> &b)
 	{
 		return (!(a == b));
 	}
-	template <typename Iterator>
-	bool operator<(const Iterator &a, const Iterator &b)
+	template <typename P>
+	bool operator<(const normal_iterator<P> &a, const normal_iterator<P> &b)
 	{
 		return (a.base() < b.base());
 	}
-	template <typename Iterator>
-	bool operator>(const Iterator &a, const Iterator &b)
+	template <typename P>
+	bool operator>(const normal_iterator<P> &a, const normal_iterator<P> &b)
 	{
 		return (!(a < b) && (a != b));
 	}
-	template <typename Iterator>
-	bool operator<=(const Iterator &a, const Iterator &b)
+	template <typename P>
+	bool operator<=(const normal_iterator<P> &a, const normal_iterator<P> &b)
 	{
 		return (!(a > b));
 	}
-	template <typename Iterator>
-	bool operator>=(const Iterator &a, const Iterator &b)
+	template <typename P>
+	bool operator>=(const normal_iterator<P> &a, const normal_iterator<P> &b)
 	{
 		return (!(a < b));
 	}
+	/**************************************************************************/
+	/*
+	 * comparaison for normal_iterator
+	 * [x] operator==
+	 * [x] operator!=
+	 * [x] operator<
+	 * [x] operator>
+	 * [x] operator<=
+	 * [x] operator>=
+	 */
+	template <typename I>
+	bool operator==(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	{
+		return (a.base() == b.base());
+	}
+	template <typename I>
+	bool operator!=(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	{
+		return (!(a == b));
+	}
+	template <typename I>
+	bool operator<(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	{
+		return (a.base() > b.base());
+	}
+	template <typename I>
+	bool operator>(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	{
+		return (!(a < b) && (a != b));
+	}
+	template <typename I>
+	bool operator<=(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	{
+		return (!(a > b));
+	}
+	template <typename I>
+	bool operator>=(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	{
+		return (!(a < b));
+	}
+
 }  // namespace ft
 
 #endif /* ifsdef ITERATOR_HPP */
