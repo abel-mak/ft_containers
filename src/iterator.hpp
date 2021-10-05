@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/02 12:26:55 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/05 13:07:04 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ namespace ft
 	 * [x] operator+()
 	 * [x] operator-=()
 	 * [x] operator-()
+	 * [] operator=()
 	 * [x] base()
 	 */
 	template <typename P>
@@ -104,6 +105,7 @@ namespace ft
 		normal_iterator operator+(const difference_type &n) const;
 		normal_iterator &operator-=(const difference_type &n);
 		normal_iterator operator-(const difference_type &n) const;
+		normal_iterator &operator=(const normal_iterator &lhs);
 		P base(void) const;
 		pointer operator->();
 	};
@@ -189,6 +191,13 @@ namespace ft
 	typename normal_iterator<P>::pointer normal_iterator<P>::operator->()
 	{
 		return (this->current);
+	}
+	template <typename P>
+	normal_iterator<P> &normal_iterator<P>::operator=(
+	    const normal_iterator<P> &lhs)
+	{
+		this->current = lhs.current;
+		return (*this);
 	}
 	template <typename P>
 	P normal_iterator<P>::base(void) const

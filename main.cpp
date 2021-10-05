@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/02 18:20:33 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/05 18:54:25 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@ struct test
 		(void)src;
 		std::cout << "copy contructor called!" << std::endl;
 	}
+	test(int z)
+	{
+		this->a = z;
+	}
 	~test(void)
 	{
 		std::cout << "destructor called" << std::endl;
@@ -75,12 +79,23 @@ int main()
 	struct test az[] = {t1, t1, t1};
 
 	std::vector<struct test> azv1(std::begin(az), std::end(az));
-	azv1.reserve(5);
+	std::cout << "===============" << std::endl;
+	azv1.reserve(4);
+	std::cout << "size: " << azv1.size() << std::endl;
+	std::cout << "capacity: " << azv1.capacity() << std::endl;
+	std::cout << "===============" << std::endl;
+	// azv1.reserve(0);
 	// std::vector<struct test> azv11(azv1);
 
 	// ft::vector<struct test> azv2(std::begin(az), std::end(az));
-	//	ft::vector<struct test> azv22(azv2);
-	// azv2.reserve(5);
+	// std::cout << "===============" << std::endl;
+	// azv2.resize(4);
+	// std::cout << "size: " << azv2.size() << std::endl;
+	// std::cout << "capacity: " << azv2.capacity() << std::endl;
+	// std::cout << "===============" << std::endl;
+
+	// azv2.reserve(-1);
+	// ft::vector<struct test> azv22(azv2);
 	// ft::vector<struct test> azv2(std::begin(az), std::end(az));
 	// std::cout << "size: " << x.size() << std::endl;
 	// std::cout << "capL " << x.capacity() << std::endl;

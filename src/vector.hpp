@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/02 18:20:36 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/05 18:54:23 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,10 @@ namespace ft
 	 **
 	 * [x] size
 	 * [x] max_size
-	 * [] resize
+	 * [x] resize
 	 * [x] capacity
-	 * [] empty
-	 * [] reserve
-	 **
+	 * [x] empty
+	 * [x] reserve
 	 */
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector
@@ -68,6 +67,7 @@ namespace ft
 		       InputIterator last,
 		       const allocator_type &alloc = allocator_type());
 		vector(const vector &src);
+		~vector(void);
 		const_iterator begin(void) const;
 		const_iterator end(void) const;
 		iterator begin(void);
@@ -80,12 +80,16 @@ namespace ft
 		size_type max_size(void) const;
 		size_type capacity(void) const;
 		void reserve(size_type n);
+		bool empty(void) const;
+		void resize(size_type n);
+		void resize(size_type n, value_type val);
 
 	private:
 		void vectorFree(void);
 		void copyConstructRange(iterator first, iterator last, iterator target);
 		void constructRange(iterator first, iterator last);
 		pointer allocAndConstruct(const size_type &n);
+		size_type getCapacityBigger(const size_type &n);
 		Allocator _alloc;
 		pointer _begin;
 		pointer _end;
@@ -172,6 +176,11 @@ namespace ft
 		}
 	}
 	template <typename T, typename A>
+	vector<T, A>::~vector<T, A>(void)
+	{
+		this->vectorFree();
+	}
+	template <typename T, typename A>
 	typename vector<T, A>::size_type vector<T, A>::size(void) const
 	{
 		return (_end - _begin);
@@ -238,13 +247,15 @@ namespace ft
 	template <typename T, typename A>
 	void vector<T, A>::vectorFree(void)
 	{
-		typename vector<T, A>::iterator tmp;
+		typename vector<T, A>::iterator first;
+		typename vector<T, A>::iterator last;
 
-		tmp = this->begin();
-		while (tmp != this->end())
+		first = this->begin();
+		last  = this->end();
+		while (first != last)
 		{
-			_alloc.destroy(tmp.base());
-			tmp++;
+			_alloc.destroy(first.base());
+			first++;
 		}
 		_alloc.deallocate((this->begin()).base(), this->size());
 	}
@@ -303,6 +314,52 @@ namespace ft
 			_end      = _begin + tmpSize;
 			_endAlloc = _begin + n;
 		}
+	}
+	template <typename T, typename A>
+	bool vector<T, A>::empty(void) const
+	{
+		return (this->size() == 0);
+	}
+	template <typename T, typename A>
+	void vector<T, A>::resize(vector<T, A>::size_type n)
+	{
+		size_type i;
+
+		if (n < this->size())
+		{
+			vector<T, A>::size_type diff = (this->size() - n);
+			i                            = 0;
+			while (i < diff)
+			{
+				_alloc.destroy(_end--);
+				i++;
+			}
+		}
+		else if (n > this->size())
+		{
+			size_type diff;
+
+			diff = n - this->capacity();
+			this->reserve(
+			    std::max(2 * this->capacity(), n));  // modify the capacity
+			iterator first(_end);
+			iterator last(_end + diff);
+			constructRange(first, last);
+			_end = _end + diff;
+		}
+	}
+	template <typename T, typename A>
+	typename vector<T, A>::size_type vector<T, A>::getCapacityBigger(
+	    const size_type &n)
+	{
+		size_type res;
+
+		res = this->capacity();
+		while (res < n)
+		{
+			res *= 2;
+		}
+		return (res);
 	}
 }  // namespace ft
 
