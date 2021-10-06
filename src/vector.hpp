@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/05 18:54:23 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/06 18:52:42 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 #include "./type_traits.hpp"
 #include "iterator.hpp"
+
 namespace ft
 {
 	/*
@@ -38,6 +39,20 @@ namespace ft
 	 * [x] capacity
 	 * [x] empty
 	 * [x] reserve
+	 **
+	 * [x] operator[]
+	 * [x] at
+	 * [x] front
+	 * [x] back
+	 **
+	 * [] assign
+	 * [] push_back
+	 * [] pop_back
+	 * [] insert
+	 * [] erase
+	 * [] swap
+	 * [] clear
+	 *
 	 */
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector
@@ -82,14 +97,25 @@ namespace ft
 		void reserve(size_type n);
 		bool empty(void) const;
 		void resize(size_type n);
-		void resize(size_type n, value_type val);
+		void resize(size_type n, const_reference val);
+		reference operator[](size_type n);
+		const_reference operator[](size_type n) const;
+		reference at(size_type n);
+		const_reference at(size_type n) const;
+		reference front(void);
+		const_reference front(void) const;
+		reference back(void);
+		const_reference back(void) const;
+		void push_back(const value_type &val);
 
 	private:
 		void vectorFree(void);
-		void copyConstructRange(iterator first, iterator last, iterator target);
+		void copyConstructFromRange(iterator first, iterator last,
+		                            iterator target);
 		void constructRange(iterator first, iterator last);
+		void copyConstructRange(iterator first, iterator last,
+		                        const_reference val);
 		pointer allocAndConstruct(const size_type &n);
-		size_type getCapacityBigger(const size_type &n);
 		Allocator _alloc;
 		pointer _begin;
 		pointer _end;
@@ -260,9 +286,9 @@ namespace ft
 		_alloc.deallocate((this->begin()).base(), this->size());
 	}
 	template <typename T, typename A>
-	void vector<T, A>::copyConstructRange(const vector<T, A>::iterator first,
-	                                      const vector<T, A>::iterator last,
-	                                      const vector<T, A>::iterator target)
+	void vector<T, A>::copyConstructFromRange(
+	    const vector<T, A>::iterator first, const vector<T, A>::iterator last,
+	    const vector<T, A>::iterator target)
 	{
 		while (first != last)
 		{
@@ -278,6 +304,17 @@ namespace ft
 		while (first != last)
 		{
 			_alloc.construct(first.base());
+			first++;
+		}
+	}
+	template <typename T, typename A>
+	void vector<T, A>::copyConstructRange(const iterator first,
+	                                      const iterator last,
+	                                      const_reference val)
+	{
+		while (first != last)
+		{
+			_alloc.construct(first.base(), val);
 			first++;
 		}
 	}
@@ -306,7 +343,7 @@ namespace ft
 			typename vector<T, A>::iterator tmpIter(tmpBegin);
 			typename vector<T, A>::size_type tmpSize = this->size();
 
-			copyConstructRange(this->begin(), this->end(), tmpIter);
+			copyConstructFromRange(this->begin(), this->end(), tmpIter);
 			// constructRange(vector<T, A>::iterator(tmpBegin + tmpSize),
 			//             vector<T, A>::iterator(tmpBegin + n));
 			this->vectorFree();
@@ -349,17 +386,100 @@ namespace ft
 		}
 	}
 	template <typename T, typename A>
-	typename vector<T, A>::size_type vector<T, A>::getCapacityBigger(
-	    const size_type &n)
+	void vector<T, A>::resize(size_type n, const_reference val)
 	{
-		size_type res;
+		size_type i;
 
-		res = this->capacity();
-		while (res < n)
+		if (n < this->size())
 		{
-			res *= 2;
+			vector<T, A>::size_type diff = (this->size() - n);
+			i                            = 0;
+			while (i < diff)
+			{
+				_alloc.destroy(_end--);
+				i++;
+			}
 		}
-		return (res);
+		else if (n > this->size())
+		{
+			size_type diff;
+
+			diff = n - this->capacity();
+			this->reserve(
+			    std::max(2 * this->capacity(), n));  // modify the capacity
+			iterator first(_end);
+			iterator last(_end + diff);
+			copyConstructRange(first, last, val);
+			_end = _end + diff;
+		}
+	}
+	template <typename T, typename A>
+	typename vector<T, A>::reference vector<T, A>::operator[](
+	    vector<T, A>::size_type n)
+	{
+		return (_begin[n]);
+	}
+	template <typename T, typename A>
+	typename vector<T, A>::const_reference vector<T, A>::operator[](
+	    vector<T, A>::size_type n) const
+	{
+		return (_begin[n]);
+	}
+	template <typename T, typename A>
+	typename vector<T, A>::reference vector<T, A>::at(size_type n)
+	{
+		if (n < this->size())
+			return (_begin[n]);
+		else
+			throw std::out_of_range("vector");
+	}
+	template <typename T, typename A>
+	typename vector<T, A>::const_reference vector<T, A>::at(size_type n) const
+	{
+		if (n < this->size())
+			return (_begin[n]);
+		else
+			throw std::out_of_range("vector");
+	}
+	template <typename T, typename A>
+	typename vector<T, A>::reference vector<T, A>::front(void)
+	{
+		return (*_begin);
+	}
+	template <typename T, typename A>
+	typename vector<T, A>::const_reference vector<T, A>::front(void) const
+	{
+		return (*_begin);
+	}
+	template <typename T, typename A>
+	typename vector<T, A>::reference vector<T, A>::back(void)
+	{
+		return (*(_end - 1));
+	}
+	template <typename T, typename A>
+	typename vector<T, A>::const_reference vector<T, A>::back(void) const
+	{
+		return (*(_end - 1));
+	}
+	template <typename T, typename A>
+	void vector<T, A>::push_back(const value_type &val)
+	{
+		size_type nextCapacity;
+		size_type curCapacity;
+		size_type curSize;
+
+		curSize     = this->size();
+		curCapacity = this->capacity();
+		if (this->capacity() - this->size() >= 1)
+		{
+			*(_end++) = val;
+		}
+		else
+		{
+			nextCapacity = (curCapacity == 0) ? 1 : curCapacity * 2;
+			this->reserve(nextCapacity);
+			_alloc.construct(_end++, val);
+		}
 	}
 }  // namespace ft
 
