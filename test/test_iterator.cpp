@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 14:17:28 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/02 12:29:21 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/07 17:03:01 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ TEST_CASE("test ft::normal_iterator")
 		CHECK((ft_i1 -= 5).base() == (std_i1 -= 5).base());
 		CHECK((ft_i1 + 5).base() == (std_i1 + 5).base());
 		CHECK((ft_i1 - 5).base() == (std_i1 - 5).base());
+	}
+	SUBCASE("test access operator")
+	{
 	}
 	SUBCASE("test comparison")
 	{
@@ -100,6 +103,42 @@ TEST_CASE("test ft::reverse_iterator")
 		CHECK((ft_rev1 -= 5).base() == (std_rev1 -= 5).base());
 		CHECK((ft_rev1 + 5).base() == (std_rev1 + 5).base());
 		CHECK((ft_rev1 - 5).base() == (std_rev1 - 5).base());
+	}
+	SUBCASE("test access operator */[]/->")
+	{
+		struct test
+		{
+			int a;
+			test()
+			{
+				a = 3;
+			}
+			test(int z)
+			{
+				a = z;
+			}
+		};
+
+		{
+			int arr[] = {1, 2};
+			std::reverse_iterator<int *> std_rev(arr + 3);
+			ft::reverse_iterator<int *> ft_rev(arr + 3);
+
+			CHECK(std_rev[0] == ft_rev[0]);
+			CHECK(std_rev[1] == ft_rev[1]);
+			CHECK(*std_rev == *ft_rev);
+		}
+		{
+			struct test t1;
+			struct test t2(10);
+			struct test tarr[] = {t1, t2};
+			std::reverse_iterator<struct test *> std_rev(tarr + 3);
+			ft::reverse_iterator<struct test *> ft_rev(tarr + 3);
+			CHECK(std_rev[0].a == ft_rev[0].a);
+			CHECK(std_rev[1].a == ft_rev[1].a);
+			CHECK((*std_rev).a == (*ft_rev).a);
+			CHECK((std_rev)->a == (ft_rev)->a);
+		}
 	}
 	SUBCASE("test comparison operators")
 	{

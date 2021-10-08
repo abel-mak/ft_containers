@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/05 13:07:04 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/07 16:45:52 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,13 +280,13 @@ namespace ft
 	typename reverse_iterator<I>::reference reverse_iterator<I>::operator*()
 	    const
 	{
-		return (*this->current);
+		return (*(this->current - 1));
 	}
 	template <typename I>
 	typename reverse_iterator<I>::pointer reverse_iterator<I>::operator->()
 	    const
 	{
-		return (this->current);
+		return (this->current - 1);
 	}
 	template <typename I>
 	reverse_iterator<I> &reverse_iterator<I>::operator++()
@@ -346,7 +346,7 @@ namespace ft
 	typename reverse_iterator<I>::reference &reverse_iterator<I>::operator[](
 	    const reverse_iterator<I>::difference_type &n) const
 	{
-		return (this->current[n]);
+		return (this->current[-n - 1]);
 	}
 	template <typename I>
 	I reverse_iterator<I>::base(void) const

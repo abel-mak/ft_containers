@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/06 18:52:42 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/08 19:09:56 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,12 @@ namespace ft
 	 * [x] back
 	 **
 	 * [] assign
-	 * [] push_back
-	 * [] pop_back
+	 * [x] push_back
+	 * [x] pop_back
 	 * [] insert
 	 * [] erase
 	 * [] swap
-	 * [] clear
-	 *
+	 * [x] clear
 	 */
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector
@@ -107,15 +106,21 @@ namespace ft
 		reference back(void);
 		const_reference back(void) const;
 		void push_back(const value_type &val);
+		void pop_back(void);
+		void clear(void);
+		template <typename InputIterator>
+		void assign(InputIterator first, InputIterator last);
 
 	private:
 		void vectorFree(void);
-		void copyConstructFromRange(iterator first, iterator last,
-		                            iterator target);
+		template <typename InputIterator, typename OutputIterator>
+		void copyConstructFromRange(InputIterator first, InputIterator last,
+		                            OutputIterator target);
 		void constructRange(iterator first, iterator last);
 		void copyConstructRange(iterator first, iterator last,
 		                        const_reference val);
 		pointer allocAndConstruct(const size_type &n);
+		void __destroyEnd(pointer ptr);
 		Allocator _alloc;
 		pointer _begin;
 		pointer _end;
@@ -283,12 +288,13 @@ namespace ft
 			_alloc.destroy(first.base());
 			first++;
 		}
-		_alloc.deallocate((this->begin()).base(), this->size());
+		_alloc.deallocate(_begin, this->size());
 	}
 	template <typename T, typename A>
-	void vector<T, A>::copyConstructFromRange(
-	    const vector<T, A>::iterator first, const vector<T, A>::iterator last,
-	    const vector<T, A>::iterator target)
+	template <typename InputIterator, typename OutputIterator>
+	void vector<T, A>::copyConstructFromRange(InputIterator first,
+	                                          InputIterator last,
+	                                          OutputIterator target)
 	{
 		while (first != last)
 		{
@@ -479,6 +485,64 @@ namespace ft
 			nextCapacity = (curCapacity == 0) ? 1 : curCapacity * 2;
 			this->reserve(nextCapacity);
 			_alloc.construct(_end++, val);
+		}
+	}
+	template <typename T, typename A>
+	void vector<T, A>::pop_back(void)
+	{
+		_alloc.destroy(--_end);
+	}
+	template <typename T, typename A>
+	void vector<T, A>::clear(void)
+	{
+		while (_end != _begin)
+		{
+			_alloc.destroy(--_end);
+		}
+	}
+	template <typename T, typename A>
+	void vector<T, A>::__destroyEnd(pointer ptr)
+	{
+		pointer tmp;
+
+		tmp = ptr;
+		while (tmp != _end)
+		{
+			_alloc.destroy(tmp);
+			tmp++;
+		}
+		_end = ptr;
+	}
+	template <typename T, typename A>
+	template <typename Iterator>
+	void vector<T, A>::assign(Iterator first, Iterator last)
+	{
+		size_type dist;
+		typename ft::vector<value_type>::iterator tmp(_begin);
+
+		dist = std::distance(first, last);
+		if (dist <= this->capacity())
+		{
+			if (this->size() >= dist)
+			{
+				if (this->size() != dist)
+					__destroyEnd(_begin + dist);
+				std::copy(first, last, tmp);
+			}
+			else if (this->size() < dist)
+			{
+				std::copy(first, first + this->size(), _begin);
+				copyConstructFromRange(first + this->size(), last,
+				                       this->begin() + this->size());
+			}
+		}
+		else
+		{
+			this->vectorFree();
+			_begin    = _alloc.allocate(dist);
+			_end      = _begin + dist;
+			_endAlloc = _end;
+			copyConstructFromRange(first + this->size(), last, this->begin());
 		}
 	}
 }  // namespace ft
