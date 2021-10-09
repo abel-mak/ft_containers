@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/08 19:09:56 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/09 18:54:50 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ namespace ft
 	 * [x] front
 	 * [x] back
 	 **
-	 * [] assign
+	 * [x] assign
 	 * [x] push_back
 	 * [x] pop_back
 	 * [] insert
@@ -110,17 +110,25 @@ namespace ft
 		void clear(void);
 		template <typename InputIterator>
 		void assign(InputIterator first, InputIterator last);
+		void assign(size_type n, const value_type &val);
+		iterator insert(iterator position, const_reference val);
+		void insert(iterator position, size_type n, const_reference val);
+		template <typename II>
+		void insert(iterator position, II first, II last);
 
 	private:
 		void vectorFree(void);
-		template <typename InputIterator, typename OutputIterator>
-		void copyConstructFromRange(InputIterator first, InputIterator last,
-		                            OutputIterator target);
+		template <typename II, typename OI>
+		void copyConstructFromRange(
+		    typename enable_if<!is_integral<II>::value, II>::type first,
+		    II last, OI target);
 		void constructRange(iterator first, iterator last);
 		void copyConstructRange(iterator first, iterator last,
 		                        const_reference val);
 		pointer allocAndConstruct(const size_type &n);
 		void __destroyEnd(pointer ptr);
+		void __newAlloc(size_type n);
+		void __rotate(size_type n);
 		Allocator _alloc;
 		pointer _begin;
 		pointer _end;
@@ -291,10 +299,10 @@ namespace ft
 		_alloc.deallocate(_begin, this->size());
 	}
 	template <typename T, typename A>
-	template <typename InputIterator, typename OutputIterator>
-	void vector<T, A>::copyConstructFromRange(InputIterator first,
-	                                          InputIterator last,
-	                                          OutputIterator target)
+	template <typename II, typename OI>
+	void vector<T, A>::copyConstructFromRange(
+	    typename enable_if<!is_integral<II>::value, II>::type first, II last,
+	    OI target)
 	{
 		while (first != last)
 		{
@@ -314,8 +322,7 @@ namespace ft
 		}
 	}
 	template <typename T, typename A>
-	void vector<T, A>::copyConstructRange(const iterator first,
-	                                      const iterator last,
+	void vector<T, A>::copyConstructRange(iterator first, iterator last,
 	                                      const_reference val)
 	{
 		while (first != last)
@@ -525,7 +532,7 @@ namespace ft
 		{
 			if (this->size() >= dist)
 			{
-				if (this->size() != dist)
+				if (this->size() > dist)
 					__destroyEnd(_begin + dist);
 				std::copy(first, last, tmp);
 			}
@@ -534,16 +541,127 @@ namespace ft
 				std::copy(first, first + this->size(), _begin);
 				copyConstructFromRange(first + this->size(), last,
 				                       this->begin() + this->size());
+				_end = _begin + dist;
 			}
 		}
 		else
 		{
 			this->vectorFree();
-			_begin    = _alloc.allocate(dist);
-			_end      = _begin + dist;
-			_endAlloc = _end;
+			__newAlloc(dist);
 			copyConstructFromRange(first + this->size(), last, this->begin());
 		}
+	}
+	template <typename T, typename A>
+	void vector<T, A>::__newAlloc(size_type n)
+	{
+		_begin    = _alloc.allocate(n);
+		_end      = _begin + n;
+		_endAlloc = _end;
+	}
+	template <typename T, typename A>
+	void vector<T, A>::assign(size_type n, const value_type &val)
+	{
+		size_type i;
+		size_type curSize;
+
+		curSize = this->size();
+		if (n <= this->capacity())
+		{
+			if (curSize >= n)
+			{
+				if (curSize > n)
+					__destroyEnd(_begin + n);
+				i = 0;
+				while (i < n)
+				{
+					*(_begin + i) = val;
+					i++;
+				}
+			}
+			else if (curSize < n)
+			{
+				i = 0;
+				while (i < this->size())
+				{
+					*(_begin + i) = val;
+					i++;
+				}
+				copyConstructRange(this->begin() + curSize, this->begin() + n,
+				                   val);
+				_end = _begin + n;
+			}
+		}
+		else
+		{
+			this->vectorFree();
+			__newAlloc(n);
+			copyConstructRange(this->begin(), this->end(), val);
+		}
+	}
+	template <typename T, typename A>
+	void vector<T, A>::__rotate(size_type n)
+	{
+		iterator first = this->begin();
+		size_type i;
+		size_type curSize;
+		size_type count;
+		value_type tmp;
+
+		curSize = this->size();
+		if (curSize > 1)
+		{
+			count = 0;
+			while (count < n)
+			{
+				tmp = first[curSize - 1];
+				i   = curSize - 1;
+				while (i > 0)
+				{
+					first[i] = first[i - 1];
+					i--;
+				}
+				first[0] = tmp;
+				count++;
+			}
+		}
+	}
+	template <typename T, typename A>
+	typename vector<T, A>::iterator vector<T, A>::insert(iterator position,
+	                                                     const_reference val)
+	{
+		size_type nextSize;
+
+		if (this->size() + 1 > this->capacity())
+		{
+			this->reserve(this->size() * 2);
+		}
+		nextSize = this->size();
+		copyConstructRange(this->begin() + nextSize,
+		                   this->begin() + nextSize + 1, val);
+		_end++;
+		this->__rotate(1);
+		return (position);
+	}
+	template <typename T, typename A>
+	void vector<T, A>::insert(iterator position, size_type n,
+	                          const_reference val)
+	{
+		size_type nextSize;
+
+		if (this->size() + n > this->capacity())
+		{
+			this->reserve(std::max(this->size() * 2, this->size() + n));
+		}
+		nextSize = this->size();
+		copyConstructRange(this->begin() + nextSize,
+		                   this->begin() + nextSize + n, val);
+		_end += n;
+		this->__rotate(n);
+	}
+	template <typename T, typename A>
+	template <typename II>
+	void vector<T, A>::insert(iterator position, II first, II last)
+	{
 	}
 }  // namespace ft
 
