@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/10 19:03:42 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/11 17:20:32 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include "src/type_traits.hpp"
 #include "src/utility.hpp"
 #include "src/vector.hpp"
+
+//#define _LIBCPP_DEBUG
 
 template <typename B>
 void my_function(B begin, B end, int)
@@ -76,38 +78,40 @@ int main()
 	ft::pair<int, int> b;
 	std::vector<int> x(10);
 	struct test t1;
-	struct test t2(97);
-	struct test az[] = {t2, t2, t2, t1, t1, t1, t2, t2};
+	struct test t2(2);
+	struct test t3(3);
+	struct test t4(4);
+	struct test az[] = {t2, t2, t2, t1, t1, t1, t3, t4};
 
-	// std::vector<struct test> azv1(std::begin(az), std::end(az));
-	// std::cout << "===============" << std::endl;
-	// std::cout << "size: " << azv1.size() << std::endl;
-	// std::cout << "capacity: " << azv1.capacity() << std::endl;
-	// azv1.erase(azv1.begin() + 3, azv1.begin() + 5);
-	// int i = 0;
-	// while (i < azv1.size())
-	//{
-	//	std::cout << azv1[i].a << std::endl;
-	//	i++;
-	//}
-	// std::cout << "size: " << azv1.size() << std::endl;
-	// std::cout << "capacity: " << azv1.capacity() << std::endl;
-	// std::cout << "===============" << std::endl;
-
-	ft::vector<struct test> azv2(std::begin(az), std::end(az));
+	std::vector<struct test> azv1(std::begin(az), std::end(az));
 	std::cout << "===============" << std::endl;
-	std::cout << "size: " << azv2.size() << std::endl;
-	std::cout << "capacity: " << azv2.capacity() << std::endl;
-	azv2.erase(azv2.begin() + 3, azv2.begin() + 5);
+	std::cout << "size: " << azv1.size() << std::endl;
+	std::cout << "capacity: " << azv1.capacity() << std::endl;
+	azv1.erase(azv1.begin(), azv1.end());
 	int i = 0;
-	while (i < azv2.size())
+	while (i < azv1.size())
 	{
-		std::cout << azv2[i].a << std::endl;
+		std::cout << azv1[i].a << std::endl;
 		i++;
 	}
-	std::cout << "size: " << azv2.size() << std::endl;
-	std::cout << "capacity: " << azv2.capacity() << std::endl;
+	std::cout << "size: " << azv1.size() << std::endl;
+	std::cout << "capacity: " << azv1.capacity() << std::endl;
 	std::cout << "===============" << std::endl;
+
+	//	ft::vector<struct test> azv2(std::begin(az), std::end(az));
+	//	std::cout << "===============" << std::endl;
+	//	std::cout << "size: " << azv2.size() << std::endl;
+	//	std::cout << "capacity: " << azv2.capacity() << std::endl;
+	//	azv2.erase(azv2.begin(), azv2.end());
+	//	int i = 0;
+	//	while (i < azv2.size())
+	//	{
+	//		std::cout << azv2[i].a << std::endl;
+	//		i++;
+	//	}
+	//	std::cout << "size: " << azv2.size() << std::endl;
+	//	std::cout << "capacity: " << azv2.capacity() << std::endl;
+	//	std::cout << "===============" << std::endl;
 	//	std::vector<struct test> azv1(3);
 	//	std::cout << "===============" << std::endl;
 	//	std::cout << "size: " << azv1.size() << std::endl;
@@ -123,28 +127,28 @@ int main()
 	//	std::cout << "capacity: " << azv1.capacity() << std::endl;
 	//	std::cout << "===============" << std::endl;
 	//
-	// ft::vector<struct test> azv2(3);
-	// std::cout << "===============" << std::endl;
-	// std::cout << "size: " << azv2.size() << std::endl;
-	// std::cout << "capacity: " << azv2.capacity() << std::endl;
-	// azv2.insert(azv2.begin() + 1, std::begin(az), std::end(az));
-	// int i = 0;
-	// while (i < azv2.size())
+	//    ft::vector<struct test> azv2(3);
+	//    std::cout << "===============" << std::endl;
+	//    std::cout << "size: " << azv2.size() << std::endl;
+	//    std::cout << "capacity: " << azv2.capacity() << std::endl;
+	//    azv2.insert(azv2.begin() + 1, std::begin(az), std::end(az));
+	//    int i = 0;
+	//    while (i < azv2.size())
 	//{
 	//	std::cout << azv2[i].a << std::endl;
 	//	i++;
-	//}
-	// std::cout << "size: " << azv2.size() << std::endl;
-	// std::cout << "capacity: " << azv2.capacity() << std::endl;
-	// std::cout << "===============" << std::endl;
-	// std::vector<struct test> azv1(2);
-	// std::cout << "===============" << std::endl;
-	// std::cout << "size: " << azv1.size() << std::endl;
-	// std::cout << "capacity: " << azv1.capacity() << std::endl;
-	// azv1.assign(std::begin(az), std::end(az));
-	// std::cout << "size: " << azv1.size() << std::endl;
-	// std::cout << "capacity: " << azv1.capacity() << std::endl;
-	// std::cout << "===============" << std::endl;
+	//   }
+	//    std::cout << "size: " << azv2.size() << std::endl;
+	//    std::cout << "capacity: " << azv2.capacity() << std::endl;
+	//    std::cout << "===============" << std::endl;
+	//    std::vector<struct test> azv1(2);
+	//    std::cout << "===============" << std::endl;
+	//    std::cout << "size: " << azv1.size() << std::endl;
+	//    std::cout << "capacity: " << azv1.capacity() << std::endl;
+	//    azv1.assign(std::begin(az), std::end(az));
+	//    std::cout << "size: " << azv1.size() << std::endl;
+	//    std::cout << "capacity: " << azv1.capacity() << std::endl;
+	//    std::cout << "===============" << std::endl;
 
 	// ft::vector<struct test> azv2(3);
 	// azv2.reserve(10);

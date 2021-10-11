@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/07 16:45:52 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/11 15:16:00 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,13 +355,15 @@ namespace ft
 	}
 	/**************************************************************************/
 	/*
-	 * comparaison for normal_iterator
+	 * non member operators for normal_iterator
 	 * [x] operator==
 	 * [x] operator!=
 	 * [x] operator<
 	 * [x] operator>
 	 * [x] operator<=
 	 * [x] operator>=
+	 * [] operator+
+	 * [] operator-
 	 */
 	template <typename P>
 	bool operator==(const normal_iterator<P> &a, const normal_iterator<P> &b)
@@ -393,15 +395,29 @@ namespace ft
 	{
 		return (!(a < b));
 	}
+	template <typename P>
+	typename normal_iterator<P>::difference_type operator+(
+	    const normal_iterator<P> &lhs, const normal_iterator<P> &rhs)
+	{
+		return (lhs.base() + rhs.base());
+	}
+	template <typename P>
+	typename normal_iterator<P>::difference_type operator-(
+	    const normal_iterator<P> &lhs, const normal_iterator<P> &rhs)
+	{
+		return (lhs.base() - rhs.base());
+	}
 	/**************************************************************************/
 	/*
-	 * comparaison for normal_iterator
+	 * non members operators for reverse_iterator
 	 * [x] operator==
 	 * [x] operator!=
 	 * [x] operator<
 	 * [x] operator>
 	 * [x] operator<=
 	 * [x] operator>=
+	 * [] operator+
+	 * [] operator-
 	 */
 	template <typename I>
 	bool operator==(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
@@ -433,7 +449,18 @@ namespace ft
 	{
 		return (!(a < b));
 	}
-
+	template <typename I>
+	typename reverse_iterator<I>::difference_type operator+(
+	    const reverse_iterator<I> &lhs, const reverse_iterator<I> &rhs)
+	{
+		return (lhs.base() + rhs.base());
+	}
+	template <typename I>
+	typename reverse_iterator<I>::difference_type operator-(
+	    const reverse_iterator<I> &lhs, const reverse_iterator<I> &rhs)
+	{
+		return (lhs.base() - rhs.base());
+	}
 }  // namespace ft
 
 #endif /* ifsdef ITERATOR_HPP */

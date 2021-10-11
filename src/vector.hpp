@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/10 18:59:59 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/11 18:59:02 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ namespace ft
 	 * [x] push_back
 	 * [x] pop_back
 	 * [x] insert
-	 * [] erase
+	 * [x] erase
 	 * [] swap
 	 * [x] clear
 	 */
@@ -117,6 +117,7 @@ namespace ft
 		void insert(iterator position, II first, II last);
 		iterator erase(const iterator position);
 		iterator erase(const iterator first, const iterator last);
+		void swap(vector &x);
 
 	private:
 		void vectorFree(void);
@@ -695,13 +696,10 @@ namespace ft
 	{
 		pointer new_end;
 
-		if (position + 1 != this->end())
-			std::copy(position + 1, this->end(), position);
+		std::copy(position + 1, this->end(), position);
 		new_end = _end - 1;
 		__destroyEnd(new_end);
-		///////////////////
-		return iterator();
-		//////////////////
+		return (position);
 	}
 	template <typename T, typename A>
 	typename vector<T, A>::iterator vector<T, A>::erase(const iterator first,
@@ -709,11 +707,17 @@ namespace ft
 	{
 		pointer new_end;
 
-		if (last + 1 != this->end())
-			std::copy(last + 1, this->end(), first);
+		std::copy(last, this->end(), first);
 		new_end = _end - std::distance(first, last);
 		__destroyEnd(new_end);
-		return iterator();
+		return (first);
+	}
+	template <typename T, typename A>
+	void vector<T, A>::swap(vector &x)
+	{
+		std::swap(this->_begin, x._begin);
+		std::swap(this->_end, x._end);
+		std::swap(this->_endAlloc, x._endAlloc);
 	}
 }  // namespace ft
 
