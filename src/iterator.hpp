@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/11 15:16:00 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/12 19:09:20 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -459,7 +459,7 @@ namespace ft
 	typename reverse_iterator<I>::difference_type operator-(
 	    const reverse_iterator<I> &lhs, const reverse_iterator<I> &rhs)
 	{
-		return (lhs.base() - rhs.base());
+		return (rhs.base() - lhs.base());
 	}
 }  // namespace ft
 

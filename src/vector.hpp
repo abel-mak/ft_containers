@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/11 18:59:02 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/12 19:13:01 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,25 +255,25 @@ namespace ft
 	typename vector<T, A>::const_reverse_iterator vector<T, A>::rbegin(
 	    void) const
 	{
-		typename vector<T, A>::const_reverse_iterator tmp(_end - 1);
+		typename vector<T, A>::const_reverse_iterator tmp(_end);
 		return (tmp);
 	}
 	template <typename T, typename A>
 	typename vector<T, A>::const_reverse_iterator vector<T, A>::rend(void) const
 	{
-		typename vector<T, A>::const_reverse_iterator tmp(_begin - 1);
+		typename vector<T, A>::const_reverse_iterator tmp(_begin);
 		return (tmp);
 	}
 	template <typename T, typename A>
 	typename vector<T, A>::reverse_iterator vector<T, A>::rbegin(void)
 	{
-		typename vector<T, A>::reverse_iterator tmp(_end - 1);
+		typename vector<T, A>::reverse_iterator tmp(_end);
 		return (tmp);
 	}
 	template <typename T, typename A>
 	typename vector<T, A>::reverse_iterator vector<T, A>::rend(void)
 	{
-		typename vector<T, A>::reverse_iterator tmp(_begin - 1);
+		typename vector<T, A>::reverse_iterator tmp(_begin);
 		return (tmp);
 	}
 	template <typename T, typename A>

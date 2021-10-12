@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 14:53:12 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/02 16:02:38 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/12 19:13:02 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,9 +135,31 @@ TEST_CASE("ft::vector constructors")
 		CHECK(std_v.size() == ft_v.size());
 		CHECK(std_v.capacity() == ft_v.capacity());
 		CHECK(compare_a(std_i, ft_i, std_v.size()));
-		
+
 		CHECK(std_v1.size() == ft_v1.size());
 		CHECK(std_v1.capacity() == ft_v1.capacity());
 		CHECK(compare_a(std_i1, ft_i1, std_v1.size()));
+	}
+	SUBCASE("begin and end")
+	{
+		struct test t1;
+		struct test arr[] = {t1, t1, t1};
+
+		std::vector<struct test> std_v(std::begin(arr), std::end(arr));
+		ft::vector<struct test> ft_v(std::begin(arr), std::end(arr));
+
+		CHECK((std_v.begin() - std_v.end()) == (ft_v.begin() - ft_v.end()));
+	}
+	SUBCASE("rbegin and rend")
+	{
+		struct test t1;
+		struct test arr[] = {t1, t1, t1};
+
+		std::vector<struct test> std_v(std::begin(arr), std::end(arr));
+		ft::vector<struct test> ft_v(std::begin(arr), std::end(arr));
+
+		CHECK((std_v.rbegin() - std_v.rend()) == (ft_v.rbegin() - ft_v.rend()));
+		CHECK((std_v.begin().base() - std_v.rbegin().base().base()) ==
+		      (ft_v.begin().base() - ft_v.rbegin().base().base()));
 	}
 }
