@@ -64,4 +64,4 @@ typename my_if<std::is_integral<T>::value,T>::type uneFonction(T x);
 
 ## Links
 - [Why is the copy constructor not called?](https://stackoverflow.com/questions/3663506/why-is-the-copy-constructor-not-called)
-- 
+- [In-order iterator for binary tree](https://stackoverflow.com/questions/12850889/in-order-iterator-for-binary-tree)
