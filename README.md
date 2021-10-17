@@ -59,9 +59,15 @@ struct my_if<true,T>
 template <typename T>
 typename my_if<std::is_integral<T>::value,T>::type uneFonction(T x);
 ```
+###### install libc++
+sudo apt update<br>
+sudo apt install libc++abi1 libc6 libgcc1 libc++1</br>
+sudo apt-get install libc++-dev
 
 
 
 ## Links
 - [Why is the copy constructor not called?](https://stackoverflow.com/questions/3663506/why-is-the-copy-constructor-not-called)
 - [In-order iterator for binary tree](https://stackoverflow.com/questions/12850889/in-order-iterator-for-binary-tree)
+- [LLVM Debian/Ubuntu nightly packages](https://apt.llvm.org/)
+- 
