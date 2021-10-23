@@ -28,6 +28,52 @@ namespace ft
 		node_ptr right;
 	};
 
+	template <typename node_ptr>
+	bool isLeft(node_ptr node)
+	{
+		if (node != nullptr && node->parent != nullptr &&
+		    node->parent->left == node)
+			return (true);
+		return (false);
+	}
+	template <typename node_ptr>
+	bool isRight(node_ptr node)
+	{
+		if (node != nullptr && node->parent != nullptr &&
+		    node->parent->right == node)
+			return (true);
+		return (false);
+	}
+
+	// inorder successor
+	template <typename node_ptr>
+	node_ptr nextNode(node_ptr node)
+	{
+		if (node->right != nullptr)
+			return (node->right);
+		else
+		{
+			while (isRight(node) == true)
+			{
+				node = node->parent;
+			}
+			return (node->parent);
+		}
+	}
+	template <typename node_ptr>
+	node_ptr prevNode(node_ptr node)
+	{
+		if (node->left != nullptr)
+			return (node->left);
+		else
+		{
+			while (isLeft(node) == true)
+			{
+				node = node->parent;
+			}
+			return (node->parent);
+		}
+	}
 	template <typename Y>
 	struct tree_iterator
 	{
@@ -39,7 +85,10 @@ namespace ft
 		typedef tree_node<Y> *node_ptr;
 
 		node_ptr node;
+		tree_iterator<Y> nextNode(void);
+		tree_iterator<Y> prevNode(void);
 	};
+
 }  // namespace ft
 
 #endif /* ifndef TREE_ITERATOR_HPP */
