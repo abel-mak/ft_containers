@@ -6,17 +6,19 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/13 15:13:30 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/23 19:14:16 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREE_ITERATOR_HPP
 #define TREE_ITERATOR_HPP
 
+#include <algorithm>
 #include <iterator>
 
 namespace ft
 {
+
 	template <typename Y>
 	struct tree_node
 	{
@@ -27,7 +29,96 @@ namespace ft
 		node_ptr left;
 		node_ptr right;
 	};
+	/**************************************************************************/
+	/*
+	 * [x] operator*()
+	 * [x] operator->()
+	 * [x] operator++()
+	 * [x] operator++(int)
+	 * [x] operator--()
+	 * [x] operator--()
+	 * [x] operator==()
+	 * [x] operator!=()
+	 */
+	template <typename Y>
+	struct tree_iterator
+	{
+		typedef Y value_type;
+		typedef Y &reference;
+		typedef Y *pointer;
+		typedef std::bidirectional_iterator_tag iterator_category;
+		typedef ptrdiff_t difference_type;
+		typedef tree_node<Y> *node_ptr;
 
+		node_ptr _node;
+
+		tree_iterator(void);
+		tree_iterator(const node_ptr node);
+		reference operator*() const;
+		pointer operator->() const;
+		tree_iterator &operator++();
+		tree_iterator operator++(int);
+		tree_iterator &operator--();
+		tree_iterator operator--(int);
+		bool operator==(tree_iterator const &x);
+		bool operator!=(tree_iterator const &x);
+	};
+	template <typename Y>
+	tree_iterator<Y>::tree_iterator(void) : _node(nullptr)
+	{
+	}
+	template <typename Y>
+	tree_iterator<Y>::tree_iterator(const node_ptr node) : _node(node)
+	{
+	}
+	template <typename Y>
+	typename tree_iterator<Y>::reference tree_iterator<Y>::operator*(void) const
+	{
+		return (this->_node->value);
+	}
+	template <typename Y>
+	typename tree_iterator<Y>::pointer tree_iterator<Y>::operator->(void) const
+	{
+		return (_node);
+	}
+	template <typename Y>
+	tree_iterator<Y> &tree_iterator<Y>::operator++()
+	{
+		_node = nextNode(_node);
+		return (*this);
+	}
+	template <typename Y>
+	tree_iterator<Y> tree_iterator<Y>::operator++(int)
+	{
+		tree_iterator tmp(_node);
+		++this;
+		return (tmp);
+	}
+	template <typename Y>
+	tree_iterator<Y> &tree_iterator<Y>::operator--()
+	{
+		_node = prevNode(_node);
+		return (*this);
+	}
+	template <typename Y>
+	tree_iterator<Y> tree_iterator<Y>::operator--(int)
+	{
+		tree_iterator tmp(_node);
+
+		--this;
+		return (tmp);
+	}
+	template <typename Y>
+	bool tree_iterator<Y>::operator==(tree_iterator const &x)
+	{
+		return (_node == x._node);
+	}
+	template <typename Y>
+	bool tree_iterator<Y>::operator!=(tree_iterator const &x)
+	{
+		return (!(*this == x));
+	}
+	/**************************************************************************/
 	template <typename node_ptr>
 	bool isLeft(node_ptr node)
 	{
@@ -75,20 +166,13 @@ namespace ft
 		}
 	}
 	template <typename Y>
-	struct tree_iterator
+	size_t height(typename tree_node<Y>::node_ptr x)
 	{
-		typedef Y value_type;
-		typedef Y &reference;
-		typedef Y *pointer;
-		typedef std::bidirectional_iterator_tag iterator_category;
-		typedef ptrdiff_t difference_type;
-		typedef tree_node<Y> *node_ptr;
-
-		node_ptr node;
-		tree_iterator<Y> nextNode(void);
-		tree_iterator<Y> prevNode(void);
-	};
-
+		if (x == nullptr)
+			return (-1);
+		else
+			return (std::max(height(x->left), height(x->right)) + 1);
+	}
 }  // namespace ft
 
 #endif /* ifndef TREE_ITERATOR_HPP */
