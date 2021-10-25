@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/24 19:04:38 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/25 19:04:38 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ namespace ft
 		typedef tree_node *node_ptr;
 		typedef const tree_node *const_node_ptr;
 
+		Y value;
 		node_ptr parent;
 		node_ptr left;
 		node_ptr right;
@@ -119,6 +120,24 @@ namespace ft
 		return (!(*this == x));
 	}
 	/**************************************************************************/
+	template <typename node_ptr>
+	node_ptr tree_min(node_ptr x)
+	{
+		while (x->left != nullptr)
+		{
+			x = x->left;
+		}
+		return (x);
+	}
+	template <typename node_ptr>
+	node_ptr tree_max(node_ptr x)
+	{
+		while (x->right != nullptr)
+		{
+			x = x->right;
+		}
+		return (x);
+	}
 	template <typename node_ptr>
 	bool isLeft(node_ptr node)
 	{
