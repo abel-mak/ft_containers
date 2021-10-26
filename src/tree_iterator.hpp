@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/25 19:04:38 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/26 19:17:27 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,32 @@ namespace ft
 		node_ptr parent;
 		node_ptr left;
 		node_ptr right;
+
+		tree_node(const tree_node &src);
+		tree_node &operator=(const tree_node &lhs);
+		tree_node(void);
 	};
+	template <typename Y>
+	tree_node<Y>::tree_node(void)
+	{
+		this->parent = nullptr;
+		this->left   = nullptr;
+		this->right  = nullptr;
+	}
+	template <typename Y>
+	tree_node<Y>::tree_node(const tree_node &src)
+	{
+		*this = src;
+	}
+	template <typename Y>
+	tree_node<Y> &tree_node<Y>::operator=(const tree_node &lhs)
+	{
+		this->value  = lhs.value;
+		this->parent = lhs.value;
+		this->left   = lhs.left;
+		this->right  = lhs.right;
+		return (*this);
+	}
 	/**************************************************************************/
 	/*
 	 * [x] operator*()
