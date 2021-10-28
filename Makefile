@@ -6,7 +6,7 @@
 #    By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/10 17:10:37 by abel-mak          #+#    #+#              #
-#    Updated: 2021/10/02 12:21:12 by abel-mak         ###   ########.fr        #
+#    Updated: 2021/10/28 17:38:37 by abel-mak         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,11 @@ SRC=main.cpp
 
 TEST_SRC:=$(wildcard ./test/test*.cpp)
 
+TEST2_SRC:=$(wildcard ./test/_test*.cpp)
+
 TEST_OUT=ft_test
+
+TEST2_OUT=ft_test2
 
 DOCTEST= ./test/doctest/doctest/
 
@@ -34,6 +38,9 @@ all: $(NAME)
 
 $(NAME): $(SRC) $(HDR) 
 	clang++ $(FLAGS) $(SRC) -o $(NAME) 
+
+test2: $(TEST2_SRC)
+	@clang++ -std=c++98 $(TEST2_SRC) -o $(TEST2_OUT) && ./$(TEST2_OUT)
 
 test1: $(TEST_SRC) 
 	clang++ -std=c++11 $(TEST_SRC) -o $(TEST_OUT) && ./$(TEST_OUT)

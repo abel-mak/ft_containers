@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/27 19:22:22 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/28 19:08:44 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,15 @@
 /*
  * left-left imbalanced do right rotation
  * right-right imbalced do left rotation
- * left-right do left rotation and then do
- * right-left do right and then left
+ * left-right do left rotation to child and then do right
+ * right-left do right roation to child and then left
+ */
+
+/*
+ * the _rootParentNode is end node, i got this idea from libc++ tree class
+ * after i saw that my idea sucks the idea is to make parent node for root and
+ * make the parent->left point to root, so this make it easy for insertion
+ * deletion, and also when traversing the tree with iterator
  */
 
 namespace ft
@@ -53,8 +60,6 @@ namespace ft
 		node_ptr constructNode(const value_type &x);
 		void balanceAfterInsert(node_ptr x);
 		std::string getRotation(node_ptr x);
-		void leftRotate(node_ptr x);
-		void rightRotate(node_ptr x);
 	};
 	template <typename K, typename V, typename Comp, typename Alloc>
 	tree<K, V, Comp, Alloc>::tree(void)
@@ -73,8 +78,42 @@ namespace ft
 		alloc.construct(&newN->value, x);
 		return (newN);
 	}
-	template <typename K, typename V, typename Comp, typename Alloc>
-	std::string tree<K, V, Comp, Alloc>::getRotation(node_ptr x)
+	template <typename node_ptr>
+	void rightRotate(node_ptr x)
+	{
+		node_ptr child;
+
+		child         = x->left;
+		child->parent = x->parent;
+		if (isRight(x) == true)
+			x->parent->right = child;
+		else
+			x->parent->left = child;
+		x->parent = child;
+		x->left   = child->right;
+		if (x->left != nullptr)
+			x->left->parent = x;
+		child->right = x;
+	}
+	template <typename node_ptr>
+	void leftRotate(node_ptr x)
+	{
+		node_ptr child;
+
+		child         = x->right;
+		child->parent = x->parent;
+		if (isLeft(x) == true)
+			x->parent->left = child;
+		else
+			x->parent->right = child;
+		x->parent = child;
+		x->right  = child->left;
+		if (x->right != nullptr)
+			x->right->parent = x;
+		child->left = x;
+	}
+	template <typename node_ptr>
+	std::string getRotation(node_ptr x)
 	{
 		int bf;
 		std::string res = "";
@@ -101,15 +140,40 @@ namespace ft
 			}
 			i++;
 		}
+		return (res);
 	}
-	template <typename K, typename V, typename Comp, typename Alloc>
-	void tree<K, V, Comp, Alloc>::balanceAfterInsert(node_ptr x)
+	template <typename node_ptr>
+	void applyRotation(node_ptr x, std::string rot)
 	{
-		node_ptr child;
-		node_ptr grandChild;
-
-		while (x != &_rootParentNode)
+		if (rot == "ll")
 		{
+			leftRotate(x);
+		}
+		else if (rot == "rr")
+		{
+			rightRotate(x);
+		}
+		else if (rot == "lr")
+		{
+			leftRotate(x->left);
+			rightRotate(x);
+		}
+		else if (rot == "rl")
+		{
+			rightRotate(x->right);
+			leftRotate(x);
+		}
+	}
+	template <typename node_ptr>
+	void balanceAfterInsert(node_ptr x, node_ptr _rootParentNodeAddress)
+	{
+		std::string rot;
+
+		while (x != _rootParentNodeAddress)
+		{
+			rot = getRotation(x);
+			if (rot != "")
+				applyRotation(x, rot);
 			x = x->parent;
 		}
 	}
@@ -148,7 +212,8 @@ namespace ft
 		}
 		res.first = iterator(child);
 		if (res.second == true)
-			this->balance_after_insert(child);
+			this->balanceAfterInsert(child, &_rootParentNode);
+		return (res);
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::node_ptr tree<K, V, Comp, Alloc>::find(
