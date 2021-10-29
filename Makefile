@@ -6,7 +6,7 @@
 #    By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/10 17:10:37 by abel-mak          #+#    #+#              #
-#    Updated: 2021/10/28 17:38:37 by abel-mak         ###   ########.fr        #
+#    Updated: 2021/10/29 11:10:33 by abel-mak         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ test1: $(TEST_SRC)
 	clang++ -std=c++11 $(TEST_SRC) -o $(TEST_OUT) && ./$(TEST_OUT)
 
 clean:
-	rm -f $(NAME) $(TEST_OUT) $(NAME_DEBUG)
+	rm -f $(NAME) $(TEST_OUT) $(TEST2_OUT) $(NAME_DEBUG) a.out
 
 debug: $(SRC) $(HDR)
 	clang++ $(FLAGS_DEBUG) $(SRC) -o $(NAME_DEBUG)
@@ -71,4 +71,3 @@ debug: $(SRC) $(HDR)
 #fclean: clean
 #
 #re: fclean all
-

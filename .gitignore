@@ -4,3 +4,5 @@ ft
 ft_test
 ft_debug
 *.dSYM
+test/print_tree.cpp
+ft_test2

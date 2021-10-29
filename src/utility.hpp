@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 17:27:08 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/26 14:56:15 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/29 19:19:58 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ namespace ft
 	};
 
 	template <typename T1, typename T2>
-	pair<T1, T2>::pair(void) : first(0), second(0)
+	pair<T1, T2>::pair(void) : first(), second()
 	{
 	}
 	template <typename T1, typename T2>
@@ -51,9 +51,9 @@ namespace ft
 		return (*this);
 	}
 	template <typename T1, typename T2>
-	pair<T1, T2>::pair(const pair<T1, T2> &src)
+	pair<T1, T2>::pair(const pair<T1, T2> &src) : first(), second()
 	{
-		*this = src;
+		//*this = src;
 	}
 	template <typename T1, typename T2>
 	pair<T1, T2>::pair(const T1 &a, const T2 &b) : first(a), second(b)

@@ -6,13 +6,14 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/28 19:08:44 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/29 19:24:43 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREE_HPP
 #define TREE_HPP
 
+#include <iostream>
 #include <string>
 
 #include "tree_iterator.hpp"
@@ -83,6 +84,8 @@ namespace ft
 	{
 		node_ptr child;
 
+		if (x->left == nullptr)
+			return;
 		child         = x->left;
 		child->parent = x->parent;
 		if (isRight(x) == true)
@@ -100,6 +103,8 @@ namespace ft
 	{
 		node_ptr child;
 
+		if (x->right == nullptr)
+			return;
 		child         = x->right;
 		child->parent = x->parent;
 		if (isLeft(x) == true)
@@ -120,23 +125,25 @@ namespace ft
 		int i;
 
 		i = 0;
-		while (i < 2 && ((bf = height(x->right) - height(x->left) < -1) ||
-		                 (bf = height(x->right) - height(x->left) > 1)))
+		// the first iteration is to check for imbalacance
+		// the second one is to see which side of the node is heavy
+		while (i < 2 && ((bf = height(x->right) - height(x->left)) < -1 ||
+		                 (bf > 1) || i == 1))
 		{
-			if (bf > 1 || bf < -1)
+			if (bf < 0)
 			{
-				if (bf < 0)
-				{
-					x = x->left;
-					res += "l";
-					// left heavy
-				}
-				else
-				{
-					x = x->right;
-					res += "r";
-					// right heavy
-				}
+				x = x->left;
+				res += "l";
+			}
+			else if (bf > 0)
+			{
+				x = x->right;
+				res += "r";
+			}
+			else if (bf == 0 && res != "")
+			{
+				// this is just for second iteration
+				res += res[0];
 			}
 			i++;
 		}
@@ -147,11 +154,11 @@ namespace ft
 	{
 		if (rot == "ll")
 		{
-			leftRotate(x);
+			rightRotate(x);
 		}
 		else if (rot == "rr")
 		{
-			rightRotate(x);
+			leftRotate(x);
 		}
 		else if (rot == "lr")
 		{
@@ -228,13 +235,13 @@ namespace ft
 		tmp     = tmpRoot;
 		while (tmp != nullptr)
 		{
-			if (key > tmp->value.first)
+			if (value_compare()(key, tmp->value.first) == false)
 			{
 				tmp = tmpRoot->right;
 				if (tmp != nullptr)
 					tmpRoot = tmp;
 			}
-			else if (key < tmp->value->first)
+			else if (value_compare()(key, tmp->value->first) == true)
 			{
 				tmp = tmpRoot->left;
 				if (tmp != nullptr)

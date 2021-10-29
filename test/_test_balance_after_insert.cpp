@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 18:14:37 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/28 19:18:28 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/29 18:49:57 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,204 @@ bool isBalanced(node *root)
 	return (res);
 }
 
+#define COUNT 10
+
+void print2DUtil(node *root, int space, int depth)
+{
+	if (root == 0)
+		return;
+
+	space += COUNT;
+
+	print2DUtil(root->right, space, depth + 1);
+
+	std::cout << std::endl;
+	for (int i = COUNT; i < space; i++) std::cout << " ";
+	std::cout << "depth: " << depth << std::endl;
+	for (int i = COUNT; i < space; i++) std::cout << " ";
+	std::cout << "node: " << root << std::endl;
+	for (int i = COUNT; i < space; i++) std::cout << " ";
+	std::cout << "right: " << root->right << std::endl;
+	for (int i = COUNT; i < space; i++) std::cout << " ";
+	std::cout << "left: " << root->left << std::endl;
+
+	print2DUtil(root->left, space, depth + 1);
+}
+
+void print2D(node *root)
+{
+	print2DUtil(root, 0, 0);
+	std::cout << "***********************************************" << std::endl;
+}
+
 void test_balance_after()
 {
+	// left-left
 	{
-		node root;
+		node a;
 		node x;
+		node c;
 		node y;
 
-		root.left = &x;
-		x.left    = &y;
-		x.parent  = &root;
-		y.parent  = &x;
-
-		ft::balanceAfterInsert(&x, &root);
+		a.left   = &x;
+		x.left   = &c;
+		x.parent = &a;
+		c.left   = &y;
+		c.parent = &x;
+		y.parent = &c;
+		// print2D(&a);
+		ft::balanceAfterInsert(&x, &a);
 		assert(isBalanced(&x) == true);
+		// print2D(&a);
+	}
+	{
+		node a;
+		node x;
+		node c;
+		node d;
+		node g;
+
+		a.left   = &x;
+		x.parent = &a;
+		x.left   = &c;
+		c.parent = &x;
+		c.left   = &d;
+		d.parent = &c;
+		c.right  = &g;
+		g.parent = &c;
+		// print2D(&a);
+		ft::balanceAfterInsert(&x, &a);
+		assert(isBalanced(&x) == true);
+		// print2D(&a);
+	}
+	{
+		node a;
+		node x;
+		node c;
+		node d;
+		node g;
+		node e;
+
+		a.left   = &x;
+		x.parent = &a;
+		x.left   = &c;
+		c.parent = &x;
+		c.left   = &d;
+		d.parent = &c;
+		c.right  = &g;
+		g.parent = &c;
+
+		// print2D(&a);
+		ft::balanceAfterInsert(&x, &a);
+		g.left   = &e;
+		e.parent = &g;
+		// print2D(&a);
+		ft::balanceAfterInsert(&x, &a);
+		assert(isBalanced(&x) == true);
+		// print2D(&a);
+	}
+	/**************************************************************************/
+	// right-right
+	{
+		node a;
+		node x;
+		node c;
+		node y;
+
+		a.left   = &x;
+		x.right  = &c;
+		x.parent = &a;
+		c.right  = &y;
+		c.parent = &x;
+		y.parent = &c;
+		// print2D(&a);
+		ft::balanceAfterInsert(&x, &a);
+		assert(isBalanced(&x) == true);
+		// print2D(&a);
+	}
+	{
+		node a;
+		node x;
+		node c;
+		node d;
+		node g;
+
+		a.left   = &x;
+		x.parent = &a;
+		x.right  = &c;
+		c.parent = &x;
+		c.right  = &d;
+		d.parent = &c;
+		c.left   = &g;
+		g.parent = &c;
+		// print2D(&a);
+		ft::balanceAfterInsert(&x, &a);
+		assert(isBalanced(&x) == true);
+		// print2D(&a);
+	}
+	{
+		node a;
+		node x;
+		node c;
+		node d;
+		node g;
+		node e;
+
+		a.left   = &x;
+		x.parent = &a;
+		x.right  = &c;
+		c.parent = &x;
+		c.right  = &d;
+		d.parent = &c;
+		c.left   = &g;
+		g.parent = &c;
+
+		// print2D(&a);
+		ft::balanceAfterInsert(&x, &a);
+		g.right  = &e;
+		e.parent = &g;
+		// print2D(&a);
+		ft::balanceAfterInsert(&x, &a);
+		assert(isBalanced(&x) == true);
+		// print2D(&a);
+	}
+	/**************************************************************************/
+	// left-right
+	{
+		node a;
+		node x;
+		node c;
+		node g;
+
+		a.left   = &x;
+		x.parent = &a;
+		x.left   = &c;
+		c.parent = &x;
+		c.right  = &g;
+		g.parent = &c;
+		// print2D(&a);
+		ft::balanceAfterInsert(&x, &a);
+		assert(isBalanced(&x) == true);
+		// print2D(&a);
+	}
+	/**************************************************************************/
+	// right-left
+	{
+		node a;
+		node x;
+		node c;
+		node d;
+
+		a.left   = &x;
+		x.parent = &a;
+		x.right  = &c;
+		c.parent = &x;
+		c.left   = &d;
+		d.parent = &c;
+		// print2D(&a);
+		ft::balanceAfterInsert(&x, &a);
+		assert(isBalanced(&x) == true);
+		// print2D(&a);
 	}
 	std::cout << " balance_after_insert " << GREEN << " [OK]" << ENDCOLOR
 	          << std::endl;
