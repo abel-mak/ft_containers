@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 18:14:37 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/29 18:49:57 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/30 19:27:14 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int height(node *x)
 		return (std::max(height(x->left), height(x->right)) + 1);
 	}
 }
-
-void balanceFactor(node *x, bool &res)
+template <typename node_ptr>
+void balanceFactor(node_ptr x, bool &res)
 {
 	int dh;
 
@@ -58,8 +58,8 @@ void balanceFactor(node *x, bool &res)
 			res = false;
 	}
 }
-
-bool isBalanced(node *root)
+template <typename node_ptr>
+bool isBalanced(node_ptr root)
 {
 	bool res;
 	if (root == nullptr)
@@ -71,7 +71,8 @@ bool isBalanced(node *root)
 
 #define COUNT 10
 
-void print2DUtil(node *root, int space, int depth)
+template <typename node_ptr>
+void print2DUtil(node_ptr root, int space, int depth)
 {
 	if (root == 0)
 		return;
@@ -89,11 +90,14 @@ void print2DUtil(node *root, int space, int depth)
 	std::cout << "right: " << root->right << std::endl;
 	for (int i = COUNT; i < space; i++) std::cout << " ";
 	std::cout << "left: " << root->left << std::endl;
+	for (int i = COUNT; i < space; i++) std::cout << " ";
+	std::cout << "parent: " << root->parent << std::endl;
 
 	print2DUtil(root->left, space, depth + 1);
 }
 
-void print2D(node *root)
+template <typename node_ptr>
+void print2D(node_ptr *root)
 {
 	print2DUtil(root, 0, 0);
 	std::cout << "***********************************************" << std::endl;
@@ -270,4 +274,40 @@ void test_balance_after()
 	}
 	std::cout << " balance_after_insert " << GREEN << " [OK]" << ENDCOLOR
 	          << std::endl;
+}
+void test_insert()
+{
+	{
+		ft::tree<int, int, std::less<int>,
+		         std::allocator<ft::pair<const int, int> > >
+		    t;
+		ft::pair<const int, int> a(2, 0);
+		ft::pair<const int, int> b(3, 0);
+		ft::pair<const int, int> c(5, 0);
+		ft::pair<const int, int> d(6, 0);
+		ft::pair<const int, int> e(9, 0);
+		ft::pair<const int, int> f(8, 0);
+		ft::pair<const int, int> g(7, 0);
+		ft::pair<const int, int> h(4, 0);
+		ft::pair<const int, int> ii(1, 0);
+		ft::tree<int, int, std::less<int>,
+		         std::allocator<ft::pair<const int, int> > >::node_ptr i;
+
+		t.insert(a);
+		t.insert(b);
+		t.insert(c);
+		t.insert(d);
+		t.insert(e);
+		t.insert(f);
+		t.insert(g);
+		t.insert(h);
+		t.insert(ii);
+		i = t.getRoot();
+
+		std::cout << "height: " << height(i) << std::endl;
+		print2D(i);
+		assert(isBalanced(i));
+		std::cout << " insert " << GREEN << " [OK]" << ENDCOLOR << std::endl;
+		//   t.insert()
+	}
 }

@@ -6,14 +6,14 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 13:42:49 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/29 15:21:38 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/30 18:41:57 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cassert>
 #include <iostream>
-#define RED   "\033[31m"
-#define GREEN "\033[32m"
+#define RED      "\033[31m"
+#define GREEN    "\033[32m"
 #define ENDCOLOR "\e[m"
 
 #include "../src/tree.hpp"
@@ -201,13 +201,15 @@ void test()
 		assert(c.left == 0);
 		assert(c.right == 0);
 	}
-	std::cout << " tree_rotate " << GREEN << " [OK]"  << ENDCOLOR << std::endl;
+	std::cout << " tree_rotate " << GREEN << " [OK]" << ENDCOLOR << std::endl;
 }
 
 void test_balance_after(void);
+void test_insert(void);
 
 int main(void)
 {
-	test();
-	test_balance_after();
+//	test();
+//	test_balance_after();
+	test_insert();
 }

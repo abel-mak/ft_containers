@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/29 19:24:43 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/30 19:18:16 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ namespace ft
 		typedef typename allocator_type::size_type size_type;
 		typedef tree_node<value_type> *node_ptr;
 		typedef tree_iterator<value_type> iterator;
+		typedef std::allocator<tree_node<value_type> > node_allocator;
 
 	private:
 		tree_node<value_type> _rootParentNode;
@@ -55,13 +56,19 @@ namespace ft
 
 	public:
 		tree(void);
-		allocator_type alloc;
+		allocator_type _alloc;
 		pair<iterator, bool> insert(const value_type &v);
 		node_ptr find(K &k);
 		node_ptr constructNode(const value_type &x);
-		void balanceAfterInsert(node_ptr x);
 		std::string getRotation(node_ptr x);
+		node_ptr getRoot(void);
 	};
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename tree<K, V, Comp, Alloc>::node_ptr tree<K, V, Comp, Alloc>::getRoot(
+	    void)
+	{
+		return (_rootParentNode.left);
+	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	tree<K, V, Comp, Alloc>::tree(void)
 	{
@@ -74,9 +81,10 @@ namespace ft
 	tree<K, V, Comp, Alloc>::constructNode(const value_type &x)
 	{
 		node_ptr newN;
+		node_allocator tmpAlloc;
 
-		newN = alloc.allocate(1);
-		alloc.construct(&newN->value, x);
+		newN = tmpAlloc.allocate(1);
+		tmpAlloc.construct(newN, x);
 		return (newN);
 	}
 	template <typename node_ptr>
@@ -195,21 +203,36 @@ namespace ft
 
 		key   = x.first;
 		child = this->find(key);
-		if (key != child->value.first)
+		if (child != &_rootParentNode && key != child->value.first)
 		{
 			newN         = constructNode(x);
 			newN->parent = child;
 			res.second   = true;
-			if (key < child->value.first || child == &_rootParentNode)
+			if (key < child->value.first)
 			{
 				child->left = newN;
+				//	std::cout << "child: " << child
+				//	          << " ======== "
+				//	             "child child: "
+				//	          << child->left << std::endl;
 				// insert to left of the child
 			}
 			else if (key > child->value.first)
 			{
 				child->right = newN;
+				//	std::cout << "child: " << child
+				//	          << " ======== "
+				//	             "child child: "
+				//	          << child->right << std::endl;
 				// insert to right of the child
 			}
+		}
+		else if (child == &_rootParentNode)
+		{
+			newN         = constructNode(x);
+			newN->parent = child;
+			child->left  = newN;
+			res.second   = true;
 		}
 		else
 		{
@@ -219,7 +242,9 @@ namespace ft
 		}
 		res.first = iterator(child);
 		if (res.second == true)
-			this->balanceAfterInsert(child, &_rootParentNode);
+		{
+			balanceAfterInsert(child, &_rootParentNode);
+		}
 		return (res);
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
@@ -241,7 +266,7 @@ namespace ft
 				if (tmp != nullptr)
 					tmpRoot = tmp;
 			}
-			else if (value_compare()(key, tmp->value->first) == true)
+			else if (value_compare()(key, tmp->value.first) == true)
 			{
 				tmp = tmpRoot->left;
 				if (tmp != nullptr)
@@ -256,4 +281,4 @@ namespace ft
 	}
 }  // namespace ft
 
-#endif /* ifndef TREE_HPP */
+#endif /* if//ndef TREE_HPP */
