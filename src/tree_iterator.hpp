@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/30 18:59:59 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/31 18:41:21 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ namespace ft
 		*this = src;
 	}
 	template <typename Y>
-	tree_node<Y>::tree_node(const Y &value) : value(value)
+	tree_node<Y>::tree_node(const Y &x) : value(x)
 	{
 		this->parent = nullptr;
 		this->left   = nullptr;
@@ -95,8 +95,6 @@ namespace ft
 		typedef ptrdiff_t difference_type;
 		typedef tree_node<Y> *node_ptr;
 
-		node_ptr _node;
-
 		tree_iterator(void);
 		tree_iterator(const node_ptr node);
 		reference operator*() const;
@@ -107,6 +105,9 @@ namespace ft
 		tree_iterator operator--(int);
 		bool operator==(tree_iterator const &x);
 		bool operator!=(tree_iterator const &x);
+
+	private:
+		node_ptr _node;
 	};
 	template <typename Y>
 	tree_iterator<Y>::tree_iterator(void) : _node(nullptr)

@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 18:14:37 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/30 19:27:14 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/31 18:19:47 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 
 struct node
 {
+	std::pair<int, int> value;
 	node *left;
 	node *right;
 	node *parent;
@@ -92,6 +93,8 @@ void print2DUtil(node_ptr root, int space, int depth)
 	std::cout << "left: " << root->left << std::endl;
 	for (int i = COUNT; i < space; i++) std::cout << " ";
 	std::cout << "parent: " << root->parent << std::endl;
+	for (int i = COUNT; i < space; i++) std::cout << " ";
+	std::cout << "key: " << root->value.first << std::endl;
 
 	print2DUtil(root->left, space, depth + 1);
 }
@@ -304,10 +307,68 @@ void test_insert()
 		t.insert(ii);
 		i = t.getRoot();
 
-		std::cout << "height: " << height(i) << std::endl;
-		print2D(i);
+		// print2D(i);
 		assert(isBalanced(i));
-		std::cout << " insert " << GREEN << " [OK]" << ENDCOLOR << std::endl;
-		//   t.insert()
 	}
+	{
+		ft::tree<int, int, std::less<int>,
+		         std::allocator<ft::pair<const int, int> > >
+		    t;
+		ft::pair<const int, int> a(15, 0);
+		ft::pair<const int, int> b(3, 0);
+		ft::pair<const int, int> c(9, 0);
+		ft::pair<const int, int> d(8, 0);
+		ft::pair<const int, int> e(14, 0);
+		ft::pair<const int, int> f(13, 0);
+		ft::pair<const int, int> g(12, 0);
+		ft::pair<const int, int> h(11, 0);
+		ft::pair<const int, int> ii(10, 0);
+		ft::tree<int, int, std::less<int>,
+		         std::allocator<ft::pair<const int, int> > >::node_ptr i;
+
+		t.insert(a);
+		t.insert(b);
+		t.insert(c);
+		t.insert(d);
+		t.insert(e);
+		t.insert(f);
+		t.insert(g);
+		t.insert(h);
+		t.insert(ii);
+		i = t.getRoot();
+
+		// print2D(i);
+		assert(isBalanced(i));
+	}
+	{
+		ft::tree<int, int, std::less<int>,
+		         std::allocator<ft::pair<const int, int> > >
+		    t;
+		ft::pair<const int, int> a(77, 0);
+		ft::pair<const int, int> b(82, 0);
+		ft::pair<const int, int> c(2, 0);
+		ft::pair<const int, int> d(25, 0);
+		ft::pair<const int, int> e(54, 0);
+		ft::pair<const int, int> f(27, 0);
+		ft::pair<const int, int> g(21, 0);
+		ft::pair<const int, int> h(95, 0);
+		ft::pair<const int, int> ii(65, 0);
+		ft::tree<int, int, std::less<int>,
+		         std::allocator<ft::pair<const int, int> > >::node_ptr i;
+
+		t.insert(a);
+		t.insert(b);
+		t.insert(c);
+		t.insert(d);
+		t.insert(e);
+		t.insert(f);
+		t.insert(g);
+		t.insert(h);
+		t.insert(ii);
+		i = t.getRoot();
+
+		// print2D(i);
+		assert(isBalanced(i));
+	}
+	std::cout << " insert " << GREEN << " [OK]" << ENDCOLOR << std::endl;
 }

@@ -6,12 +6,16 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 17:27:08 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/29 19:19:58 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/31 18:19:50 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILITY_HPP
 #define UTILITY_HPP
+
+#include <iostream>
+
+#include "type_traits.hpp"
 
 namespace ft
 {
@@ -23,6 +27,9 @@ namespace ft
 	{
 		typedef T1 first_type;
 		typedef T2 second_type;
+
+	private:
+		bool is;
 
 	public:
 		first_type first;
@@ -51,9 +58,9 @@ namespace ft
 		return (*this);
 	}
 	template <typename T1, typename T2>
-	pair<T1, T2>::pair(const pair<T1, T2> &src) : first(), second()
+	pair<T1, T2>::pair(const pair<T1, T2> &src)
+	    : first(src.first), second(src.second)
 	{
-		//*this = src;
 	}
 	template <typename T1, typename T2>
 	pair<T1, T2>::pair(const T1 &a, const T2 &b) : first(a), second(b)

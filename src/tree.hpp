@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/30 19:18:16 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/10/31 19:20:45 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ namespace ft
 	{
 	public:
 		typedef pair<const K, V> value_type;
+		typedef const pair<const K, V> const_value_type;
 		typedef Comp value_compare;
 		typedef Alloc allocator_type;
 		typedef typename allocator_type::pointer pointer;
@@ -48,20 +49,25 @@ namespace ft
 		typedef typename allocator_type::size_type size_type;
 		typedef tree_node<value_type> *node_ptr;
 		typedef tree_iterator<value_type> iterator;
+		typedef tree_iterator<const_value_type> const_iterator;
 		typedef std::allocator<tree_node<value_type> > node_allocator;
 
 	private:
 		tree_node<value_type> _rootParentNode;
 		node_ptr _startNode;
+		node_ptr constructNode(const value_type &x);
+		std::string getRotation(node_ptr x);
+		void removeNode(node_ptr x);
+		void SetChildBeforeEraseAndRemove(node_ptr x, node_ptr child);
 
 	public:
 		tree(void);
 		allocator_type _alloc;
+		node_allocator _nodeAlloc;
 		pair<iterator, bool> insert(const value_type &v);
 		node_ptr find(K &k);
-		node_ptr constructNode(const value_type &x);
-		std::string getRotation(node_ptr x);
 		node_ptr getRoot(void);
+		void erase(const_iterator position);
 	};
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::node_ptr tree<K, V, Comp, Alloc>::getRoot(
@@ -81,11 +87,16 @@ namespace ft
 	tree<K, V, Comp, Alloc>::constructNode(const value_type &x)
 	{
 		node_ptr newN;
-		node_allocator tmpAlloc;
 
-		newN = tmpAlloc.allocate(1);
-		tmpAlloc.construct(newN, x);
+		newN = _nodeAlloc.allocate(1);
+		_nodeAlloc.construct(newN, x);
 		return (newN);
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	void tree<K, V, Comp, Alloc>::removeNode(node_ptr x)
+	{
+		_nodeAlloc.destroy(x);
+		_nodeAlloc.deallocate(x, 1);
 	}
 	template <typename node_ptr>
 	void rightRotate(node_ptr x)
@@ -209,23 +220,9 @@ namespace ft
 			newN->parent = child;
 			res.second   = true;
 			if (key < child->value.first)
-			{
 				child->left = newN;
-				//	std::cout << "child: " << child
-				//	          << " ======== "
-				//	             "child child: "
-				//	          << child->left << std::endl;
-				// insert to left of the child
-			}
 			else if (key > child->value.first)
-			{
 				child->right = newN;
-				//	std::cout << "child: " << child
-				//	          << " ======== "
-				//	             "child child: "
-				//	          << child->right << std::endl;
-				// insert to right of the child
-			}
 		}
 		else if (child == &_rootParentNode)
 		{
@@ -240,7 +237,7 @@ namespace ft
 			res.second = false;
 			// the keys are equal return child
 		}
-		res.first = iterator(child);
+		res.first = iterator(newN);
 		if (res.second == true)
 		{
 			balanceAfterInsert(child, &_rootParentNode);
@@ -279,6 +276,33 @@ namespace ft
 		}
 		return (tmpRoot);
 	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	void tree<K, V, Comp, Alloc>::SetChildBeforeEraseAndRemove(node_ptr x,
+	                                                           node_ptr child)
+	{
+		if (isRight(x) == true)
+			x->parent->right = child;
+		else
+			x->parent->left = child;
+		this->removeNode(x);
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	void tree<K, V, Comp, Alloc>::erase(const_iterator position)
+	{
+		node_ptr x;
+
+		x = position.base();
+		if (x->left != nullptr && x->right != nullptr)
+		{
+		}
+		else if (x->left != nullptr && x->right == nullptr)
+			SetChildBeforeEraseAndRemove(x, x->left);
+		else if (x->right != nullptr && x->left == nullptr)
+			SetChildBeforeEraseAndRemove(x, x->right);
+		else
+			SetChildBeforeEraseAndRemove(x, nullptr);
+	}
+
 }  // namespace ft
 
 #endif /* if//ndef TREE_HPP */
