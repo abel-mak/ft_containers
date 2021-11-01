@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/31 18:41:21 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/01 19:22:04 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ namespace ft
 	template <typename Y>
 	typename tree_iterator<Y>::pointer tree_iterator<Y>::operator->(void) const
 	{
-		return (_node);
+		return (&(_node->value));
 	}
 	template <typename Y>
 	tree_iterator<Y> &tree_iterator<Y>::operator++()
@@ -137,7 +137,7 @@ namespace ft
 	tree_iterator<Y> tree_iterator<Y>::operator++(int)
 	{
 		tree_iterator tmp(_node);
-		++this;
+		++(*this);
 		return (tmp);
 	}
 	template <typename Y>
@@ -151,7 +151,7 @@ namespace ft
 	{
 		tree_iterator tmp(_node);
 
-		--this;
+		--(*this);
 		return (tmp);
 	}
 	template <typename Y>
@@ -205,7 +205,7 @@ namespace ft
 	node_ptr nextNode(node_ptr node)
 	{
 		if (node->right != nullptr)
-			return (node->right);
+			return (tree_min(node->right));
 		else
 		{
 			while (isRight(node) == true)
@@ -219,7 +219,7 @@ namespace ft
 	node_ptr prevNode(node_ptr node)
 	{
 		if (node->left != nullptr)
-			return (node->left);
+			return (tree_max(node->left));
 		else
 		{
 			while (isLeft(node) == true)

@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 13:42:49 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/30 18:41:57 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/01 14:36:03 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,7 @@
 #define ENDCOLOR "\e[m"
 
 #include "../src/tree.hpp"
-struct node
-{
-	node *left;
-	node *right;
-	node *parent;
-	node()
-	{
-		left   = nullptr;
-		right  = nullptr;
-		parent = nullptr;
-	}
-};
+#include "test_header.hpp"
 
 void test()
 {
@@ -206,10 +195,12 @@ void test()
 
 void test_balance_after(void);
 void test_insert(void);
+void test_iterator(void);
 
 int main(void)
 {
-//	test();
-//	test_balance_after();
+	test();
+	test_balance_after();
 	test_insert();
+	test_iterator();
 }
