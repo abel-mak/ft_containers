@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/01 13:03:25 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/02 12:29:09 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,7 +356,7 @@ namespace ft
 			tmp = nextNode(x);
 			this->replaceNode(x, tmp);
 			this->removeNode(x);
-			erase(iterator(tmp));
+			erase(const_iterator(tmp));
 			// create clone to tmp and replace it with with x
 			// delete x and delete tmp
 		}

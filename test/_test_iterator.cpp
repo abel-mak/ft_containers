@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 14:10:11 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/01 19:22:02 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/02 10:36:22 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void test_iterator(void)
 		{
 			if ((*it).first < (*prev).first)
 				assert(1 == 0);
-			std::cout << (*it).first << std::endl;
+			// std::cout << (*it).first << std::endl;
 			prev = it;
 			++it;
 		}
@@ -92,7 +92,7 @@ void test_iterator(void)
 		{
 			if (it->first > prev->first)
 				assert(1 == 0);
-			std::cout << (*it).first << std::endl;
+			// std::cout << (*it).first << std::endl;
 			if (it == t.begin())
 				break;
 			prev = it;
@@ -106,10 +106,10 @@ void test_iterator(void)
 		         std::allocator<ft::pair<const int, int> > >::iterator prev;
 		assert(it == prev);
 	}
-
-	std::cout << "tree_iterator operator== and operator!= [OK]" << std::endl;
-	std::cout << "tree_iterator operator-> [OK]" << std::endl;
-	std::cout << "tree_iterator both operator++ [OK]" << std::endl;
-	std::cout << "tree_iterator both operator-- [OK]" << std::endl;
-	std::cout << "tree_iterator operator* [OK]" << std::endl;
+	// std::cout << "tree_iterator operator== and operator!= [OK]" << std::endl;
+	// std::cout << "tree_iterator operator-> [OK]" << std::endl;
+	// std::cout << "tree_iterator both operator++ [OK]" << std::endl;
+	// std::cout << "tree_iterator both operator-- [OK]" << std::endl;
+	// std::cout << "tree_iterator operator* [OK]" << std::endl;
+	std::cout << " tree_iterator [OK]" << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/01 19:22:04 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/02 12:29:08 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,6 @@ namespace ft
 		tree_node(const tree_node &src);
 		tree_node(const Y &value);
 		tree_node &operator=(const tree_node &lhs);
-	};
-	template <>
-	struct tree_node<bool>
-	{
-		typedef tree_node *node_ptr;
-		typedef const tree_node *const_node_ptr;
-
-		node_ptr parent;
-		node_ptr left;
-		node_ptr right;
-		tree_node(void);
 	};
 	template <typename Y>
 	tree_node<Y>::tree_node(void)

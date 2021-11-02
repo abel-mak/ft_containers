@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 18:14:37 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/01 12:44:30 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/02 10:33:06 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,8 +299,6 @@ void test_insert()
 	}
 	{
 		std::map<int, int> a;
-
-
 		// std::cout << (*(a.begin())).second << std::endl;
 		//    std::cout << a.size() << std::endl;
 		//     while (it != a.end())

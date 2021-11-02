@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 13:42:49 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/01 14:36:03 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/02 10:39:38 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,7 @@ void test()
 void test_balance_after(void);
 void test_insert(void);
 void test_iterator(void);
+void test_erase();
 
 int main(void)
 {
@@ -203,4 +204,5 @@ int main(void)
 	test_balance_after();
 	test_insert();
 	test_iterator();
+	test_erase();
 }
