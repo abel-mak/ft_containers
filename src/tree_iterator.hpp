@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/02 12:29:08 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/03 18:39:01 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ namespace ft
 		this->right  = nullptr;
 	}
 	template <typename Y>
-	tree_node<Y> &tree_node<Y>::operator=(const tree_node &lhs)
+	tree_node<Y> &tree_node<Y>::operator=(const tree_node<Y> &lhs)
 	{
 		this->value  = lhs.value;
 		this->parent = lhs.value;
@@ -85,7 +85,7 @@ namespace ft
 		typedef tree_node<Y> *node_ptr;
 
 		tree_iterator(void);
-		tree_iterator(const node_ptr node);
+		tree_iterator(node_ptr node);
 		reference operator*() const;
 		pointer operator->() const;
 		tree_iterator &operator++();
@@ -95,7 +95,7 @@ namespace ft
 		bool operator==(tree_iterator const &x);
 		bool operator!=(tree_iterator const &x);
 
-	private:
+	public:
 		node_ptr _node;
 	};
 	template <typename Y>
@@ -103,7 +103,7 @@ namespace ft
 	{
 	}
 	template <typename Y>
-	tree_iterator<Y>::tree_iterator(const node_ptr node) : _node(node)
+	tree_iterator<Y>::tree_iterator(node_ptr node) : _node(node)
 	{
 	}
 	template <typename Y>

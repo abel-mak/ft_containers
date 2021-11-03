@@ -6,12 +6,14 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/19 15:37:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/31 16:44:33 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/03 16:08:54 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TYPE_TRAITS_HPP
 #define TYPE_TRAITS_HPP
+
+#include <iostream>
 
 namespace ft
 {

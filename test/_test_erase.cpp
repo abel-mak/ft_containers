@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:46 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/02 11:09:18 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/03 19:45:35 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,10 @@ void test_erase()
 		print2D(t.getRoot());
 		while (it != t.end())
 		{
-			if (it->first == 21)
+			if (it->first == 54)
 				t.erase(it);
 			it++;
 		}
+		// print2D(t.getRoot());
 	}
 }

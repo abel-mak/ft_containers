@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/02 12:29:09 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/03 19:45:37 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ namespace ft
 		typedef typename allocator_type::difference_type difference_type;
 		typedef typename allocator_type::size_type size_type;
 		typedef tree_node<value_type> *node_ptr;
+		typedef const node_ptr const_node_ptr;
 		typedef tree_iterator<value_type> iterator;
 		typedef tree_iterator<const_value_type> const_iterator;
 		typedef std::allocator<tree_node<value_type> > node_allocator;
@@ -69,7 +70,7 @@ namespace ft
 		pair<iterator, bool> insert(const value_type &v);
 		node_ptr find(K &k);
 		node_ptr getRoot(void);
-		void erase(const_iterator position);
+		void erase(iterator position);
 		iterator begin(void);
 		const_iterator begin(void) const;
 		iterator end(void);
@@ -122,12 +123,20 @@ namespace ft
 		node_ptr newN;
 
 		newN = _nodeAlloc.allocate(1);
+		std::cout << "newN: " << newN << std::endl;
 		_nodeAlloc.construct(newN, x);
 		return (newN);
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	void tree<K, V, Comp, Alloc>::removeNode(node_ptr x)
 	{
+		if (x->parent != nullptr)
+		{
+			if (isLeft(x) == true)
+				x->parent->left = nullptr;
+			else
+				x->parent->right = nullptr;
+		}
 		_nodeAlloc.destroy(x);
 		_nodeAlloc.deallocate(x, 1);
 	}
@@ -325,10 +334,7 @@ namespace ft
 	{
 		node_ptr newN;
 
-		newN         = constructNode(x->value);
-		newN->left   = x->left;
-		newN->right  = x->right;
-		newN->parent = x->parent;
+		newN = constructNode(x->value);
 		return (newN);
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
@@ -336,19 +342,22 @@ namespace ft
 	{
 		node_ptr newN;
 
-		newN = this->cloney(y);
+		newN         = this->cloneNode(y);
+		newN->left   = x->left;
+		newN->right  = x->right;
+		newN->parent = x->parent;
 		if (isLeft(x) == true)
 			x->parent->left = newN;
 		else
 			x->parent->right = newN;
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
-	void tree<K, V, Comp, Alloc>::erase(const_iterator position)
+	void tree<K, V, Comp, Alloc>::erase(iterator position)
 	{
 		node_ptr x;
 		node_ptr tmp;
 
-		x = position.base();
+		x = position._node;
 		if (x == nullptr)
 			return;
 		if (x->left != nullptr && x->right != nullptr)
@@ -356,7 +365,8 @@ namespace ft
 			tmp = nextNode(x);
 			this->replaceNode(x, tmp);
 			this->removeNode(x);
-			erase(const_iterator(tmp));
+			erase(iterator(tmp));
+			return;
 			// create clone to tmp and replace it with with x
 			// delete x and delete tmp
 		}
@@ -366,6 +376,7 @@ namespace ft
 			SetChildBeforeEraseAndRemove(x, x->right);
 		else
 			SetChildBeforeEraseAndRemove(x, nullptr);
+		// balanceAfterInsert((this->begin())._node, &_rootParentNode);
 	}
 
 }  // namespace ft
