@@ -6,13 +6,14 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 14:10:11 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/02 10:36:22 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/04 14:20:53 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <map>
 
 #include "../src/tree.hpp"
+
 void test_iterator(void)
 {
 	{
@@ -88,16 +89,16 @@ void test_iterator(void)
 		prev = t.end();
 		--it;
 		--prev;
-		while (1)
-		{
-			if (it->first > prev->first)
-				assert(1 == 0);
-			// std::cout << (*it).first << std::endl;
-			if (it == t.begin())
-				break;
-			prev = it;
-			it--;
-		}
+			while (1)
+			{
+				if (it->first > prev->first)
+					assert(1 == 0);
+				// std::cout << (*it).first << std::endl;
+				if (it == t.begin())
+					break;
+				prev = it;
+				it--;
+			}
 	}
 	{
 		ft::tree<int, int, std::less<int>,

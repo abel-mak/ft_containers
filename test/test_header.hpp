@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 12:07:56 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/01 12:11:22 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/04 14:38:12 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void print2DUtil(node_ptr root, int space, int depth)
 
 	space += COUNT;
 
-	print2DUtil(root->right, space, depth + 1);
+	print2DUtil(static_cast<node_ptr>(root->right), space, depth + 1);
 
 	std::cout << std::endl;
 	for (int i = COUNT; i < space; i++) std::cout << " ";
@@ -84,7 +84,7 @@ void print2DUtil(node_ptr root, int space, int depth)
 	for (int i = COUNT; i < space; i++) std::cout << " ";
 	std::cout << "key: " << root->value.first << std::endl;
 
-	print2DUtil(root->left, space, depth + 1);
+	print2DUtil(static_cast<node_ptr>(root->left), space, depth + 1);
 }
 
 template <typename node_ptr>

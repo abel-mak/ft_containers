@@ -6,14 +6,14 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/03 19:45:37 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/04 18:46:52 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREE_HPP
 #define TREE_HPP
 
-#include <iostream>
+//#include <iostream>
 #include <string>
 
 #include "tree_iterator.hpp"
@@ -48,6 +48,8 @@ namespace ft
 		typedef typename allocator_type::difference_type difference_type;
 		typedef typename allocator_type::size_type size_type;
 		typedef tree_node<value_type> *node_ptr;
+		typedef tree_node_base<void>::b_node_ptr b_node_ptr;
+		typedef tree_node_base<void>::const_b_node_ptr const_b_node_ptr;
 		typedef const node_ptr const_node_ptr;
 		typedef tree_iterator<value_type> iterator;
 		typedef tree_iterator<const_value_type> const_iterator;
@@ -58,10 +60,12 @@ namespace ft
 		node_ptr _startNode;
 		node_ptr constructNode(const value_type &x);
 		std::string getRotation(node_ptr x);
-		void removeNode(node_ptr x);
-		void SetChildBeforeEraseAndRemove(node_ptr x, node_ptr child);
-		void replaceNode(node_ptr x, node_ptr y);
+		void removeNode(b_node_ptr x);
+		void SetChildBeforeEraseAndRemove(b_node_ptr x, b_node_ptr child);
+		void replaceNode(b_node_ptr x, b_node_ptr y);
 		node_ptr cloneNode(node_ptr x);
+		size_type _size;
+		void updateSize(void);
 
 	public:
 		tree(void);
@@ -80,12 +84,12 @@ namespace ft
 	typename tree<K, V, Comp, Alloc>::node_ptr tree<K, V, Comp, Alloc>::getRoot(
 	    void)
 	{
-		if (_rootParentNode.left == &_rootParentNode)
+		if (_rootParentNode.left == static_cast<b_node_ptr>(&_rootParentNode))
 			return (nullptr);
-		return (_rootParentNode.left);
+		return (static_cast<node_ptr>(_rootParentNode.left));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
-	tree<K, V, Comp, Alloc>::tree(void)
+	tree<K, V, Comp, Alloc>::tree(void) : _size(0)
 	{
 		_rootParentNode.parent = nullptr;
 		_rootParentNode.left   = &_rootParentNode;
@@ -95,13 +99,13 @@ namespace ft
 	typename tree<K, V, Comp, Alloc>::iterator tree<K, V, Comp, Alloc>::begin(
 	    void)
 	{
-		return (iterator(tree_min(&_rootParentNode)));
+		return (iterator(tree_min(static_cast<b_node_ptr>(&_rootParentNode))));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::const_iterator
 	tree<K, V, Comp, Alloc>::begin() const
 	{
-		return (iterator(tree_min(&_rootParentNode)));
+		return (iterator(tree_min(static_cast<b_node_ptr>(&_rootParentNode))));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::iterator tree<K, V, Comp, Alloc>::end(
@@ -117,33 +121,41 @@ namespace ft
 		return (const_iterator(&_rootParentNode));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
+	void tree<K, V, Comp, Alloc>::updateSize(void)
+	{
+		size_type tmp;
+		iterator first;
+
+		first = this->begin();
+		tmp   = 0;
+		while (first != this->end())
+		{
+			first++;
+			tmp++;
+		}
+		_size = tmp;
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::node_ptr
 	tree<K, V, Comp, Alloc>::constructNode(const value_type &x)
 	{
 		node_ptr newN;
 
 		newN = _nodeAlloc.allocate(1);
-		std::cout << "newN: " << newN << std::endl;
+		// std::cout << "newN: " << newN << std::endl;
 		_nodeAlloc.construct(newN, x);
 		return (newN);
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
-	void tree<K, V, Comp, Alloc>::removeNode(node_ptr x)
+	void tree<K, V, Comp, Alloc>::removeNode(b_node_ptr x)
 	{
-		if (x->parent != nullptr)
-		{
-			if (isLeft(x) == true)
-				x->parent->left = nullptr;
-			else
-				x->parent->right = nullptr;
-		}
-		_nodeAlloc.destroy(x);
-		_nodeAlloc.deallocate(x, 1);
+		_nodeAlloc.destroy(static_cast<node_ptr>(x));
+		_nodeAlloc.deallocate(static_cast<node_ptr>(x), 1);
 	}
-	template <typename node_ptr>
-	void rightRotate(node_ptr x)
+	template <typename b_node_ptr>
+	void rightRotate(b_node_ptr x)
 	{
-		node_ptr child;
+		b_node_ptr child;
 
 		if (x->left == nullptr)
 			return;
@@ -159,10 +171,10 @@ namespace ft
 			x->left->parent = x;
 		child->right = x;
 	}
-	template <typename node_ptr>
-	void leftRotate(node_ptr x)
+	template <typename b_node_ptr>
+	void leftRotate(b_node_ptr x)
 	{
-		node_ptr child;
+		b_node_ptr child;
 
 		if (x->right == nullptr)
 			return;
@@ -210,8 +222,8 @@ namespace ft
 		}
 		return (res);
 	}
-	template <typename node_ptr>
-	void applyRotation(node_ptr x, std::string rot)
+	template <typename b_node_ptr>
+	void applyRotation(b_node_ptr x, std::string rot)
 	{
 		if (rot == "ll")
 		{
@@ -232,8 +244,8 @@ namespace ft
 			leftRotate(x);
 		}
 	}
-	template <typename node_ptr>
-	void balanceAfterInsert(node_ptr x, node_ptr _rootParentNodeAddress)
+	template <typename b_node_ptr>
+	void balanceAfterInsert(b_node_ptr x, b_node_ptr _rootParentNodeAddress)
 	{
 		std::string rot;
 
@@ -282,7 +294,8 @@ namespace ft
 		res.first = iterator(newN);
 		if (res.second == true)
 		{
-			balanceAfterInsert(child, &_rootParentNode);
+			balanceAfterInsert(static_cast<b_node_ptr>(child),
+			                   static_cast<b_node_ptr>(&_rootParentNode));
 		}
 		return (res);
 	}
@@ -290,22 +303,25 @@ namespace ft
 	typename tree<K, V, Comp, Alloc>::node_ptr tree<K, V, Comp, Alloc>::find(
 	    K &key)
 	{
-		if (_rootParentNode.left == &_rootParentNode)
+		if (_rootParentNode.left == static_cast<b_node_ptr>(&_rootParentNode))
 			return (&_rootParentNode);
-		node_ptr tmpRoot;
-		node_ptr tmp;
+		b_node_ptr tmpRoot;
+		b_node_ptr tmp;
 
 		tmpRoot = _rootParentNode.left;
 		tmp     = tmpRoot;
 		while (tmp != nullptr)
 		{
-			if (value_compare()(key, tmp->value.first) == false)
+			if (value_compare()(
+			        key, (static_cast<node_ptr>(tmp))->value.first) == false)
 			{
 				tmp = tmpRoot->right;
 				if (tmp != nullptr)
 					tmpRoot = tmp;
 			}
-			else if (value_compare()(key, tmp->value.first) == true)
+			else if (value_compare()(
+			             key, (static_cast<node_ptr>(tmp))->value.first) ==
+			         true)
 			{
 				tmp = tmpRoot->left;
 				if (tmp != nullptr)
@@ -316,16 +332,19 @@ namespace ft
 				tmp = nullptr;
 			}
 		}
-		return (tmpRoot);
+		this->updateSize();
+		return (static_cast<node_ptr>(tmpRoot));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
-	void tree<K, V, Comp, Alloc>::SetChildBeforeEraseAndRemove(node_ptr x,
-	                                                           node_ptr child)
+	void tree<K, V, Comp, Alloc>::SetChildBeforeEraseAndRemove(b_node_ptr x,
+	                                                           b_node_ptr child)
 	{
 		if (isRight(x) == true)
 			x->parent->right = child;
 		else
 			x->parent->left = child;
+		if (child != nullptr)
+			child->parent = x->parent;
 		this->removeNode(x);
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
@@ -337,15 +356,20 @@ namespace ft
 		newN = constructNode(x->value);
 		return (newN);
 	}
+	/*
+	 * precondition x->left != nullptr && x->right != nullptr
+	 */
 	template <typename K, typename V, typename Comp, typename Alloc>
-	void tree<K, V, Comp, Alloc>::replaceNode(node_ptr x, node_ptr y)
+	void tree<K, V, Comp, Alloc>::replaceNode(b_node_ptr x, b_node_ptr y)
 	{
-		node_ptr newN;
+		b_node_ptr newN;
 
-		newN         = this->cloneNode(y);
-		newN->left   = x->left;
-		newN->right  = x->right;
-		newN->parent = x->parent;
+		newN             = this->cloneNode(static_cast<node_ptr>(y));
+		newN->left       = x->left;
+		newN->right      = x->right;
+		newN->parent     = x->parent;
+		x->left->parent  = newN;
+		x->right->parent = newN;
 		if (isLeft(x) == true)
 			x->parent->left = newN;
 		else
@@ -354,8 +378,8 @@ namespace ft
 	template <typename K, typename V, typename Comp, typename Alloc>
 	void tree<K, V, Comp, Alloc>::erase(iterator position)
 	{
-		node_ptr x;
-		node_ptr tmp;
+		b_node_ptr x;
+		b_node_ptr tmp;
 
 		x = position._node;
 		if (x == nullptr)
@@ -364,8 +388,8 @@ namespace ft
 		{
 			tmp = nextNode(x);
 			this->replaceNode(x, tmp);
-			this->removeNode(x);
 			erase(iterator(tmp));
+			this->removeNode(x);
 			return;
 			// create clone to tmp and replace it with with x
 			// delete x and delete tmp
@@ -376,9 +400,10 @@ namespace ft
 			SetChildBeforeEraseAndRemove(x, x->right);
 		else
 			SetChildBeforeEraseAndRemove(x, nullptr);
-		// balanceAfterInsert((this->begin())._node, &_rootParentNode);
+		balanceAfterInsert((this->begin())._node,
+		                   static_cast<b_node_ptr>(&_rootParentNode));
+		this->updateSize();
 	}
-
 }  // namespace ft
 
-#endif /* if//ndef TREE_HPP */
+#endif /* ifndef TREE_HPP */

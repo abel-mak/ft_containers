@@ -6,9 +6,11 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:46 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/03 19:45:35 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/04 18:45:55 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <map>
 
 #include "../src/tree.hpp"
 #include "test_header.hpp"
@@ -43,13 +45,70 @@ void test_erase()
 		t.insert(ii);
 
 		it = t.begin();
-		print2D(t.getRoot());
+		// print2D(t.getRoot());
 		while (it != t.end())
 		{
 			if (it->first == 54)
+			{
 				t.erase(it);
+				break;
+			}
 			it++;
 		}
 		// print2D(t.getRoot());
+		assert(isBalanced(t.getRoot()) == true);
+
+		it = t.begin();
+		while (it != t.end())
+		{
+			if (it->first == 21)
+			{
+				t.erase(it);
+				break;
+			}
+			it++;
+		}
+		// print2D(t.getRoot());
+		assert(isBalanced(t.getRoot()) == true);
+
+		it = t.begin();
+		while (it != t.end())
+		{
+			if (it->first == 77)
+			{
+				t.erase(it);
+				break;
+			}
+			it++;
+		}
+		// print2D(t.getRoot());
+		assert(isBalanced(t.getRoot()) == true);
+
+		it = t.begin();
+		while (it != t.end())
+		{
+			if (it->first == 82)
+			{
+				t.erase(it);
+				break;
+			}
+			it++;
+		}
+		// print2D(t.getRoot());
+		assert(isBalanced(t.getRoot()) == true);
+
+		it = t.begin();
+		while (it != t.end())
+		{
+			if (it->first == 77)
+			{
+				t.erase(it);
+				break;
+			}
+			it++;
+		}
+		// print2D(t.getRoot());
+		assert(isBalanced(t.getRoot()) == true);
 	}
+	std::cout << " test_erase [OK]" << std::endl;
 }

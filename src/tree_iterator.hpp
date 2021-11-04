@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/03 18:39:01 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/04 16:33:23 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,55 +14,77 @@
 #define TREE_ITERATOR_HPP
 
 #include <algorithm>
-#include <iterator>
+#include <iostream>
+//#include <iterator>
 
 namespace ft
 {
+	// added template just avoid duplicate symbols
+	template <typename T = void>
+	struct tree_node_base
+	{
+		typedef tree_node_base *b_node_ptr;
+		typedef const tree_node_base *const_b_node_ptr;
 
+		b_node_ptr parent;
+		b_node_ptr left;
+		b_node_ptr right;
+
+		tree_node_base(void);
+		tree_node_base(const tree_node_base &src);
+		tree_node_base &operator=(const tree_node_base &lhs);
+	};
+	template <typename T>
+	tree_node_base<T>::tree_node_base(void)
+	{
+		this->parent = nullptr;
+		this->left   = nullptr;
+		this->right  = nullptr;
+	}
+	template <typename T>
+	tree_node_base<T>::tree_node_base(const tree_node_base &src)
+	{
+		*this = src;
+	}
+	template <typename T>
+	tree_node_base<T> &tree_node_base<T>::operator=(const tree_node_base &lhs)
+	{
+		this->parent = lhs.parent;
+		this->left   = lhs.left;
+		this->right  = lhs.right;
+		return (*this);
+	}
+	/**************************************************************************/
 	template <typename Y>
-	struct tree_node
+	struct tree_node : public tree_node_base<void>
 	{
 		typedef tree_node *node_ptr;
 		typedef const tree_node *const_node_ptr;
 
 		Y value;
-		node_ptr parent;
-		node_ptr left;
-		node_ptr right;
 
 		tree_node(void);
 		tree_node(const tree_node &src);
 		tree_node(const Y &value);
-		tree_node &operator=(const tree_node &lhs);
+		// tree_node &operator=(const tree_node &lhs);
 	};
 	template <typename Y>
 	tree_node<Y>::tree_node(void)
 	{
-		this->parent = nullptr;
-		this->left   = nullptr;
-		this->right  = nullptr;
 	}
 	template <typename Y>
-	tree_node<Y>::tree_node(const tree_node &src)
+	tree_node<Y>::tree_node(const Y &value) : value(value)
 	{
-		*this = src;
 	}
 	template <typename Y>
-	tree_node<Y>::tree_node(const Y &x) : value(x)
+	tree_node<Y>::tree_node(const tree_node &src) : value(src.value)
 	{
-		this->parent = nullptr;
-		this->left   = nullptr;
-		this->right  = nullptr;
 	}
-	template <typename Y>
-	tree_node<Y> &tree_node<Y>::operator=(const tree_node<Y> &lhs)
-	{
-		this->value  = lhs.value;
-		this->parent = lhs.value;
-		this->left   = lhs.left;
-		this->right  = lhs.right;
-		return (*this);
-	}
+	//	template <typename Y>
+	//	tree_node<Y> &tree_node<Y>::operator=(const tree_node &lhs)
+	//	{
+	//		tree_node_base::operator=(lhs);
+	//	}
 	/**************************************************************************/
 	/*
 	 * [x] operator*()
@@ -83,9 +105,10 @@ namespace ft
 		typedef std::bidirectional_iterator_tag iterator_category;
 		typedef ptrdiff_t difference_type;
 		typedef tree_node<Y> *node_ptr;
+		typedef tree_node_base<void>::b_node_ptr b_node_ptr;
 
 		tree_iterator(void);
-		tree_iterator(node_ptr node);
+		tree_iterator(b_node_ptr node);
 		reference operator*() const;
 		pointer operator->() const;
 		tree_iterator &operator++();
@@ -96,25 +119,25 @@ namespace ft
 		bool operator!=(tree_iterator const &x);
 
 	public:
-		node_ptr _node;
+		b_node_ptr _node;
 	};
 	template <typename Y>
 	tree_iterator<Y>::tree_iterator(void) : _node(nullptr)
 	{
 	}
 	template <typename Y>
-	tree_iterator<Y>::tree_iterator(node_ptr node) : _node(node)
+	tree_iterator<Y>::tree_iterator(b_node_ptr node) : _node(node)
 	{
 	}
 	template <typename Y>
 	typename tree_iterator<Y>::reference tree_iterator<Y>::operator*(void) const
 	{
-		return (this->_node->value);
+		return ((static_cast<node_ptr>(_node))->value);
 	}
 	template <typename Y>
 	typename tree_iterator<Y>::pointer tree_iterator<Y>::operator->(void) const
 	{
-		return (&(_node->value));
+		return (&((static_cast<node_ptr>(_node))->value));
 	}
 	template <typename Y>
 	tree_iterator<Y> &tree_iterator<Y>::operator++()
@@ -154,8 +177,8 @@ namespace ft
 		return (!(*this == x));
 	}
 	/**************************************************************************/
-	template <typename node_ptr>
-	node_ptr tree_min(node_ptr x)
+	template <typename b_node_ptr>
+	b_node_ptr tree_min(b_node_ptr x)
 	{
 		while (x->left != nullptr)
 		{
@@ -163,8 +186,8 @@ namespace ft
 		}
 		return (x);
 	}
-	template <typename node_ptr>
-	node_ptr tree_max(node_ptr x)
+	template <typename b_node_ptr>
+	b_node_ptr tree_max(b_node_ptr x)
 	{
 		while (x->right != nullptr)
 		{
@@ -172,16 +195,16 @@ namespace ft
 		}
 		return (x);
 	}
-	template <typename node_ptr>
-	bool isLeft(node_ptr node)
+	template <typename b_node_ptr>
+	bool isLeft(b_node_ptr node)
 	{
 		if (node != nullptr && node->parent != nullptr &&
 		    node->parent->left == node)
 			return (true);
 		return (false);
 	}
-	template <typename node_ptr>
-	bool isRight(node_ptr node)
+	template <typename b_node_ptr>
+	bool isRight(b_node_ptr node)
 	{
 		if (node != nullptr && node->parent != nullptr &&
 		    node->parent->right == node)
@@ -190,8 +213,8 @@ namespace ft
 	}
 
 	// inorder successor
-	template <typename node_ptr>
-	node_ptr nextNode(node_ptr node)
+	template <typename b_node_ptr>
+	b_node_ptr nextNode(b_node_ptr node)
 	{
 		if (node->right != nullptr)
 			return (tree_min(node->right));
@@ -204,8 +227,8 @@ namespace ft
 			return (node->parent);
 		}
 	}
-	template <typename node_ptr>
-	node_ptr prevNode(node_ptr node)
+	template <typename b_node_ptr>
+	b_node_ptr prevNode(b_node_ptr node)
 	{
 		if (node->left != nullptr)
 			return (tree_max(node->left));
@@ -218,8 +241,8 @@ namespace ft
 			return (node->parent);
 		}
 	}
-	template <typename node_ptr>
-	int height(node_ptr x)
+	template <typename b_node_ptr>
+	int height(b_node_ptr x)
 	{
 		if (x == nullptr)
 			return (-1);
