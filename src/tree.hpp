@@ -6,14 +6,13 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/04 18:46:52 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/05 19:33:00 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREE_HPP
 #define TREE_HPP
 
-//#include <iostream>
 #include <string>
 
 #include "tree_iterator.hpp"
@@ -52,23 +51,24 @@ namespace ft
 		typedef tree_node_base<void>::const_b_node_ptr const_b_node_ptr;
 		typedef const node_ptr const_node_ptr;
 		typedef tree_iterator<value_type> iterator;
-		typedef tree_iterator<const_value_type> const_iterator;
+		typedef tree_const_iterator<value_type> const_iterator;
 		typedef std::allocator<tree_node<value_type> > node_allocator;
 
 	private:
 		tree_node<value_type> _rootParentNode;
-		node_ptr _startNode;
+		b_node_ptr _startNode;
+		size_type _size;
 		node_ptr constructNode(const value_type &x);
 		std::string getRotation(node_ptr x);
 		void removeNode(b_node_ptr x);
 		void SetChildBeforeEraseAndRemove(b_node_ptr x, b_node_ptr child);
 		void replaceNode(b_node_ptr x, b_node_ptr y);
 		node_ptr cloneNode(node_ptr x);
-		size_type _size;
-		void updateSize(void);
+		void updateStartNode(void);
 
 	public:
 		tree(void);
+		tree(tree const &src);
 		allocator_type _alloc;
 		node_allocator _nodeAlloc;
 		pair<iterator, bool> insert(const value_type &v);
@@ -79,6 +79,8 @@ namespace ft
 		const_iterator begin(void) const;
 		iterator end(void);
 		const_iterator end(void) const;
+		size_type size(void) const;
+		void swap(tree &x);
 	};
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::node_ptr tree<K, V, Comp, Alloc>::getRoot(
@@ -89,23 +91,29 @@ namespace ft
 		return (static_cast<node_ptr>(_rootParentNode.left));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
-	tree<K, V, Comp, Alloc>::tree(void) : _size(0)
+	tree<K, V, Comp, Alloc>::tree(void)
+	    : _startNode(static_cast<b_node_ptr>(&_rootParentNode)), _size(0)
 	{
 		_rootParentNode.parent = nullptr;
 		_rootParentNode.left   = &_rootParentNode;
 		_rootParentNode.right  = &_rootParentNode;
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
+	tree<K, V, Comp, Alloc>::tree(tree const &src)
+	{
+		_rootParentNode.left = src._rootParentNode.left;
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::iterator tree<K, V, Comp, Alloc>::begin(
 	    void)
 	{
-		return (iterator(tree_min(static_cast<b_node_ptr>(&_rootParentNode))));
+		return (iterator(_startNode));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::const_iterator
 	tree<K, V, Comp, Alloc>::begin() const
 	{
-		return (iterator(tree_min(static_cast<b_node_ptr>(&_rootParentNode))));
+		return (const_iterator(_startNode));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::iterator tree<K, V, Comp, Alloc>::end(
@@ -113,7 +121,6 @@ namespace ft
 	{
 		return (iterator(&_rootParentNode));
 	}
-
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::const_iterator
 	tree<K, V, Comp, Alloc>::end(void) const
@@ -121,19 +128,41 @@ namespace ft
 		return (const_iterator(&_rootParentNode));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
-	void tree<K, V, Comp, Alloc>::updateSize(void)
+	typename tree<K, V, Comp, Alloc>::size_type tree<K, V, Comp, Alloc>::size(
+	    void) const
 	{
-		size_type tmp;
-		iterator first;
-
-		first = this->begin();
-		tmp   = 0;
-		while (first != this->end())
+		return (_size);
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	void tree<K, V, Comp, Alloc>::swap(tree &x)
+	{
+		if (_rootParentNode.left == &_rootParentNode &&
+		    (x._rootParentNode.left != &(x._rootParentNode)))
 		{
-			first++;
-			tmp++;
+			_rootParentNode.left   = x._rootParentNode.left;
+			_startNode             = x._startNode;
+			x._rootParentNode.left = &(x._rootParentNode);
+			x._startNode           = &(x._rootParentNode);
 		}
-		_size = tmp;
+		else if ((x._rootParentNode.left == &(x._rootParentNode)) &&
+		         _rootParentNode.left != &_rootParentNode)
+		{
+			x._rootParentNode.left = _rootParentNode.left;
+			x._startNode           = _startNode;
+			_rootParentNode.left   = &_rootParentNode;
+			_startNode             = &_rootParentNode;
+		}
+		else
+		{
+			std::swap(_rootParentNode.left, x._rootParentNode.left);
+			std::swap(_startNode, x._startNode);
+		}
+		std::swap(_size, x._size);
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	void tree<K, V, Comp, Alloc>::updateStartNode(void)
+	{
+		_startNode = tree_min(static_cast<b_node_ptr>(&_rootParentNode));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::node_ptr
@@ -294,6 +323,8 @@ namespace ft
 		res.first = iterator(newN);
 		if (res.second == true)
 		{
+			_size++;
+			this->updateStartNode();
 			balanceAfterInsert(static_cast<b_node_ptr>(child),
 			                   static_cast<b_node_ptr>(&_rootParentNode));
 		}
@@ -332,7 +363,6 @@ namespace ft
 				tmp = nullptr;
 			}
 		}
-		this->updateSize();
 		return (static_cast<node_ptr>(tmpRoot));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
@@ -346,6 +376,8 @@ namespace ft
 		if (child != nullptr)
 			child->parent = x->parent;
 		this->removeNode(x);
+		this->updateStartNode();
+		_size--;
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::node_ptr
@@ -380,6 +412,7 @@ namespace ft
 	{
 		b_node_ptr x;
 		b_node_ptr tmp;
+		tree test;
 
 		x = position._node;
 		if (x == nullptr)
@@ -402,7 +435,6 @@ namespace ft
 			SetChildBeforeEraseAndRemove(x, nullptr);
 		balanceAfterInsert((this->begin())._node,
 		                   static_cast<b_node_ptr>(&_rootParentNode));
-		this->updateSize();
 	}
 }  // namespace ft
 

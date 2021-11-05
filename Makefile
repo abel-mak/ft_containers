@@ -6,7 +6,7 @@
 #    By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/10 17:10:37 by abel-mak          #+#    #+#              #
-#    Updated: 2021/11/04 16:00:30 by abel-mak         ###   ########.fr        #
+#    Updated: 2021/11/05 19:32:52 by abel-mak         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ $(NAME): $(SRC) $(HDR)
 	clang++ $(FLAGS) $(SRC) -o $(NAME) 
 
 test2: $(TEST2_SRC)
-	clang++ -std=c++98 $(TEST2_SRC) -o $(TEST2_OUT) && ./$(TEST2_OUT)
+	@clang++ -std=c++98 $(TEST2_SRC) -o $(TEST2_OUT) && ./$(TEST2_OUT)
 
 test1: $(TEST_SRC) 
 	clang++ -std=c++11 $(TEST_SRC) -o $(TEST_OUT) && ./$(TEST_OUT)

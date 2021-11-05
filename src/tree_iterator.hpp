@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/04 16:33:23 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/05 18:42:17 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 #include <algorithm>
 #include <iostream>
-//#include <iterator>
 
 namespace ft
 {
@@ -66,7 +65,7 @@ namespace ft
 		tree_node(void);
 		tree_node(const tree_node &src);
 		tree_node(const Y &value);
-		// tree_node &operator=(const tree_node &lhs);
+		tree_node &operator=(tree_node const &lhs);
 	};
 	template <typename Y>
 	tree_node<Y>::tree_node(void)
@@ -80,11 +79,12 @@ namespace ft
 	tree_node<Y>::tree_node(const tree_node &src) : value(src.value)
 	{
 	}
-	//	template <typename Y>
-	//	tree_node<Y> &tree_node<Y>::operator=(const tree_node &lhs)
-	//	{
-	//		tree_node_base::operator=(lhs);
-	//	}
+	template <typename Y>
+	tree_node<Y> &tree_node<Y>::operator=(tree_node const &lhs)
+	{
+		tree_node_base::operator=(lhs);
+		return (*this);
+	}
 	/**************************************************************************/
 	/*
 	 * [x] operator*()
@@ -105,7 +105,8 @@ namespace ft
 		typedef std::bidirectional_iterator_tag iterator_category;
 		typedef ptrdiff_t difference_type;
 		typedef tree_node<Y> *node_ptr;
-		typedef tree_node_base<void>::b_node_ptr b_node_ptr;
+		typedef tree_node_base<>::b_node_ptr b_node_ptr;
+		typedef const tree_node_base<>::b_node_ptr const_b_node_ptr;
 
 		tree_iterator(void);
 		tree_iterator(b_node_ptr node);
@@ -176,6 +177,98 @@ namespace ft
 	{
 		return (!(*this == x));
 	}
+	/**************************************************************************/
+	template <typename Y>
+	struct tree_const_iterator
+	{
+		typedef const Y value_type;
+		typedef const Y &reference;
+		typedef const Y *pointer;
+		typedef std::bidirectional_iterator_tag iterator_category;
+		typedef const tree_node<Y> *const_node_ptr;
+		typedef tree_node_base<>::b_node_ptr b_node_ptr;
+		typedef tree_node_base<>::const_b_node_ptr const_b_node_ptr;
+		typedef tree_iterator<Y> iterator;
+
+		tree_const_iterator(void);
+		tree_const_iterator(const_b_node_ptr node);
+		tree_const_iterator(iterator it);
+		reference operator*() const;
+		pointer operator->() const;
+		tree_const_iterator &operator++();
+		tree_const_iterator operator++(int);
+		tree_const_iterator &operator--();
+		tree_const_iterator operator--(int);
+		bool operator==(tree_const_iterator const &x);
+		bool operator!=(tree_const_iterator const &x);
+
+	public:
+		const_b_node_ptr _node;
+	};
+
+	template <typename Y>
+	tree_const_iterator<Y>::tree_const_iterator(void) : _node(nullptr)
+	{
+	}
+	template <typename Y>
+	tree_const_iterator<Y>::tree_const_iterator(const_b_node_ptr node)
+	    : _node(static_cast<const_b_node_ptr>(node))
+	{
+	}
+	template <typename Y>
+	tree_const_iterator<Y>::tree_const_iterator(iterator it) : _node(it._node)
+	{
+	}
+	template <typename Y>
+	typename tree_const_iterator<Y>::reference
+	tree_const_iterator<Y>::operator*(void) const
+	{
+		return ((static_cast<const_node_ptr>(_node))->value);
+	}
+	template <typename Y>
+	typename tree_const_iterator<Y>::pointer tree_const_iterator<Y>::operator->(
+	    void) const
+	{
+		return (&((static_cast<const_node_ptr>(_node))->value));
+	}
+	template <typename Y>
+	tree_const_iterator<Y> &tree_const_iterator<Y>::operator++()
+	{
+		_node = nextNode(_node);
+		return (*this);
+	}
+	template <typename Y>
+	tree_const_iterator<Y> tree_const_iterator<Y>::operator++(int)
+	{
+		tree_const_iterator tmp(_node);
+		++(*this);
+		return (tmp);
+	}
+	template <typename Y>
+	tree_const_iterator<Y> &tree_const_iterator<Y>::operator--()
+	{
+		_node = prevNode(_node);
+		return (*this);
+	}
+	template <typename Y>
+	tree_const_iterator<Y> tree_const_iterator<Y>::operator--(int)
+	{
+		tree_const_iterator tmp(_node);
+
+		--(*this);
+		return (tmp);
+	}
+	template <typename Y>
+	bool tree_const_iterator<Y>::operator==(tree_const_iterator const &x)
+	{
+		return (_node == x._node);
+	}
+	template <typename Y>
+	bool tree_const_iterator<Y>::operator!=(tree_const_iterator const &x)
+	{
+		return (!(*this == x));
+	}
+
 	/**************************************************************************/
 	template <typename b_node_ptr>
 	b_node_ptr tree_min(b_node_ptr x)
