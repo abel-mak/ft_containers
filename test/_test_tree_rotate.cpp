@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 13:42:49 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/05 19:33:03 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/08 17:15:22 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,20 +191,4 @@ void test()
 		assert(c.right == 0);
 	}
 	std::cout << " tree_rotate " << GREEN << " [OK]" << ENDCOLOR << std::endl;
-}
-
-void test_balance_after(void);
-void test_insert(void);
-void test_iterator(void);
-void test_erase();
-void test_size();
-
-int main(void)
-{
-	test();
-	test_balance_after();
-	test_insert();
-	test_iterator();
-	test_erase();
-	test_size();
 }

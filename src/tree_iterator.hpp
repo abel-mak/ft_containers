@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/05 18:42:17 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/08 16:55:42 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,9 @@ namespace ft
 		tree_iterator operator--(int);
 		bool operator==(tree_iterator const &x);
 		bool operator!=(tree_iterator const &x);
+		b_node_ptr getNodePtr(void);
 
-	public:
+	private:
 		b_node_ptr _node;
 	};
 	template <typename Y>
@@ -177,6 +178,11 @@ namespace ft
 	{
 		return (!(*this == x));
 	}
+	template <typename Y>
+	typename tree_iterator<Y>::b_node_ptr tree_iterator<Y>::getNodePtr(void)
+	{
+		return (_node);
+	}
 	/**************************************************************************/
 	template <typename Y>
 	struct tree_const_iterator
@@ -201,6 +207,7 @@ namespace ft
 		tree_const_iterator operator--(int);
 		bool operator==(tree_const_iterator const &x);
 		bool operator!=(tree_const_iterator const &x);
+		b_node_ptr getNodePtr(void);
 
 	public:
 		const_b_node_ptr _node;
@@ -268,7 +275,12 @@ namespace ft
 	{
 		return (!(*this == x));
 	}
-
+	template <typename Y>
+	typename tree_const_iterator<Y>::b_node_ptr
+	tree_const_iterator<Y>::getNodePtr(void)
+	{
+		return (_node);
+	}
 	/**************************************************************************/
 	template <typename b_node_ptr>
 	b_node_ptr tree_min(b_node_ptr x)
@@ -304,7 +316,6 @@ namespace ft
 			return (true);
 		return (false);
 	}
-
 	// inorder successor
 	template <typename b_node_ptr>
 	b_node_ptr nextNode(b_node_ptr node)
