@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/08 16:55:12 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/09 14:47:27 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ namespace ft
 		void replaceNode(b_node_ptr x, b_node_ptr y);
 		node_ptr cloneNode(node_ptr x);
 		void updateStartNode(void);
-		node_ptr find(K &k);
 		void destroyTree(b_node_ptr root);
 
 	public:
@@ -83,6 +82,8 @@ namespace ft
 		size_type size(void) const;
 		void swap(tree &x);
 		void clear(void);
+		node_ptr findOrParent(K &k);
+		// iterator find(const K &k);
 	};
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename tree<K, V, Comp, Alloc>::node_ptr tree<K, V, Comp, Alloc>::getRoot(
@@ -301,7 +302,7 @@ namespace ft
 		pair<iterator, bool> res;
 
 		key   = x.first;
-		child = this->find(key);
+		child = this->findOrParent(key);
 		if (child != &_rootParentNode && key != child->value.first)
 		{
 			newN         = constructNode(x);
@@ -335,9 +336,13 @@ namespace ft
 		}
 		return (res);
 	}
+	/*
+	 * find a node key if it exists else postition where a node with this key
+	 * should go
+	 */
 	template <typename K, typename V, typename Comp, typename Alloc>
-	typename tree<K, V, Comp, Alloc>::node_ptr tree<K, V, Comp, Alloc>::find(
-	    K &key)
+	typename tree<K, V, Comp, Alloc>::node_ptr
+	tree<K, V, Comp, Alloc>::findOrParent(K &key)
 	{
 		if (_rootParentNode.left == static_cast<b_node_ptr>(&_rootParentNode))
 			return (&_rootParentNode);

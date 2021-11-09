@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/08 16:55:42 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/09 15:23:25 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ namespace ft
 	{
 	}
 	template <typename Y>
-	tree_const_iterator<Y>::tree_const_iterator(iterator it) : _node(it._node)
+	tree_const_iterator<Y>::tree_const_iterator(iterator it) : _node(it.getNodePtr())
 	{
 	}
 	template <typename Y>
