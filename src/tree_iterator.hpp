@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/09 15:23:25 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/11 18:45:12 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,7 @@ namespace ft
 		typedef const Y &reference;
 		typedef const Y *pointer;
 		typedef std::bidirectional_iterator_tag iterator_category;
+		typedef ptrdiff_t difference_type;
 		typedef const tree_node<Y> *const_node_ptr;
 		typedef tree_node_base<>::b_node_ptr b_node_ptr;
 		typedef tree_node_base<>::const_b_node_ptr const_b_node_ptr;
@@ -207,7 +208,7 @@ namespace ft
 		tree_const_iterator operator--(int);
 		bool operator==(tree_const_iterator const &x);
 		bool operator!=(tree_const_iterator const &x);
-		b_node_ptr getNodePtr(void);
+		const_b_node_ptr getNodePtr(void);
 
 	public:
 		const_b_node_ptr _node;
@@ -223,7 +224,8 @@ namespace ft
 	{
 	}
 	template <typename Y>
-	tree_const_iterator<Y>::tree_const_iterator(iterator it) : _node(it.getNodePtr())
+	tree_const_iterator<Y>::tree_const_iterator(iterator it)
+	    : _node(it.getNodePtr())
 	{
 	}
 	template <typename Y>
@@ -276,7 +278,7 @@ namespace ft
 		return (!(*this == x));
 	}
 	template <typename Y>
-	typename tree_const_iterator<Y>::b_node_ptr
+	typename tree_const_iterator<Y>::const_b_node_ptr
 	tree_const_iterator<Y>::getNodePtr(void)
 	{
 		return (_node);

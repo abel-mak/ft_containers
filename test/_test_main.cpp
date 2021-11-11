@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 17:11:35 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/08 19:20:47 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/11 17:32:33 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void test_erase();
 void test_size();
 void test_clear();
 void test_map_iter();
+void test_map_operations();
 
 int main(void)
 {
@@ -29,4 +30,5 @@ int main(void)
 	test_size();
 	test_clear();
 	test_map_iter();
+	test_map_operations();
 }

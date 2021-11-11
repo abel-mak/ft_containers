@@ -70,4 +70,5 @@ sudo apt-get install libc++-dev
 - [Why is the copy constructor not called?](https://stackoverflow.com/questions/3663506/why-is-the-copy-constructor-not-called)
 - [In-order iterator for binary tree](https://stackoverflow.com/questions/12850889/in-order-iterator-for-binary-tree)
 - [LLVM Debian/Ubuntu nightly packages](https://apt.llvm.org/)
-- 
+- [What is a symbol table?](https://stackoverflow.com/questions/69112/what-is-a-symbol-table)
+- [typename c++ and order of compiling](https://stackoverflow.com/questions/59225508/typename-c-and-order-of-compiling)

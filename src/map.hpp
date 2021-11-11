@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 15:49:20 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/09 18:55:29 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/11 20:18:22 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,16 @@ namespace ft
 	 * [x] reverse_iterator rend ()
 	 * [x] const_reverse_iterator rend () const
 	 **
+	 * [x] constructor
+	 *
+	 **
 	 * [x] empty
 	 * [x] size
 	 * [x] max_size
 	 **
 	 * [x] operator[]
 	 **
-	 * [] insert
+	 * [x] insert
 	 * 		pair<iterator,bool> insert (const value_type& val);
 	 * 		iterator insert (iterator position, const value_type& val);
 	 * 		template <class InputIterator>
@@ -49,7 +52,9 @@ namespace ft
 	 * [] key_comp
 	 * [] value_comp
 	 **
-	 * [] find
+	 * [x] find
+	 * 		iterator find (const key_type& k);
+	 * 		const_iterator find (const key_type& k) const;
 	 * [] count
 	 * [] lower_bound
 	 * [] upper_bound
@@ -75,12 +80,51 @@ namespace ft
 		typedef tree_const_iterator<value_type> const_iterator;
 		typedef reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+		typedef typename tree<key_type, mapped_type, key_compare,
+		                      allocator_type>::node_ptr node_ptr;
+		typedef typename tree<key_type, mapped_type, key_compare,
+		                      allocator_type>::b_node_ptr b_node_ptr;
+		typedef
+		    typename tree<key_type, mapped_type, key_compare,
+		                  allocator_type>::const_b_node_ptr const_b_node_ptr;
+		typedef typename tree<key_type, mapped_type, key_compare,
+		                      allocator_type>::const_node_ptr const_node_ptr;
+
+	public:
+		class value_compare : std::binary_function<value_type, value_type, bool>
+		{
+			friend class map<K, V, Comp, Alloc>;
+			friend class tree<K, V, value_compare, Alloc>;
+
+		protected:
+			key_compare _comp;
+			value_compare()
+			{
+			}
+			value_compare(key_compare comp) : _comp(comp)
+			{
+			}
+
+		public:
+			bool operator()(key_type x, key_type y) const
+			{
+				return _comp(x, y);
+			}
+		};
 
 	private:
 		allocator_type _alloc;
-		tree<key_type, mapped_type, key_compare, allocator_type> t;
+		key_compare _comp;
 
 	public:
+		tree<key_type, mapped_type, value_compare, allocator_type> t;
+		map();
+		explicit map(const key_compare &comp,
+		             const allocator_type &alloc = allocator_type());
+		template <class II>
+		map(II first, II last, const key_compare &comp = key_compare(),
+		    const allocator_type &alloc = allocator_type());
+		map(const map &src);
 		iterator begin(void);
 		const_iterator begin(void) const;
 		iterator end(void);
@@ -97,7 +141,30 @@ namespace ft
 		iterator insert(iterator position, const value_type &val);
 		template <typename II>
 		void insert(II first, II last);
+		iterator find(const key_type &k);
+		const_iterator find(const key_type &k) const;
 	};
+	template <typename K, typename V, typename Comp, typename Alloc>
+	map<K, V, Comp, Alloc>::map()
+	{
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	map<K, V, Comp, Alloc>::map(const key_compare &comp,
+	                            const allocator_type &alloc)
+	    : t(value_compare(comp), alloc)
+	{
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	template <typename II>
+	map<K, V, Comp, Alloc>::map(II first, II second, const key_compare &comp,
+	                            const allocator_type &alloc)
+	    : t(first, second, value_compare(comp), alloc)
+	{
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	map<K, V, Comp, Alloc>::map(const map &src) : t(src.t)
+	{
+	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename map<K, V, Comp, Alloc>::iterator map<K, V, Comp, Alloc>::begin(
 	    void)
@@ -178,6 +245,32 @@ namespace ft
 			insert(*first);
 			first++;
 		}
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::iterator map<K, V, Comp, Alloc>::find(
+	    const key_type &k)
+	{
+		node_ptr endPtr;
+		node_ptr x;
+
+		endPtr = static_cast<node_ptr>((t.end()).getNodePtr());
+		x      = t.findOrParent(k);
+		if (endPtr != x && x->value.first == k)
+		{
+			return (iterator(x));
+		}
+		return (iterator(endPtr));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::const_iterator
+	map<K, V, Comp, Alloc>::find(const key_type &k) const
+	{
+		const_b_node_ptr endPtr = ((t.end()).getNodePtr());
+		const_b_node_ptr x      = t.findOrParent(k);
+
+		if (endPtr != x && (static_cast<const_node_ptr>(x))->value.first == k)
+			return (const_iterator(x));
+		return (const_iterator(endPtr));
 	}
 }  // namespace ft
 
