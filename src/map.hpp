@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 15:49:20 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/11 20:18:22 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/12 10:47:52 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ namespace ft
 		void insert(II first, II last);
 		iterator find(const key_type &k);
 		const_iterator find(const key_type &k) const;
+		void erase(iterator position);
 	};
 	template <typename K, typename V, typename Comp, typename Alloc>
 	map<K, V, Comp, Alloc>::map()
@@ -221,7 +222,7 @@ namespace ft
 	typename map<K, V, Comp, Alloc>::mapped_type &
 	map<K, V, Comp, Alloc>::operator[](const key_type &k)
 	{
-		(*((this->insert(make_pair(k, mapped_type()))).first)).second;
+		return ((*((this->insert(make_pair(k, mapped_type()))).first)).second);
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	ft::pair<typename map<K, V, Comp, Alloc>::iterator, bool>
@@ -234,7 +235,7 @@ namespace ft
 	    iterator position, const value_type &val)
 	{
 		(void)position;
-		return (t.insert(val));
+		return (t.insert(val).first);
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	template <typename II>

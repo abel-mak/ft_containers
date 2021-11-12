@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/11 19:13:50 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/12 19:40:17 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,8 +277,8 @@ namespace ft
 		i = 0;
 		// the first iteration is to check for imbalacance
 		// the second one is to see which side of the node is heavy
-		while (i < 2 && ((bf = height(x->right) - height(x->left)) < -1 ||
-		                 (bf > 1) || i == 1))
+		while (i < 2 && ((bf = height(x->right) - height(x->left)) == -2 ||
+		                 (bf == 2) || i == 1))
 		{
 			if (bf < 0)
 			{
@@ -325,7 +325,9 @@ namespace ft
 	void balanceAfterInsert(b_node_ptr x, b_node_ptr _rootParentNodeAddress)
 	{
 		std::string rot;
+		int i;
 
+		i = 0;
 		while (x != _rootParentNodeAddress)
 		{
 			rot = getRotation(x);
@@ -344,6 +346,8 @@ namespace ft
 			first++;
 		}
 	}
+	/*
+	 */
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	pair<typename tree<K, V, Vcomp, Alloc>::iterator, bool>
 	tree<K, V, Vcomp, Alloc>::insert(const value_type &x)
@@ -382,7 +386,9 @@ namespace ft
 		if (res.second == true)
 		{
 			_size++;
-			this->updateStartNode();
+			// this->updateStartNode();
+			if (child == _startNode && isLeft(newN))
+				_startNode = newN;
 			balanceAfterInsert(static_cast<b_node_ptr>(child),
 			                   static_cast<b_node_ptr>(&_rootParentNode));
 		}
