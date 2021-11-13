@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 18:14:37 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/04 18:45:56 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/13 10:27:04 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,7 @@ void test_balance_after()
 	std::cout << " balance_after_insert " << GREEN << " [OK]" << ENDCOLOR
 	          << std::endl;
 }
+
 void test_insert()
 {
 	{

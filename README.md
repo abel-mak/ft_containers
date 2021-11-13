@@ -72,3 +72,4 @@ sudo apt-get install libc++-dev
 - [LLVM Debian/Ubuntu nightly packages](https://apt.llvm.org/)
 - [What is a symbol table?](https://stackoverflow.com/questions/69112/what-is-a-symbol-table)
 - [typename c++ and order of compiling](https://stackoverflow.com/questions/59225508/typename-c-and-order-of-compiling)
+- [Binary Search Tree - Copying one tree into another tree](https://stackoverflow.com/questions/40969075/binary-search-tree-copying-one-tree-into-another-tree)

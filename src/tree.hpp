@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/12 19:40:17 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/13 20:11:22 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ namespace ft
 		node_ptr cloneNode(node_ptr x);
 		void updateStartNode(void);
 		void destroyTree(b_node_ptr root);
+		void copyTree(b_node_ptr rooot);
 
 	public:
 		tree(void);
@@ -83,6 +84,7 @@ namespace ft
 		template <typename II>
 		void insert(II first, II last);
 		node_ptr getRoot(void);
+		node_ptr getRoot(void) const;
 		void erase(iterator position);
 		iterator begin(void);
 		const_iterator begin(void) const;
@@ -100,6 +102,15 @@ namespace ft
 	tree<K, V, Vcomp, Alloc>::getRoot(void)
 	{
 		if (_rootParentNode.left == static_cast<b_node_ptr>(&_rootParentNode))
+			return (nullptr);
+		return (static_cast<node_ptr>(_rootParentNode.left));
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	typename tree<K, V, Vcomp, Alloc>::node_ptr
+	tree<K, V, Vcomp, Alloc>::getRoot(void) const
+	{
+		if (_rootParentNode.left ==
+		    static_cast<const_b_node_ptr>(&_rootParentNode))
 			return (nullptr);
 		return (static_cast<node_ptr>(_rootParentNode.left));
 	}
@@ -145,8 +156,9 @@ namespace ft
 		_rootParentNode.parent = nullptr;
 		_rootParentNode.left   = &_rootParentNode;
 		_rootParentNode.right  = &_rootParentNode;
-		this->insert(src.begin(), src.end());
-		this->updateStartNode();
+		this->copyTree(src.getRoot());
+		// this->insert(src.begin(), src.end());
+		//  this->updateStartNode();
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::iterator tree<K, V, Vcomp, Alloc>::begin(
@@ -203,6 +215,20 @@ namespace ft
 			std::swap(_startNode, x._startNode);
 		}
 		std::swap(_size, x._size);
+	}
+
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	void tree<K, V, Vcomp, Alloc>::copyTree(b_node_ptr root)
+	{
+		//	std::cout << (static_cast<node_ptr>(root))->value.first
+		//	          << " ===========================" << std::endl;
+		if (root == nullptr)
+			return;
+		if (root->left != nullptr)
+			this->copyTree(root->left);
+		this->insert((static_cast<node_ptr>(root))->value);
+		if (root->right != nullptr)
+			this->copyTree(root->right);
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	void tree<K, V, Vcomp, Alloc>::updateStartNode(void)
@@ -321,6 +347,9 @@ namespace ft
 			leftRotate(x);
 		}
 	}
+	/*
+	 * apply rotation for only the first imbalanced node and the break!!!
+	 */
 	template <typename b_node_ptr>
 	void balanceAfterInsert(b_node_ptr x, b_node_ptr _rootParentNodeAddress)
 	{
@@ -332,7 +361,10 @@ namespace ft
 		{
 			rot = getRotation(x);
 			if (rot != "")
+			{
 				applyRotation(x, rot);
+				break;
+			}
 			x = x->parent;
 		}
 	}
