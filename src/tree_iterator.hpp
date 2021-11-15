@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/13 20:10:31 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/14 13:26:41 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ namespace ft
 		typedef const tree_node *const_node_ptr;
 
 		Y value;
-
+		int height;
 		tree_node(void);
 		tree_node(const tree_node &src);
 		tree_node(const Y &value);
@@ -72,11 +72,11 @@ namespace ft
 	{
 	}
 	template <typename Y>
-	tree_node<Y>::tree_node(const Y &value) : value(value)
+	tree_node<Y>::tree_node(const Y &value) : value(value), height(0)
 	{
 	}
 	template <typename Y>
-	tree_node<Y>::tree_node(const tree_node &src) : value(src.value)
+	tree_node<Y>::tree_node(const tree_node &src) : value(src.value), height(0)
 	{
 	}
 	template <typename Y>

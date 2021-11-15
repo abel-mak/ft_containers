@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/13 20:11:22 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/15 19:49:19 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 #include <string>
 
+#include "../test/test_header.hpp"
 #include "tree_iterator.hpp"
 #include "utility.hpp"
-
 /*
  * left-left imbalanced do right rotation
  * right-right imbalced do left rotation
@@ -69,7 +69,14 @@ namespace ft
 		node_ptr cloneNode(node_ptr x);
 		void updateStartNode(void);
 		void destroyTree(b_node_ptr root);
-		void copyTree(b_node_ptr rooot);
+		void copyTree(b_node_ptr root);
+		void secondUpdateHeight(b_node_ptr x);
+		int oOneHeight(b_node_ptr x);
+		void checkImbalance(b_node_ptr x);
+		void thirdUpdateHeight(b_node_ptr x);
+		void balance(b_node_ptr x);
+		std::string getRotationMem(b_node_ptr x);
+		void updateHeightAfterBalance(b_node_ptr x, std::string &rot);
 
 	public:
 		tree(void);
@@ -129,6 +136,7 @@ namespace ft
 	      _alloc(alloc),
 	      _startNode(static_cast<b_node_ptr>(&_rootParentNode)),
 	      _size(0)
+
 	{
 		_rootParentNode.parent = nullptr;
 		_rootParentNode.left   = &_rootParentNode;
@@ -143,6 +151,7 @@ namespace ft
 	      _alloc(alloc),
 	      _startNode(static_cast<b_node_ptr>(&_rootParentNode)),
 	      _size(0)
+
 	{
 		_rootParentNode.parent = nullptr;
 		_rootParentNode.left   = &_rootParentNode;
@@ -152,6 +161,7 @@ namespace ft
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	tree<K, V, Vcomp, Alloc>::tree(tree const &src)
 	    : _startNode(static_cast<b_node_ptr>(&_rootParentNode)), _size(0)
+
 	{
 		_rootParentNode.parent = nullptr;
 		_rootParentNode.left   = &_rootParentNode;
@@ -220,8 +230,6 @@ namespace ft
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	void tree<K, V, Vcomp, Alloc>::copyTree(b_node_ptr root)
 	{
-		//	std::cout << (static_cast<node_ptr>(root))->value.first
-		//	          << " ===========================" << std::endl;
 		if (root == nullptr)
 			return;
 		if (root->left != nullptr)
@@ -293,8 +301,8 @@ namespace ft
 			x->right->parent = x;
 		child->left = x;
 	}
-	template <typename node_ptr>
-	std::string getRotation(node_ptr x)
+	template <typename b_node_ptr>
+	std::string getRotation(b_node_ptr x)
 	{
 		int bf;
 		std::string res = "";
@@ -350,6 +358,54 @@ namespace ft
 	/*
 	 * apply rotation for only the first imbalanced node and the break!!!
 	 */
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	std::string tree<K, V, Vcomp, Alloc>::getRotationMem(b_node_ptr x)
+	{
+		int bf;
+		std::string res = "";
+		int i;
+
+		i = 0;
+		// the first iteration is to check for imbalacance
+		// the second one is to see which side of the node is heavy
+		while (i < 2 &&
+		       ((bf = this->oOneHeight(static_cast<node_ptr>(x->right)) -
+		              this->oOneHeight(static_cast<node_ptr>(x->left))) == -2 ||
+		        (bf == 2) || i == 1))
+		{
+			if (bf < 0)
+			{
+				x = x->left;
+				res += "l";
+			}
+			else if (bf > 0)
+			{
+				x = x->right;
+				res += "r";
+			}
+			else if (bf == 0 && res != "")
+			{
+				// this is just for second iteration
+				res += res[0];
+			}
+			i++;
+		}
+		return (res);
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	void tree<K, V, Vcomp, Alloc>::balance(b_node_ptr x)
+	{
+		std::string rot;
+		int i;
+
+		i   = 0;
+		rot = this->getRotationMem(x);
+		if (rot != "")
+		{
+			applyRotation(x, rot);
+			this->updateHeightAfterBalance(x, rot);
+		}
+	}
 	template <typename b_node_ptr>
 	void balanceAfterInsert(b_node_ptr x, b_node_ptr _rootParentNodeAddress)
 	{
@@ -379,7 +435,97 @@ namespace ft
 		}
 	}
 	/*
+	 *
 	 */
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	int tree<K, V, Vcomp, Alloc>::oOneHeight(b_node_ptr x)
+	{
+		if (x == nullptr)
+			return (-1);
+		return ((static_cast<node_ptr>(x))->height);
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	void tree<K, V, Vcomp, Alloc>::updateHeightAfterBalance(b_node_ptr x,
+	                                                        std::string &rot)
+	{
+		b_node_ptr tmp;
+
+		if (x != nullptr)
+		{
+			if (rot == "rr" || rot == "ll")
+			{
+				static_cast<node_ptr>(x)->height =
+				    std::max(oOneHeight(x->right), oOneHeight(x->left)) + 1;
+				thirdUpdateHeight(x->parent);
+			}
+			else
+			{
+				static_cast<node_ptr>(x)->height =
+				    std::max(oOneHeight(x->right), oOneHeight(x->left)) + 1;
+				if (isLeft(x) == true)
+				{
+					tmp = x->parent->right;
+				}
+				else
+				{
+					tmp = x->parent->left;
+				}
+				if (tmp != nullptr)
+					static_cast<node_ptr>(tmp)->height =
+					    std::max(oOneHeight(tmp->right),
+					             oOneHeight(tmp->left)) +
+					    1;
+				thirdUpdateHeight(x->parent);
+			}
+		}
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	void tree<K, V, Vcomp, Alloc>::secondUpdateHeight(b_node_ptr x)
+	{
+		node_ptr tmp;
+		int height;
+
+		height = 1;
+		while (x != &_rootParentNode)
+		{
+			tmp = static_cast<node_ptr>(x);
+			if (height > tmp->height)
+				tmp->height = height++;
+			else
+				break;
+			x = x->parent;
+		}
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	void tree<K, V, Vcomp, Alloc>::thirdUpdateHeight(b_node_ptr x)
+	{
+		node_ptr tmp;
+
+		while (x != &_rootParentNode)
+		{
+			tmp = static_cast<node_ptr>(x);
+			tmp->height =
+			    std::max(oOneHeight(x->right), oOneHeight(x->left)) + 1;
+			x = x->parent;
+		}
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	void tree<K, V, Vcomp, Alloc>::checkImbalance(b_node_ptr x)
+	{
+		int bf;
+
+		bf = 0;
+		while (x != &_rootParentNode)
+		{
+			bf = oOneHeight(x->right) + 1 - (oOneHeight(x->left) + 1);
+			if (bf == 2 || bf == -2)
+			{
+				this->balance(x);
+				break;
+			}
+			x = x->parent;
+		}
+	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	pair<typename tree<K, V, Vcomp, Alloc>::iterator, bool>
 	tree<K, V, Vcomp, Alloc>::insert(const value_type &x)
@@ -387,48 +533,35 @@ namespace ft
 		K key;
 		node_ptr child;
 		node_ptr newN;
-		pair<iterator, bool> res;
 
 		key   = x.first;
 		child = this->findOrParent(key);
-		if (child != &_rootParentNode && key != child->value.first)
+		if (child == &_rootParentNode || key != child->value.first)
 		{
 			newN         = constructNode(x);
 			newN->parent = child;
-			res.second   = true;
-			if (key < child->value.first)
+			newN->height = 0;
+			if (child != &_rootParentNode)
+			{
+				if (key < child->value.first)
+					child->left = newN;
+				else if (key > child->value.first)
+					child->right = newN;
+				this->secondUpdateHeight(child);
+			}
+			else
 				child->left = newN;
-			else if (key > child->value.first)
-				child->right = newN;
-		}
-		else if (child == &_rootParentNode)
-		{
-			newN         = constructNode(x);
-			newN->parent = child;
-			child->left  = newN;
-			res.second   = true;
-		}
-		else
-		{
-			newN       = child;
-			res.second = false;
-			// the keys are equal return child
-		}
-		res.first = iterator(newN);
-		if (res.second == true)
-		{
 			_size++;
-			// this->updateStartNode();
 			if (child == _startNode && isLeft(newN))
 				_startNode = newN;
-			balanceAfterInsert(static_cast<b_node_ptr>(child),
-			                   static_cast<b_node_ptr>(&_rootParentNode));
+			checkImbalance(child);
+			return (ft::pair<iterator, bool>(iterator(newN), true));
 		}
-		return (res);
+		return (ft::pair<iterator, bool>(iterator(child), false));
 	}
 	/*
-	 * find a node key if it exists else postition where a node with this key
-	 * should go
+	 * find a node key if it exists else postition where a node with this
+	 * key should go
 	 */
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::node_ptr

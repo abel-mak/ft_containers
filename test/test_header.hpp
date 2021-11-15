@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 12:07:56 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/13 12:38:01 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/15 11:09:47 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 struct node
 {
 	ft::pair<int, int> value;
+	int height;
 	node *left;
 	node *right;
 	node *parent;
@@ -72,7 +73,7 @@ void print2DUtil(node_ptr root, int space, int depth)
 
 	std::cout << std::endl;
 	for (int i = COUNT; i < space; i++) std::cout << " ";
-	std::cout << "depth: " << depth << std::endl;
+	std::cout << "height: " << root->height << std::endl;
 	for (int i = COUNT; i < space; i++) std::cout << " ";
 	std::cout << "node: " << root << std::endl;
 	for (int i = COUNT; i < space; i++) std::cout << " ";
@@ -81,6 +82,8 @@ void print2DUtil(node_ptr root, int space, int depth)
 	std::cout << "left: " << root->left << std::endl;
 	for (int i = COUNT; i < space; i++) std::cout << " ";
 	std::cout << "parent: " << root->parent << std::endl;
+	for (int i = COUNT; i < space; i++) std::cout << " ";
+	std::cout << "depth: " << depth << std::endl;
 	for (int i = COUNT; i < space; i++) std::cout << " ";
 	std::cout << "key: " << root->value.first << std::endl;
 

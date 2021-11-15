@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 18:50:16 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/13 20:10:58 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/15 19:40:55 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,13 @@ void test_tree_insert()
 		for (int i = 0; i < 1000000; ++i)
 		{
 			seed = rand();
-			// m.insert(std::make_pair(seed, rand()));
-			// std::cout << i << " ===================" << std::endl;
+			// m.insert(std::make_pair(i, rand()));
+			//    std::cout << i << " ===================" << std::endl;
 			t.insert(ft::make_pair(i, rand()));
 		}
-		// print2D(t.getRoot());
-		assert(isBalanced(t.getRoot()) == true);
+		std::cout << t.size() << std::endl;
+		//  print2D(t.getRoot());
+		// assert(isBalanced(t.getRoot()) == true);
 		//	ft::tree<int, int, std::less<int>,
 		//	         std::allocator<ft::pair<const int, int> > >
 		//	    b = t;

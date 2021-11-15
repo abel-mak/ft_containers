@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 12:43:15 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/05 19:32:59 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/15 19:48:32 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void test_size()
 			it++;
 		}
 		assert(t.size() == 1);
-		// print2D(t.getRoot());
+		//print2D(t.getRoot());
 
 		it = t.begin();
 		while (it != t.end())

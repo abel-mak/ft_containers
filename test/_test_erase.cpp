@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:46 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/04 18:45:55 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/15 19:43:53 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 void test_erase()
 {
-	{
 		ft::tree<int, int, std::less<int>,
 		         std::allocator<ft::pair<const int, int> > >
 		    t;
@@ -109,6 +108,5 @@ void test_erase()
 		}
 		// print2D(t.getRoot());
 		assert(isBalanced(t.getRoot()) == true);
-	}
 	std::cout << " test_erase [OK]" << std::endl;
 }
