@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 17:11:35 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/15 19:49:18 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/16 15:45:02 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void test_map_iter();
 void test_map_operations();
 void test_map_modifiers();
 void test_tree_insert();
+void test_tree_erase();
 
 int main(void)
 {
@@ -35,4 +36,5 @@ int main(void)
 	test_map_operations();
 	test_map_modifiers();
 	test_tree_insert();
+	test_tree_erase();
 }

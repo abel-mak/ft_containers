@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/15 19:49:19 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/16 12:50:13 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -392,6 +392,9 @@ namespace ft
 		}
 		return (res);
 	}
+	/*
+	 * precondition x not a nullptr
+	 */
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	void tree<K, V, Vcomp, Alloc>::balance(b_node_ptr x)
 	{
@@ -444,40 +447,32 @@ namespace ft
 			return (-1);
 		return ((static_cast<node_ptr>(x))->height);
 	}
+	/*
+	 * precondition x is not a nullptr
+	 */
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	void tree<K, V, Vcomp, Alloc>::updateHeightAfterBalance(b_node_ptr x,
 	                                                        std::string &rot)
 	{
 		b_node_ptr tmp;
 
-		if (x != nullptr)
+		static_cast<node_ptr>(x)->height =
+		    std::max(oOneHeight(x->right), oOneHeight(x->left)) + 1;
+		if (rot == "rl" || rot == "lr")
 		{
-			if (rot == "rr" || rot == "ll")
+			if (isLeft(x) == true)
 			{
-				static_cast<node_ptr>(x)->height =
-				    std::max(oOneHeight(x->right), oOneHeight(x->left)) + 1;
-				thirdUpdateHeight(x->parent);
+				tmp = x->parent->right;
 			}
 			else
 			{
-				static_cast<node_ptr>(x)->height =
-				    std::max(oOneHeight(x->right), oOneHeight(x->left)) + 1;
-				if (isLeft(x) == true)
-				{
-					tmp = x->parent->right;
-				}
-				else
-				{
-					tmp = x->parent->left;
-				}
-				if (tmp != nullptr)
-					static_cast<node_ptr>(tmp)->height =
-					    std::max(oOneHeight(tmp->right),
-					             oOneHeight(tmp->left)) +
-					    1;
-				thirdUpdateHeight(x->parent);
+				tmp = x->parent->left;
 			}
+			if (tmp != nullptr)
+				static_cast<node_ptr>(tmp)->height =
+				    std::max(oOneHeight(tmp->right), oOneHeight(tmp->left)) + 1;
 		}
+		thirdUpdateHeight(x->parent);
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	void tree<K, V, Vcomp, Alloc>::secondUpdateHeight(b_node_ptr x)
@@ -560,8 +555,8 @@ namespace ft
 		return (ft::pair<iterator, bool>(iterator(child), false));
 	}
 	/*
-	 * find a node key if it exists else postition where a node with this
-	 * key should go
+	 * find a node with this key if it exists else return postition where
+	 * a node with this key should go
 	 */
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::node_ptr
@@ -640,6 +635,7 @@ namespace ft
 			x->parent->left = child;
 		if (child != nullptr)
 			child->parent = x->parent;
+		this->thirdUpdateHeight(x->parent);
 		this->removeNode(x);
 		this->updateStartNode();
 		_size--;
@@ -680,9 +676,9 @@ namespace ft
 		b_node_ptr xParent;
 
 		x       = position.getNodePtr();
-		xParent = x->parent;
 		if (x == nullptr)
 			return;
+		xParent = x->parent;
 		if (x->left != nullptr && x->right != nullptr)
 		{
 			tmp = nextNode(x);
@@ -699,7 +695,8 @@ namespace ft
 			SetChildBeforeEraseAndRemove(x, x->right);
 		else
 			SetChildBeforeEraseAndRemove(x, nullptr);
-		balanceAfterInsert(xParent, static_cast<b_node_ptr>(&_rootParentNode));
+		//balanceAfterInsert(xParent, static_cast<b_node_ptr>(&_rootParentNode));
+		this->checkImbalance(xParent);
 	}
 	// post-order traversal
 	template <typename K, typename V, typename Vcomp, typename Alloc>
