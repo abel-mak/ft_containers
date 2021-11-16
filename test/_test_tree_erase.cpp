@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 14:14:49 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/16 16:09:55 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/16 16:17:47 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void test_tree_erase()
 	//	assert(t.size() == 96);
 	//	assert(isBalanced(t.getRoot()) == true);
 	//}
-	//std::cout << " test_tree_erase [OK]" << std::endl;
+	// std::cout << " test_tree_erase [OK]" << std::endl;
 }
 //		m.erase(std::map<int, int>::iterator(arr[0]));
 //		print2D(t.getRoot());
