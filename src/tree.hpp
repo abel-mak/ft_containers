@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/16 12:50:13 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/17 20:13:22 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -651,22 +651,32 @@ namespace ft
 	}
 	/*
 	 * precondition x->left != nullptr && x->right != nullptr
+	 * y will always be either a leaf node or node that has right child
 	 */
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	void tree<K, V, Vcomp, Alloc>::replaceNode(b_node_ptr x, b_node_ptr y)
 	{
-		b_node_ptr newN;
+		b_node_ptr yRight;
 
-		newN             = this->cloneNode(static_cast<node_ptr>(y));
-		newN->left       = x->left;
-		newN->right      = x->right;
-		newN->parent     = x->parent;
-		x->left->parent  = newN;
-		x->right->parent = newN;
-		if (isLeft(x) == true)
-			x->parent->left = newN;
+		yRight = y->right;
+		if (isLeft(y) == true)
+		{
+			y->parent->left = nullptr;
+		}
 		else
-			x->parent->right = newN;
+		{
+			y->parent->right = y->right;
+		}
+		y->left         = x->left;
+		y->right        = x->right;
+		y->parent       = x->parent;
+		x->left->parent = y;
+		if (x->right != nullptr)
+			x->right->parent = y;
+		if (isLeft(x) == true)
+			x->parent->left = y;
+		else
+			x->parent->right = y;
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	void tree<K, V, Vcomp, Alloc>::erase(iterator position)
@@ -675,19 +685,28 @@ namespace ft
 		b_node_ptr tmp;
 		b_node_ptr xParent;
 
-		x       = position.getNodePtr();
+		x = position.getNodePtr();
 		if (x == nullptr)
 			return;
 		xParent = x->parent;
 		if (x->left != nullptr && x->right != nullptr)
 		{
-			tmp = nextNode(x);
+			tmp     = nextNode(x);
+			xParent = tmp->parent;
 			this->replaceNode(x, tmp);
-			erase(iterator(tmp));
+			if (xParent != x)
+				this->thirdUpdateHeight(nextNode(tmp));
+			else
+			{
+				xParent = tmp;
+				this->thirdUpdateHeight(tmp);
+			}
+			// erase(iterator(tmp));
 			this->removeNode(x);
-			return;
-			// create clone to tmp and replace it with with x
-			// delete x and delete tmp
+			_size--;
+			// return;
+			//  create clone to tmp and replace it with with x
+			//  delete x and delete tmp
 		}
 		else if (x->left != nullptr && x->right == nullptr)
 			SetChildBeforeEraseAndRemove(x, x->left);
@@ -695,7 +714,8 @@ namespace ft
 			SetChildBeforeEraseAndRemove(x, x->right);
 		else
 			SetChildBeforeEraseAndRemove(x, nullptr);
-		//balanceAfterInsert(xParent, static_cast<b_node_ptr>(&_rootParentNode));
+		// balanceAfterInsert(xParent,
+		// static_cast<b_node_ptr>(&_rootParentNode));
 		this->checkImbalance(xParent);
 	}
 	// post-order traversal
