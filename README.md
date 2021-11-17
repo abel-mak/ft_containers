@@ -65,23 +65,23 @@ sudo apt install libc++abi1 libc6 libgcc1 libc++1</br>
 sudo apt-get install libc++-dev
 
 ## insert
-- every node has a value and height and left, right and parent node pointers
+- every node has a value and a height and a left, right and a parent node pointers
 - search through the tree to find right place to insert the node
 - if the node does exist before return it otherwise insert
 - after insert the new node is assigned height of 0
-- i update the height of every going from the new node to the root
-- i check for imbalance going from the new node to the root
-- after imbalance is found i do the necessary rotations, at most two rotation
+- the height is updated for every node going from the new node to the root
+- check for imbalance going from the new node to the root
+- after imbalance is found do the necessary rotations, at most two rotation
  are sufficient to rebalance the tree
 
 ## rebalance
 - after doing the rotations, the heigth of some node gets messed up
-- i call a function that update height, the function gets as argument the node 
+- call a function that updates the height, the function gets as argument the node 
 that was imbalanced and type of imbalance 
 - the function checks if the imbalance was 'right right' or 'left left' it updates
 the height of the imbalanced node and it's ancestors
 - if the imbalace was 'right left' or 'left right' it updates the height of 
-the imbalanced node , it's siblings and it's ancestors
+the imbalanced node , it's sibling and it's ancestors
 
 
 ## Links
