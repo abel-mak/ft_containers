@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 15:49:20 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/12 10:47:52 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/18 20:27:25 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ namespace ft
 	 *      	void insert (InputIterator first, InputIterator last);
 	 * [] erase
 	 * [] swap
-	 * [] clear
+	 * [x] clear
 	 **
 	 * [] key_comp
 	 * [] value_comp
@@ -144,6 +144,8 @@ namespace ft
 		iterator find(const key_type &k);
 		const_iterator find(const key_type &k) const;
 		void erase(iterator position);
+		size_type erase(const key_type &k);
+		void clear(void);
 	};
 	template <typename K, typename V, typename Comp, typename Alloc>
 	map<K, V, Comp, Alloc>::map()
@@ -272,6 +274,22 @@ namespace ft
 		if (endPtr != x && (static_cast<const_node_ptr>(x))->value.first == k)
 			return (const_iterator(x));
 		return (const_iterator(endPtr));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	void map<K, V, Comp, Alloc>::erase(iterator position)
+	{
+		t.erase(position);
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	void map<K, V, Comp, Alloc>::clear(void)
+	{
+		t.clear();
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::size_type map<K, V, Comp, Alloc>::erase(
+	    const key_type &k)
+	{
+		return (t.erase(k));
 	}
 }  // namespace ft
 

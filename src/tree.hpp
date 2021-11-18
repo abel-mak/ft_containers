@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/17 20:13:22 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/18 19:23:00 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ namespace ft
 	class tree
 	{
 	public:
+		typedef K key_type;
 		typedef pair<const K, V> value_type;
 		typedef const pair<const K, V> const_value_type;
 		typedef Vcomp value_compare;
@@ -81,18 +82,17 @@ namespace ft
 	public:
 		tree(void);
 		tree(tree const &src);
+		~tree();
 		tree(const value_type &vcomp,
 		     const allocator_type &alloc = allocator_type());
 		template <typename II>
 		tree(II first, II last, const value_compare &vcomp = value_compare(),
 		     const allocator_type &alloc = allocator_type());
 		pair<iterator, bool> insert(const value_type &v);
-
 		template <typename II>
 		void insert(II first, II last);
 		node_ptr getRoot(void);
 		node_ptr getRoot(void) const;
-		void erase(iterator position);
 		iterator begin(void);
 		const_iterator begin(void) const;
 		iterator end(void);
@@ -100,9 +100,14 @@ namespace ft
 		size_type size(void) const;
 		void swap(tree &x);
 		void clear(void);
-		node_ptr findOrParent(const K &k);
-		const_node_ptr findOrParent(const K &k) const;
-		// iterator find(const K &k);
+		void erase(iterator position);
+		size_type erase(const key_type &k);
+		node_ptr findOrParent(const key_type &k);
+		const_node_ptr findOrParent(const key_type &k) const;
+		iterator upper_bound(const key_type &k);
+		const_iterator upper_bound(const key_type &k) const;
+		iterator lower_bound(const key_type &k);
+		const_iterator lower_bound(const key_type &k) const;
 	};
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::node_ptr
@@ -120,6 +125,11 @@ namespace ft
 		    static_cast<const_b_node_ptr>(&_rootParentNode))
 			return (nullptr);
 		return (static_cast<node_ptr>(_rootParentNode.left));
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	tree<K, V, Vcomp, Alloc>::~tree()
+	{
+		this->clear();
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	tree<K, V, Vcomp, Alloc>::tree(void)
@@ -560,7 +570,7 @@ namespace ft
 	 */
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::node_ptr
-	tree<K, V, Vcomp, Alloc>::findOrParent(const K &key)
+	tree<K, V, Vcomp, Alloc>::findOrParent(const key_type &key)
 	{
 		if (_rootParentNode.left == static_cast<b_node_ptr>(&_rootParentNode))
 			return (&_rootParentNode);
@@ -593,7 +603,7 @@ namespace ft
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::const_node_ptr
-	tree<K, V, Vcomp, Alloc>::findOrParent(const K &key) const
+	tree<K, V, Vcomp, Alloc>::findOrParent(const key_type &key) const
 	{
 		if (_rootParentNode.left ==
 		    static_cast<const_b_node_ptr>(&_rootParentNode))
@@ -704,9 +714,6 @@ namespace ft
 			// erase(iterator(tmp));
 			this->removeNode(x);
 			_size--;
-			// return;
-			//  create clone to tmp and replace it with with x
-			//  delete x and delete tmp
 		}
 		else if (x->left != nullptr && x->right == nullptr)
 			SetChildBeforeEraseAndRemove(x, x->left);
@@ -717,6 +724,18 @@ namespace ft
 		// balanceAfterInsert(xParent,
 		// static_cast<b_node_ptr>(&_rootParentNode));
 		this->checkImbalance(xParent);
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	typename tree<K, V, Vcomp, Alloc>::size_type
+	tree<K, V, Vcomp, Alloc>::erase(const key_type &k)
+	{
+		b_node_ptr x;
+
+		x = this->findOrParent(k);
+		if (x == &_rootParentNode || static_cast<node_ptr>(x)->value.first != k)
+			return (0);
+		erase(iterator(x));
+		return (1);
 	}
 	// post-order traversal
 	template <typename K, typename V, typename Vcomp, typename Alloc>
@@ -739,6 +758,94 @@ namespace ft
 			this->updateStartNode();
 			_size = 0;
 		}
+	}
+	// return node with key or node with key bigger
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	typename tree<K, V, Vcomp, Alloc>::iterator
+	tree<K, V, Vcomp, Alloc>::lower_bound(const key_type &k)
+	{
+		b_node_ptr root;
+		b_node_ptr res;
+
+		res  = &_rootParentNode;
+		root = this->getRoot();
+		while (root != nullptr)
+		{
+			if (value_compare()(static_cast<node_ptr>(root)->value.first, k) ==
+			    false)
+			{
+				res  = root;
+				root = root->left;
+			}
+			else
+				root = root->right;
+		}
+		return (iterator(res));
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	typename tree<K, V, Vcomp, Alloc>::const_iterator
+	tree<K, V, Vcomp, Alloc>::lower_bound(const key_type &k) const
+	{
+		const_b_node_ptr root;
+		const_b_node_ptr res;
+
+		res  = &_rootParentNode;
+		root = this->getRoot();
+		while (root != nullptr)
+		{
+			if (value_compare()(static_cast<const_node_ptr>(root)->value.first,
+			                    k) == false)
+			{
+				res  = root;
+				root = root->left;
+			}
+			else
+				root = root->right;
+		}
+		return (const_iterator(res));
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	typename tree<K, V, Vcomp, Alloc>::iterator
+	tree<K, V, Vcomp, Alloc>::upper_bound(const key_type &k)
+	{
+		b_node_ptr root;
+		b_node_ptr res;
+
+		res  = &_rootParentNode;
+		root = this->getRoot();
+		while (root != nullptr)
+		{
+			if (value_compare()(k, static_cast<node_ptr>(root)->value.first))
+			{
+				res  = root;
+				root = root->left;
+			}
+			else
+				root = root->right;
+		}
+		return (iterator(res));
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	typename tree<K, V, Vcomp, Alloc>::const_iterator
+	tree<K, V, Vcomp, Alloc>::upper_bound(const key_type &k) const
+	{
+		const_b_node_ptr root;
+		const_b_node_ptr res;
+
+		res  = &_rootParentNode;
+		root = this->getRoot();
+		while (root != nullptr)
+		{
+			if (value_compare()(k,
+			                    static_cast<const_node_ptr>(root)->value.first))
+			{
+				res  = root;
+				root = root->left;
+			}
+			else
+				root = root->right;
+		}
+		return (const_iterator(res));
 	}
 }  // namespace ft
 

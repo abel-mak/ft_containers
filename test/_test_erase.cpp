@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:46 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/15 19:43:53 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/18 20:27:26 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 #include "../src/tree.hpp"
 #include "test_header.hpp"
 
+typedef ft::tree<int, int, std::less<int>,
+                 std::allocator<ft::pair<const int, int> > >
+    tree;
+
 void test_erase()
 {
-		ft::tree<int, int, std::less<int>,
-		         std::allocator<ft::pair<const int, int> > >
-		    t;
-		ft::tree<int, int, std::less<int>,
-		         std::allocator<ft::pair<const int, int> > >::iterator it;
+	{
+		tree t;
+		tree::iterator it;
 
 		ft::pair<const int, int> a(77, 0);
 		ft::pair<const int, int> b(82, 0);
@@ -73,19 +75,6 @@ void test_erase()
 		it = t.begin();
 		while (it != t.end())
 		{
-			if (it->first == 77)
-			{
-				t.erase(it);
-				break;
-			}
-			it++;
-		}
-		// print2D(t.getRoot());
-		assert(isBalanced(t.getRoot()) == true);
-
-		it = t.begin();
-		while (it != t.end())
-		{
 			if (it->first == 82)
 			{
 				t.erase(it);
@@ -108,5 +97,11 @@ void test_erase()
 		}
 		// print2D(t.getRoot());
 		assert(isBalanced(t.getRoot()) == true);
+
+		t.erase(25);
+		t.erase(1000);
+		assert(isBalanced(t.getRoot()) == true);
+		assert(t.size() == 4);
+	}
 	std::cout << " test_erase [OK]" << std::endl;
 }
