@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 17:11:35 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/17 19:30:59 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/19 11:51:04 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ void test_tree_erase();
 
 int main(void)
 {
-	test();
-	test_balance_after();
-	test_insert();
-	test_iterator();
-	test_erase();
-	test_size();
-	test_clear();
-	test_map_iter();
-	test_map_operations();
-	test_map_modifiers();
-	test_tree_insert();
-	test_tree_erase();
+	 test();
+	 test_balance_after();
+	 test_insert();
+	 test_iterator();
+	 test_erase();
+	 test_size();
+	 test_clear();
+	 test_map_iter();
+	 test_map_operations();
+	 test_map_modifiers();
+	 test_tree_insert();
+	 test_tree_erase();
 }

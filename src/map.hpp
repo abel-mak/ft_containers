@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 15:49:20 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/18 20:27:25 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/19 19:04:37 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ namespace ft
 	 * 		iterator insert (iterator position, const value_type& val);
 	 * 		template <class InputIterator>
 	 *      	void insert (InputIterator first, InputIterator last);
-	 * [] erase
-	 * [] swap
+	 * [x] erase
+	 * [x] swap
 	 * [x] clear
 	 **
 	 * [] key_comp
@@ -55,10 +55,10 @@ namespace ft
 	 * [x] find
 	 * 		iterator find (const key_type& k);
 	 * 		const_iterator find (const key_type& k) const;
-	 * [] count
-	 * [] lower_bound
-	 * [] upper_bound
-	 * [] equal_range
+	 * [x] count
+	 * [x] lower_bound
+	 * [x] upper_bound
+	 * [x] equal_range
 	 */
 	template <typename K, typename V, typename Comp = std::less<K>,
 	          typename Alloc = std::allocator<ft::pair<const K, V> > >
@@ -145,7 +145,17 @@ namespace ft
 		const_iterator find(const key_type &k) const;
 		void erase(iterator position);
 		size_type erase(const key_type &k);
+		void erase(iterator first, iterator end);
+		void swap(map &x);
 		void clear(void);
+		size_type count(const key_type &k) const;
+		iterator lower_bound(const key_type &k);
+		const_iterator lower_bound(const key_type &k) const;
+		iterator upper_bound(const key_type &k);
+		const_iterator upper_bound(const key_type &k) const;
+		pair<iterator, iterator> equal_range(const key_type &k);
+		pair<const_iterator, const_iterator> equal_range(
+		    const key_type &k) const;
 	};
 	template <typename K, typename V, typename Comp, typename Alloc>
 	map<K, V, Comp, Alloc>::map()
@@ -281,15 +291,69 @@ namespace ft
 		t.erase(position);
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::size_type map<K, V, Comp, Alloc>::erase(
+	    const key_type &k)
+	{
+		return (t.erase(k));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	void map<K, V, Comp, Alloc>::erase(iterator first, iterator last)
+	{
+		t.erase(first, last);
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	void map<K, V, Comp, Alloc>::swap(map &x)
+	{
+		t.swap(x.t);
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
 	void map<K, V, Comp, Alloc>::clear(void)
 	{
 		t.clear();
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
-	typename map<K, V, Comp, Alloc>::size_type map<K, V, Comp, Alloc>::erase(
-	    const key_type &k)
+	typename map<K, V, Comp, Alloc>::size_type map<K, V, Comp, Alloc>::count(
+	    const key_type &k) const
 	{
-		return (t.erase(k));
+		return (t.count(k));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::iterator
+	map<K, V, Comp, Alloc>::lower_bound(const key_type &k)
+	{
+		return (t.lower_bound(k));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::const_iterator
+	map<K, V, Comp, Alloc>::lower_bound(const key_type &k) const
+	{
+		return (t.lower_bound(k));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::iterator
+	map<K, V, Comp, Alloc>::upper_bound(const key_type &k)
+	{
+		return (t.upper_bound(k));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::const_iterator
+	map<K, V, Comp, Alloc>::upper_bound(const key_type &k) const
+	{
+		return (t.upper_bound(k));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	pair<typename map<K, V, Comp, Alloc>::iterator,
+	     typename map<K, V, Comp, Alloc>::iterator>
+	map<K, V, Comp, Alloc>::equal_range(const key_type &k)
+	{
+		return (t.equal_range(k));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	pair<typename map<K, V, Comp, Alloc>::const_iterator,
+	     typename map<K, V, Comp, Alloc>::const_iterator>
+	map<K, V, Comp, Alloc>::equal_range(const key_type &k) const
+	{
+		return (t.equal_range(k));
 	}
 }  // namespace ft
 

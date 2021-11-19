@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 14:14:49 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/18 18:04:05 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/19 19:04:38 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void test_tree_erase()
 		tree::iterator it;
 		ft::vector<tree::iterator> arr;
 
-		tt.lower_bound(5);
 		for (int i = 0; i < 100; ++i)
 		{
 			seed = rand();
@@ -60,7 +59,7 @@ void test_tree_erase()
 			if (i >= 50 && i < 50 + 7)
 				arr.push_back(it);
 		}
-		//std::cout << (t.lower_bound(5))->first << std::endl;
+		// std::cout << (t.lower_bound(5))->first << std::endl;
 		t.erase(tree::iterator(t.getRoot()));
 		t.erase(tree::iterator(arr[0]));
 		t.erase(tree::iterator(arr[1]));
@@ -72,21 +71,21 @@ void test_tree_erase()
 		assert(isBalanced(t.getRoot()) == true);
 	}
 	{
-		// std::map<int, int> m;
-		// std::map<int, int>::iterator it;
-		// ft::vector<std::map<int, int>::iterator> arr;
-		// std::map<int, int>::iterator it2;
+		std::map<int, int> m;
+		std::map<int, int>::iterator it;
+		ft::vector<std::map<int, int>::iterator> arr;
+		std::map<int, int>::iterator it2;
 
-		// for (int i = 0; i < 100; ++i)
-		//{
-		//	it = (m.insert(std::make_pair(i, rand()))).first;
-		//	if (i >= 50 && i < 50 + 3)
-		//		arr.push_back(it);
-		// }
-		////std::cout << (m.lower_bound(1000))->first << std::endl;
-		// m.erase(std::map<int, int>::iterator(arr[0]));
-		// m.erase(std::map<int, int>::iterator(arr[1]));
-		// m.erase(std::map<int, int>::iterator(arr[2]));
+		for (int i = 0; i < 100; ++i)
+		{
+			it = (m.insert(std::make_pair(i, rand()))).first;
+			if (i >= 50 && i < 50 + 3)
+				arr.push_back(it);
+		}
+		//  std::cout << (m.lower_bound(1000))->first << std::endl;
+		//   m.erase(std::map<int, int>::iterator(arr[0]));
+		//   m.erase(std::map<int, int>::iterator(arr[1]));
+		//   m.erase(std::map<int, int>::iterator(arr[2]));
 	}
 	std::cout << " test_tree_erase [OK]" << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/18 19:23:00 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/19 15:34:27 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,17 @@ namespace ft
 		void clear(void);
 		void erase(iterator position);
 		size_type erase(const key_type &k);
+		void erase(iterator first, iterator last);
 		node_ptr findOrParent(const key_type &k);
+		size_type count(const key_type &k) const;
 		const_node_ptr findOrParent(const key_type &k) const;
 		iterator upper_bound(const key_type &k);
 		const_iterator upper_bound(const key_type &k) const;
 		iterator lower_bound(const key_type &k);
 		const_iterator lower_bound(const key_type &k) const;
+		pair<const_iterator, const_iterator> equal_range(
+		    const key_type &k) const;
+		pair<iterator, iterator> equal_range(const key_type &k);
 	};
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::node_ptr
@@ -726,6 +731,15 @@ namespace ft
 		this->checkImbalance(xParent);
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
+	void tree<K, V, Vcomp, Alloc>::erase(iterator first, iterator last)
+	{
+		while (first != last)
+		{
+			erase(first);
+			first++;
+		}
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::size_type
 	tree<K, V, Vcomp, Alloc>::erase(const key_type &k)
 	{
@@ -846,6 +860,39 @@ namespace ft
 				root = root->right;
 		}
 		return (const_iterator(res));
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	typename tree<K, V, Vcomp, Alloc>::size_type
+	tree<K, V, Vcomp, Alloc>::count(const key_type &k) const
+	{
+		const_b_node_ptr x;
+
+		x = this->findOrParent(k);
+		if (x == &_rootParentNode ||
+		    static_cast<const_node_ptr>(x)->value.first != k)
+			return (0);
+		return (1);
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	pair<typename tree<K, V, Vcomp, Alloc>::iterator,
+	     typename tree<K, V, Vcomp, Alloc>::iterator>
+	tree<K, V, Vcomp, Alloc>::equal_range(const key_type &k)
+	{
+		b_node_ptr x;
+
+		x = this->findOrParent(k);
+		return (pair<iterator, iterator>(iterator(x), iterator(nextNode(x))));
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	pair<typename tree<K, V, Vcomp, Alloc>::const_iterator,
+	     typename tree<K, V, Vcomp, Alloc>::const_iterator>
+	tree<K, V, Vcomp, Alloc>::equal_range(const key_type &k) const
+	{
+		const_b_node_ptr x;
+
+		x = this->findOrParent(k);
+		return (pair<const_iterator, const_iterator>(const_iterator(x),
+		                                             const_iterator(x)));
 	}
 }  // namespace ft
 
