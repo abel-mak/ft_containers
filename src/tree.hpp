@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/19 15:34:27 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/20 17:40:27 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ namespace ft
 		pair<const_iterator, const_iterator> equal_range(
 		    const key_type &k) const;
 		pair<iterator, iterator> equal_range(const key_type &k);
+		tree &operator=(const tree &lhs);
 	};
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::node_ptr
@@ -182,8 +183,6 @@ namespace ft
 		_rootParentNode.left   = &_rootParentNode;
 		_rootParentNode.right  = &_rootParentNode;
 		this->copyTree(src.getRoot());
-		// this->insert(src.begin(), src.end());
-		//  this->updateStartNode();
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::iterator tree<K, V, Vcomp, Alloc>::begin(
@@ -676,12 +675,14 @@ namespace ft
 		yRight = y->right;
 		if (isLeft(y) == true)
 		{
-			y->parent->left = nullptr;
+			y->parent->left = y->right;
 		}
 		else
 		{
 			y->parent->right = y->right;
 		}
+		if (y->right != nullptr)
+			y->right->parent = y->parent;
 		y->left         = x->left;
 		y->right        = x->right;
 		y->parent       = x->parent;
@@ -893,6 +894,15 @@ namespace ft
 		x = this->findOrParent(k);
 		return (pair<const_iterator, const_iterator>(const_iterator(x),
 		                                             const_iterator(x)));
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	tree<K, V, Vcomp, Alloc> &tree<K, V, Vcomp, Alloc>::operator=(
+	    const tree &lhs)
+	{
+		this->clear();
+		this->copyTree(lhs.getRoot());
+		this->updateStartNode();
+		return (*this);
 	}
 }  // namespace ft
 

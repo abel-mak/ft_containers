@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/12 19:13:01 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/20 19:03:07 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <iterator>
 
 #include "./type_traits.hpp"
+#include "algorithm.hpp"
 #include "iterator.hpp"
 
 namespace ft
@@ -718,6 +719,26 @@ namespace ft
 		std::swap(this->_begin, x._begin);
 		std::swap(this->_end, x._end);
 		std::swap(this->_endAlloc, x._endAlloc);
+	}
+	template <typename T, typename A>
+	void swap(vector<T, A> &x, vector<T, A> &y)
+	{
+		x.swap(y);
+	}
+	template <typename T, typename A>
+	bool operator==(vector<T, A> &x, vector<T, A> &y)
+	{
+		return (x.size() == y.size() &&
+		        ft::equal(x.begin(), x.end(), y.begin()));
+	}
+	template <typename T, typename A>
+	bool operator!=(vector<T, A> &x, vector<T, A> &y)
+	{
+		return (!(x == y));
+	}
+	template <typename T, typename A>
+	bool operator<(vector<T, A> &x, vector<T, A> &y)
+	{
 	}
 }  // namespace ft
 

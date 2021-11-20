@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 12:07:56 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/15 11:09:47 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/20 16:10:12 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ bool isBalanced(node_ptr root)
 #define COUNT 10
 
 template <typename node_ptr>
-void print2DUtil(node_ptr root, int space, int depth)
+void print2DUtil(node_ptr root, int space, int depth, int &size)
 {
 	if (root == 0)
 		return;
 
 	space += COUNT;
 
-	print2DUtil(static_cast<node_ptr>(root->right), space, depth + 1);
+	print2DUtil(static_cast<node_ptr>(root->right), space, depth + 1, size);
 
 	std::cout << std::endl;
 	for (int i = COUNT; i < space; i++) std::cout << " ";
@@ -86,15 +86,18 @@ void print2DUtil(node_ptr root, int space, int depth)
 	std::cout << "depth: " << depth << std::endl;
 	for (int i = COUNT; i < space; i++) std::cout << " ";
 	std::cout << "key: " << root->value.first << std::endl;
-
-	print2DUtil(static_cast<node_ptr>(root->left), space, depth + 1);
+	size++;
+	print2DUtil(static_cast<node_ptr>(root->left), space, depth + 1, size);
 }
 
 template <typename node_ptr>
 void print2D(node_ptr *root)
 {
-	print2DUtil(root, 0, 0);
-	std::cout << "***********************************************" << std::endl;
+	int size;
+
+	size = 0;
+	print2DUtil(root, 0, 0, size);
+	std::cout << "*********************************************** size: " << size << std::endl;
 }
 
 #endif

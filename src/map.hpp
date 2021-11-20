@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 15:49:20 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/19 19:04:37 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/20 12:51:48 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ namespace ft
 	 * [x] swap
 	 * [x] clear
 	 **
-	 * [] key_comp
-	 * [] value_comp
+	 * [x] key_comp
+	 * [x] value_comp
 	 **
 	 * [x] find
 	 * 		iterator find (const key_type& k);
@@ -156,6 +156,9 @@ namespace ft
 		pair<iterator, iterator> equal_range(const key_type &k);
 		pair<const_iterator, const_iterator> equal_range(
 		    const key_type &k) const;
+		key_compare key_comp() const;
+		value_compare value_comp() const;
+		map &operator=(const map &lhs);
 	};
 	template <typename K, typename V, typename Comp, typename Alloc>
 	map<K, V, Comp, Alloc>::map()
@@ -354,6 +357,26 @@ namespace ft
 	map<K, V, Comp, Alloc>::equal_range(const key_type &k) const
 	{
 		return (t.equal_range(k));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::key_compare
+	map<K, V, Comp, Alloc>::key_comp() const
+	{
+		return (_comp);
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::value_compare
+	map<K, V, Comp, Alloc>::value_comp() const
+	{
+		value_compare tmp;
+
+		return (tmp);
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	map<K, V, Comp, Alloc> &map<K, V, Comp, Alloc>::operator=(const map &lhs)
+	{
+		this->t = lhs.t;
+		return (*this);
 	}
 }  // namespace ft
 
