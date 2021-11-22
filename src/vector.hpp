@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/20 19:03:07 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:25:53 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ namespace ft
 	 * [x] pop_back
 	 * [x] insert
 	 * [x] erase
-	 * [] swap
+	 * [x] swap
 	 * [x] clear
+	 * [x] get_allocator
 	 */
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector
@@ -109,16 +110,20 @@ namespace ft
 		void push_back(const value_type &val);
 		void pop_back(void);
 		void clear(void);
-		template <typename InputIterator>
-		void assign(InputIterator first, InputIterator last);
+		template <typename II>
+		void assign(typename enable_if<!is_integral<II>::value, II>::type first,
+		            II last);
 		void assign(size_type n, const value_type &val);
 		iterator insert(iterator position, const_reference val);
 		void insert(iterator position, size_type n, const_reference val);
 		template <typename II>
-		void insert(iterator position, II first, II last);
+		void insert(iterator position,
+		            typename enable_if<!is_integral<II>::value, II>::type first,
+		            II last);
 		iterator erase(const iterator position);
 		iterator erase(const iterator first, const iterator last);
 		void swap(vector &x);
+		allocator_type get_allocator(void);
 
 	private:
 		void vectorFree(void);
@@ -393,9 +398,14 @@ namespace ft
 		{
 			size_type diff;
 
-			diff = n - this->capacity();
-			this->reserve(
-			    std::max(2 * this->capacity(), n));  // modify the capacity
+			if (n <= this->capacity())
+				diff = n - this->size();
+			else
+			{
+				diff = n - this->capacity();
+				this->reserve(
+				    std::max(2 * this->capacity(), n));  // modify the capacity
+			}
 			iterator first(_end);
 			iterator last(_end + diff);
 			constructRange(first, last);
@@ -421,9 +431,14 @@ namespace ft
 		{
 			size_type diff;
 
-			diff = n - this->capacity();
-			this->reserve(
-			    std::max(2 * this->capacity(), n));  // modify the capacity
+			if (n <= this->capacity())
+				diff = n - this->size();
+			else
+			{
+				diff = n - this->capacity();
+				this->reserve(
+				    std::max(2 * this->capacity(), n));  // modify the capacity
+			}
 			iterator first(_end);
 			iterator last(_end + diff);
 			copyConstructRange(first, last, val);
@@ -525,8 +540,9 @@ namespace ft
 		_end = ptr;
 	}
 	template <typename T, typename A>
-	template <typename Iterator>
-	void vector<T, A>::assign(Iterator first, Iterator last)
+	template <typename II>
+	void vector<T, A>::assign(
+	    typename enable_if<!is_integral<II>::value, II>::type first, II last)
 	{
 		size_type dist;
 		typename ft::vector<value_type>::iterator tmp(_begin);
@@ -638,7 +654,7 @@ namespace ft
 
 		index = (position).base() - (this->begin()).base();
 		if (index >= this->size())
-			return;
+			return (position);
 		if (this->size() + 1 > this->capacity())
 		{
 			this->reserve(this->size() * 2);
@@ -660,7 +676,6 @@ namespace ft
 		index = (position).base() - (this->begin()).base();
 		if (index >= this->size())
 			return;
-		std::cout << "index: " << index << std::endl;
 		if (this->size() + n > this->capacity())
 		{
 			this->reserve(std::max(this->size() * 2, this->size() + n));
@@ -673,7 +688,9 @@ namespace ft
 	}
 	template <typename T, typename A>
 	template <typename II>
-	void vector<T, A>::insert(iterator position, II first, II last)
+	void vector<T, A>::insert(
+	    iterator position,
+	    typename enable_if<!is_integral<II>::value, II>::type first, II last)
 	{
 		size_type dist;
 		size_type nextSize;
@@ -714,6 +731,11 @@ namespace ft
 		return (first);
 	}
 	template <typename T, typename A>
+	typename vector<T, A>::allocator_type vector<T, A>::get_allocator(void)
+	{
+		return (_alloc);
+	}
+	template <typename T, typename A>
 	void vector<T, A>::swap(vector &x)
 	{
 		std::swap(this->_begin, x._begin);
@@ -726,19 +748,36 @@ namespace ft
 		x.swap(y);
 	}
 	template <typename T, typename A>
-	bool operator==(vector<T, A> &x, vector<T, A> &y)
+	bool operator==(const vector<T, A> &x, const vector<T, A> &y)
 	{
 		return (x.size() == y.size() &&
 		        ft::equal(x.begin(), x.end(), y.begin()));
 	}
 	template <typename T, typename A>
-	bool operator!=(vector<T, A> &x, vector<T, A> &y)
+	bool operator!=(const vector<T, A> &x, const vector<T, A> &y)
 	{
 		return (!(x == y));
 	}
 	template <typename T, typename A>
-	bool operator<(vector<T, A> &x, vector<T, A> &y)
+	bool operator<(const vector<T, A> &x, const vector<T, A> &y)
 	{
+		return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(),
+		                                    y.end()));
+	}
+	template <typename T, typename A>
+	bool operator>(const vector<T, A> &x, const vector<T, A> &y)
+	{
+		return (y < x);
+	}
+	template <typename T, typename A>
+	bool operator>=(const vector<T, A> &x, const vector<T, A> &y)
+	{
+		return (!(x < y));
+	}
+	template <typename T, typename A>
+	bool operator<=(const vector<T, A> &x, const vector<T, A> &y)
+	{
+		return (!(x > y));
 	}
 }  // namespace ft
 

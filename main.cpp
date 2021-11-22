@@ -1,218 +1,130 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/10 16:51:40 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/11 17:20:32 by abel-mak         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include <deque>
+#include <iostream>
+#include <string>
+#if 0  // CREATE A REAL STL EXAMPLE
+#	include <map>
+#	include <stack>
+#	include <vector>
+namespace ft = std;
+#else
+#	include "./src/map.hpp"
+#	include "./src/stack.hpp"
+#	include "./src/vector.hpp"
+#endif
 
-#include <cassert>
-#include <map>
-#include <memory>
-#include <vector>
+#include <stdlib.h>
 
-#include "src/algorithm.hpp"
-#include "src/type_traits.hpp"
-#include "src/utility.hpp"
-#include "src/vector.hpp"
-
-//#define _LIBCPP_DEBUG
-
-template <typename B>
-void my_function(B begin, B end, int)
+#define MAX_RAM     4294967296
+#define BUFFER_SIZE 4096
+struct Buffer
 {
-	begin++;
-	end++;
-	// Bidirectional Iterator specific code is here
-}
+	int idx;
+	char buff[BUFFER_SIZE];
+};
 
-template <class T>
-typename std::enable_if<false, T>::type foo1(T t)
-{
-	std::cout << "foo1: float\n";
-	return t;
-}
+#define COUNT1 (MAX_RAM / (int)sizeof(Buffer))
 
-void put(int const s)
+template <typename T>
+class MutantStack : public ft::stack<T>
 {
-	std::cout << s << std::endl;
-}
-
-struct test
-{
-	int a;
-	int b;
-	test(void)
+public:
+	MutantStack()
 	{
-		a = 5;
-		std::cout << "contructor called!" << std::endl;
 	}
-	test(const test &src)
+	MutantStack(const MutantStack<T> &src)
 	{
-		a = src.a;
-		(void)src;
-		std::cout << "copy contructor called!" << std::endl;
+		*this = src;
 	}
-	test(int z)
+	MutantStack<T> &operator=(const MutantStack<T> &rhs)
 	{
-		this->a = z;
+		this->c = rhs.c;
+		return *this;
 	}
-	~test(void)
+	~MutantStack()
 	{
-		std::cout << "destructor called" << std::endl;
+	}
+
+	typedef typename ft::stack<T>::container_type::iterator iterator;
+
+	iterator begin()
+	{
+		return this->c.begin();
+	}
+	iterator end()
+	{
+		return this->c.end();
 	}
 };
 
-int main()
+int main(int argc, char **argv)
 {
-	// ft::vector<int> a(5, 2);
-	std::allocator<int> alloc;
-	std::vector<int> myints(5, 2);
-	std::string s1 = "abcde";
-	std::string s2 = "abcdef";
-	ft::pair<int, int> a;
-	ft::pair<int, int> b;
-	std::vector<int> x(10);
-	struct test t1;
-	struct test t2(2);
-	struct test t3(3);
-	struct test t4(4);
-	struct test az[] = {t2, t2, t2, t1, t1, t1, t3, t4};
-
-	std::vector<struct test> azv1(std::begin(az), std::end(az));
-	std::cout << "===============" << std::endl;
-	std::cout << "size: " << azv1.size() << std::endl;
-	std::cout << "capacity: " << azv1.capacity() << std::endl;
-	azv1.erase(azv1.begin(), azv1.end());
-	int i = 0;
-	while (i < azv1.size())
+	if (argc != 2)
 	{
-		std::cout << azv1[i].a << std::endl;
-		i++;
+		std::cerr << "Usage: ./test seed" << std::endl;
+		std::cerr << "Provide a seed please" << std::endl;
+		std::cerr << "Count value:" << COUNT1 << std::endl;
+		return 1;
 	}
-	std::cout << "size: " << azv1.size() << std::endl;
-	std::cout << "capacity: " << azv1.capacity() << std::endl;
-	std::cout << "===============" << std::endl;
+	const int seed = atoi(argv[1]);
+	srand(seed);
 
-	//	ft::vector<struct test> azv2(std::begin(az), std::end(az));
-	//	std::cout << "===============" << std::endl;
-	//	std::cout << "size: " << azv2.size() << std::endl;
-	//	std::cout << "capacity: " << azv2.capacity() << std::endl;
-	//	azv2.erase(azv2.begin(), azv2.end());
-	//	int i = 0;
-	//	while (i < azv2.size())
-	//	{
-	//		std::cout << azv2[i].a << std::endl;
-	//		i++;
-	//	}
-	//	std::cout << "size: " << azv2.size() << std::endl;
-	//	std::cout << "capacity: " << azv2.capacity() << std::endl;
-	//	std::cout << "===============" << std::endl;
-	//	std::vector<struct test> azv1(3);
-	//	std::cout << "===============" << std::endl;
-	//	std::cout << "size: " << azv1.size() << std::endl;
-	//	std::cout << "capacity: " << azv1.capacity() << std::endl;
-	//	azv1.insert(azv1.begin() + 2, 4, t2);
-	//	int i = 0;
-	//	while (i < azv1.size())
-	//	{
-	//		std::cout << azv1[i].a << std::endl;
-	//		i++;
-	//	}
-	//	std::cout << "size: " << azv1.size() << std::endl;
-	//	std::cout << "capacity: " << azv1.capacity() << std::endl;
-	//	std::cout << "===============" << std::endl;
-	//
-	//    ft::vector<struct test> azv2(3);
-	//    std::cout << "===============" << std::endl;
-	//    std::cout << "size: " << azv2.size() << std::endl;
-	//    std::cout << "capacity: " << azv2.capacity() << std::endl;
-	//    azv2.insert(azv2.begin() + 1, std::begin(az), std::end(az));
-	//    int i = 0;
-	//    while (i < azv2.size())
-	//{
-	//	std::cout << azv2[i].a << std::endl;
-	//	i++;
-	//   }
-	//    std::cout << "size: " << azv2.size() << std::endl;
-	//    std::cout << "capacity: " << azv2.capacity() << std::endl;
-	//    std::cout << "===============" << std::endl;
-	//    std::vector<struct test> azv1(2);
-	//    std::cout << "===============" << std::endl;
-	//    std::cout << "size: " << azv1.size() << std::endl;
-	//    std::cout << "capacity: " << azv1.capacity() << std::endl;
-	//    azv1.assign(std::begin(az), std::end(az));
-	//    std::cout << "size: " << azv1.size() << std::endl;
-	//    std::cout << "capacity: " << azv1.capacity() << std::endl;
-	//    std::cout << "===============" << std::endl;
+	ft::vector<std::string> vector_str;
+	ft::vector<int> vector_int;
+	ft::stack<int> stack_int;
+	ft::vector<Buffer> vector_buffer;
+	// ft::stack<Buffer, std::deque<int> > stack_deq_buffer;
+	ft::map<int, int> map_int;
 
-	// ft::vector<struct test> azv2(3);
-	// azv2.reserve(10);
-	// std::cout << "===============" << std::endl;
-	// std::cout << "size: " << azv2.size() << std::endl;
-	// std::cout << "capacity: " << azv2.capacity() << std::endl;
-	// azv2.assign(4, t1);
-	// std::cout << "size: " << azv2.size() << std::endl;
-	// std::cout << "capacity: " << azv2.capacity() << std::endl;
-	// std::cout << "===============" << std::endl;
+	for (int i = 0; i < COUNT1; i++)
+	{
+		vector_buffer.push_back(Buffer());
+	}
 
-	// std::cout << "===============" << std::endl;
-	// std::cout << "size: " << azv1.size() << std::endl;
-	// std::cout << "capacity: " << azv1.capacity() << std::endl;
-	// azv1.clear();
-	// std::cout << "size: " << azv1.size() << std::endl;
-	// std::cout << "capacity: " << azv1.capacity() << std::endl;
-	// std::cout << "===============" << std::endl;
+	for (int i = 0; i < COUNT1; i++)
+	{
+		const int idx          = rand() % COUNT1;
+		vector_buffer[idx].idx = 5;
+	}
+	ft::vector<Buffer>().swap(vector_buffer);
 
-	// ft::vector<struct test> azv2(10);
-	// std::cout << "===============" << std::endl;
-	// std::cout << "size: " << azv2.size() << std::endl;
-	// std::cout << "capacity: " << azv2.capacity() << std::endl;
-	// azv2.clear();
-	// std::cout << "size: " << azv2.size() << std::endl;
-	// std::cout << "capacity: " << azv2.capacity() << std::endl;
-	// std::cout << "===============" << std::endl;
+	try
+	{
+		for (int i = 0; i < COUNT1; i++)
+		{
+			const int idx = rand() % COUNT1;
+			vector_buffer.at(idx);
+			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" << std::endl;
+		}
+	}
+	catch (const std::exception &e)
+	{
+		// NORMAL ! :P
+	}
 
-	// std::cout << azv1.back().a << std::endl;
-	// std::cout << azv2.back().a << std::endl;
+	for (int i = 0; i < COUNT1; ++i)
+	{
+		map_int.insert(ft::make_pair(rand(), rand()));
+	}
 
-	// std::vector<struct test> azv1(std::begin(az), std::end(az));
-	// std::cout << "===============" << std::endl;
-	// azv1.resize(4, t1);
-	// std::cout << "size: " << azv1.size() << std::endl;
-	// std::cout << "capacity: " << azv1.capacity() << std::endl;
-	// std::cout << "===============" << std::endl;
+	int sum = 0;
+	for (int i = 0; i < 10000; i++)
+	{
+		int access = rand();
+		sum += map_int[access];
+	}
+	std::cout << "should be constant with the same seed: " << sum << std::endl;
 
-	// ft::vector<struct test> azv2(std::begin(az), std::end(az));
-	// std::cout << "===============" << std::endl;
-	// azv2.resize(4, t1);
-	// std::cout << "size: " << azv2.size() << std::endl;
-	// std::cout << "capacity: " << azv2.capacity() << std::endl;
-	// std::cout << "===============" << std::endl;
-
-	// azv2.reserve(-1);
-	// ft::vector<struct test> azv22(azv2);
-	// ft::vector<struct test> azv2(std::begin(az), std::end(az));
-	// std::cout << "size: " << x.size() << std::endl;
-	// std::cout << "capL " << x.capacity() << std::endl;
-	//	ft::vector<int>::iterator iter   = x.begin();
-	//	std::vector<int>::iterator iter2 = myints.begin();
-	//	ft::vector<int>::iterator *iterp;
-	//	int i;
-	// std::vector<struct test> v(10, t1);
-	// ft::vector<struct test> v(10, t1);
-	// std::cout << t1.a << std::endl;
-
-	//	std::vector<struct test> t(1, t1);
-	//	std::vector<struct test>::iterator t_iter = t.begin();
-	//	while (t_iter != t.end())
-	//	{
-	//		std::cout << (*t_iter).a << std::endl;
-	//		t_iter++;
-	//	}
+	{
+		ft::map<int, int> copy = map_int;
+	}
+	MutantStack<char> iterable_stack;
+	for (char letter = 'a'; letter <= 'z'; letter++)
+		iterable_stack.push(letter);
+	for (MutantStack<char>::iterator it = iterable_stack.begin();
+	     it != iterable_stack.end(); it++)
+	{
+		std::cout << *it;
+	}
+	std::cout << std::endl;
 	return (0);
 }

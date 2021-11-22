@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:11:59 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/10/12 19:09:20 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/22 15:13:01 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ namespace ft
 
 		normal_iterator(void);
 		normal_iterator(P current);
-		normal_iterator(const normal_iterator &src);
+		template <typename P2>
+		normal_iterator(const normal_iterator<P2> &src);
 		reference operator*();
 		normal_iterator operator++(int);
 		normal_iterator &operator++();
@@ -118,9 +119,10 @@ namespace ft
 	{
 	}
 	template <typename P>
-	normal_iterator<P>::normal_iterator(const normal_iterator<P> &src)
+	template <typename P2>
+	normal_iterator<P>::normal_iterator(const normal_iterator<P2> &src)
 	{
-		this->current = src.current;
+		this->current = src.base();
 	}
 	template <typename P>
 	normal_iterator<P> normal_iterator<P>::operator++(int)
@@ -241,7 +243,8 @@ namespace ft
 
 		reverse_iterator(void);
 		explicit reverse_iterator(const I &tmp);
-		reverse_iterator(const reverse_iterator &src);
+		template <typename Iter>
+		reverse_iterator(const reverse_iterator<Iter> &src);
 		reverse_iterator &operator=(const reverse_iterator &rhs);
 		reference operator*() const;
 		pointer operator->() const;
@@ -265,9 +268,10 @@ namespace ft
 	{
 	}
 	template <typename I>
-	reverse_iterator<I>::reverse_iterator(const reverse_iterator<I> &src)
+	template <typename Iter>
+	reverse_iterator<I>::reverse_iterator(const reverse_iterator<Iter> &src)
+	    : current(src.base())
 	{
-		*this = src;
 	}
 	template <typename I>
 	reverse_iterator<I> &reverse_iterator<I>::operator=(
@@ -280,13 +284,16 @@ namespace ft
 	typename reverse_iterator<I>::reference reverse_iterator<I>::operator*()
 	    const
 	{
-		return (*(this->current - 1));
+		I tmp;
+
+		tmp = this->current;
+		return (*(--tmp));
 	}
 	template <typename I>
 	typename reverse_iterator<I>::pointer reverse_iterator<I>::operator->()
 	    const
 	{
-		return (this->current - 1);
+		return (&(operator*()));
 	}
 	template <typename I>
 	reverse_iterator<I> &reverse_iterator<I>::operator++()
@@ -362,48 +369,48 @@ namespace ft
 	 * [x] operator>
 	 * [x] operator<=
 	 * [x] operator>=
-	 * [] operator+
-	 * [] operator-
+	 * [x] operator+
+	 * [x] operator-
 	 */
-	template <typename P>
-	bool operator==(const normal_iterator<P> &a, const normal_iterator<P> &b)
+	template <typename P1, typename P2>
+	bool operator==(const normal_iterator<P1> &a, const normal_iterator<P2> &b)
 	{
 		return (a.base() == b.base());
 	}
-	template <typename P>
-	bool operator!=(const normal_iterator<P> &a, const normal_iterator<P> &b)
+	template <typename P1, typename P2>
+	bool operator!=(const normal_iterator<P1> &a, const normal_iterator<P2> &b)
 	{
 		return (!(a == b));
 	}
-	template <typename P>
-	bool operator<(const normal_iterator<P> &a, const normal_iterator<P> &b)
+	template <typename P1, typename P2>
+	bool operator<(const normal_iterator<P1> &a, const normal_iterator<P2> &b)
 	{
 		return (a.base() < b.base());
 	}
-	template <typename P>
-	bool operator>(const normal_iterator<P> &a, const normal_iterator<P> &b)
+	template <typename P1, typename P2>
+	bool operator>(const normal_iterator<P1> &a, const normal_iterator<P2> &b)
 	{
 		return (!(a < b) && (a != b));
 	}
-	template <typename P>
-	bool operator<=(const normal_iterator<P> &a, const normal_iterator<P> &b)
+	template <typename P1, typename P2>
+	bool operator<=(const normal_iterator<P1> &a, const normal_iterator<P2> &b)
 	{
 		return (!(a > b));
 	}
-	template <typename P>
-	bool operator>=(const normal_iterator<P> &a, const normal_iterator<P> &b)
+	template <typename P1, typename P2>
+	bool operator>=(const normal_iterator<P1> &a, const normal_iterator<P2> &b)
 	{
 		return (!(a < b));
 	}
-	template <typename P>
-	typename normal_iterator<P>::difference_type operator+(
-	    const normal_iterator<P> &lhs, const normal_iterator<P> &rhs)
+	template <typename P1, typename P2>
+	typename normal_iterator<P1>::difference_type operator+(
+	    const normal_iterator<P1> &lhs, const normal_iterator<P2> &rhs)
 	{
 		return (lhs.base() + rhs.base());
 	}
-	template <typename P>
-	typename normal_iterator<P>::difference_type operator-(
-	    const normal_iterator<P> &lhs, const normal_iterator<P> &rhs)
+	template <typename P1, typename P2>
+	typename normal_iterator<P1>::difference_type operator-(
+	    const normal_iterator<P1> &lhs, const normal_iterator<P2> &rhs)
 	{
 		return (lhs.base() - rhs.base());
 	}
@@ -416,51 +423,56 @@ namespace ft
 	 * [x] operator>
 	 * [x] operator<=
 	 * [x] operator>=
-	 * [] operator+
-	 * [] operator-
+	 * [x] operator+
+	 * [x] operator-
 	 */
-	template <typename I>
-	bool operator==(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	template <typename I1, typename I2>
+	bool operator==(const reverse_iterator<I1> &a,
+	                const reverse_iterator<I2> &b)
 	{
 		return (a.base() == b.base());
 	}
-	template <typename I>
-	bool operator!=(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	template <typename I1, typename I2>
+	bool operator!=(const reverse_iterator<I1> &a,
+	                const reverse_iterator<I2> &b)
 	{
 		return (!(a == b));
 	}
-	template <typename I>
-	bool operator<(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	template <typename I1, typename I2>
+	bool operator<(const reverse_iterator<I1> &a, const reverse_iterator<I2> &b)
 	{
 		return (a.base() > b.base());
 	}
-	template <typename I>
-	bool operator>(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	template <typename I1, typename I2>
+	bool operator>(const reverse_iterator<I1> &a, const reverse_iterator<I2> &b)
 	{
 		return (!(a < b) && (a != b));
 	}
-	template <typename I>
-	bool operator<=(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	template <typename I1, typename I2>
+	bool operator<=(const reverse_iterator<I1> &a,
+	                const reverse_iterator<I2> &b)
 	{
 		return (!(a > b));
 	}
-	template <typename I>
-	bool operator>=(const reverse_iterator<I> &a, const reverse_iterator<I> &b)
+	template <typename I1, typename I2>
+	bool operator>=(const reverse_iterator<I1> &a,
+	                const reverse_iterator<I2> &b)
 	{
 		return (!(a < b));
 	}
-	template <typename I>
-	typename reverse_iterator<I>::difference_type operator+(
-	    const reverse_iterator<I> &lhs, const reverse_iterator<I> &rhs)
+	template <typename I1, typename I2>
+	typename reverse_iterator<I1>::difference_type operator+(
+	    const reverse_iterator<I1> &lhs, const reverse_iterator<I2> &rhs)
 	{
 		return (lhs.base() + rhs.base());
 	}
-	template <typename I>
-	typename reverse_iterator<I>::difference_type operator-(
-	    const reverse_iterator<I> &lhs, const reverse_iterator<I> &rhs)
+	template <typename I1, typename I2>
+	typename reverse_iterator<I1>::difference_type operator-(
+	    const reverse_iterator<I1> &lhs, const reverse_iterator<I2> &rhs)
 	{
 		return (rhs.base() - lhs.base());
 	}
+	/**************************************************************************/
 }  // namespace ft
 
 #endif /* ifsdef ITERATOR_HPP */

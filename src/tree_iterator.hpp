@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 16:46:03 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/14 13:26:41 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/22 13:08:35 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ namespace ft
 		tree_iterator operator--(int);
 		bool operator==(tree_iterator const &x);
 		bool operator!=(tree_iterator const &x);
-		b_node_ptr getNodePtr(void);
+		b_node_ptr getNodePtr(void) const;
 
 	private:
 		b_node_ptr _node;
@@ -179,7 +179,7 @@ namespace ft
 		return (!(*this == x));
 	}
 	template <typename Y>
-	typename tree_iterator<Y>::b_node_ptr tree_iterator<Y>::getNodePtr(void)
+	typename tree_iterator<Y>::b_node_ptr tree_iterator<Y>::getNodePtr(void) const
 	{
 		return (_node);
 	}
@@ -208,9 +208,9 @@ namespace ft
 		tree_const_iterator operator--(int);
 		bool operator==(tree_const_iterator const &x);
 		bool operator!=(tree_const_iterator const &x);
-		const_b_node_ptr getNodePtr(void);
+		const_b_node_ptr getNodePtr(void) const;
 
-	public:
+	private:
 		const_b_node_ptr _node;
 	};
 
@@ -279,7 +279,7 @@ namespace ft
 	}
 	template <typename Y>
 	typename tree_const_iterator<Y>::const_b_node_ptr
-	tree_const_iterator<Y>::getNodePtr(void)
+	tree_const_iterator<Y>::getNodePtr(void) const
 	{
 		return (_node);
 	}
@@ -355,6 +355,19 @@ namespace ft
 		else
 			return (std::max(height(x->left), height(x->right)) + 1);
 	}
+	/**************************************************************************/
+	template <typename Y>
+	bool operator==(const tree_iterator<Y> &x, const tree_const_iterator<Y> &y)
+	{
+		return (x.getNodePtr() == y.getNodePtr());
+	}
+	template <typename Y>
+	bool operator!=(const tree_iterator<Y> &x, const tree_const_iterator<Y> &y)
+	{
+		return (!(x == y));
+	}
+	/**************************************************************************/
+
 }  // namespace ft
 
 #endif /* ifndef TREE_ITERATOR_HPP */

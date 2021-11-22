@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 15:49:20 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/20 12:51:48 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/22 15:23:08 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ namespace ft
 	 * [x] lower_bound
 	 * [x] upper_bound
 	 * [x] equal_range
+	 * [] get_allocator
 	 */
 	template <typename K, typename V, typename Comp = std::less<K>,
 	          typename Alloc = std::allocator<ft::pair<const K, V> > >
@@ -159,6 +160,7 @@ namespace ft
 		key_compare key_comp() const;
 		value_compare value_comp() const;
 		map &operator=(const map &lhs);
+		allocator_type get_allocator(void) const;
 	};
 	template <typename K, typename V, typename Comp, typename Alloc>
 	map<K, V, Comp, Alloc>::map()
@@ -208,11 +210,23 @@ namespace ft
 	typename map<K, V, Comp, Alloc>::reverse_iterator
 	map<K, V, Comp, Alloc>::rbegin(void)
 	{
-		return (const_reverse_iterator(this->end()));
+		return (reverse_iterator(this->end()));
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename map<K, V, Comp, Alloc>::const_reverse_iterator
 	map<K, V, Comp, Alloc>::rbegin(void) const
+	{
+		return (const_reverse_iterator(this->end()));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::reverse_iterator
+	map<K, V, Comp, Alloc>::rend(void)
+	{
+		return (reverse_iterator(this->begin()));
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::const_reverse_iterator
+	map<K, V, Comp, Alloc>::rend(void) const
 	{
 		return (const_reverse_iterator(this->begin()));
 	}
@@ -231,7 +245,7 @@ namespace ft
 	typename map<K, V, Comp, Alloc>::size_type map<K, V, Comp, Alloc>::max_size(
 	    void) const
 	{
-		return (t.max_size());
+		return (_alloc.max_size());
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename map<K, V, Comp, Alloc>::mapped_type &
@@ -377,6 +391,12 @@ namespace ft
 	{
 		this->t = lhs.t;
 		return (*this);
+	}
+	template <typename K, typename V, typename Comp, typename Alloc>
+	typename map<K, V, Comp, Alloc>::allocator_type
+	map<K, V, Comp, Alloc>::get_allocator(void) const
+	{
+		return (_alloc);
 	}
 }  // namespace ft
 
