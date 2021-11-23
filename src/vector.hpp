@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/22 19:25:53 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/23 19:27:45 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ namespace ft
 	 * [x] assign
 	 * [x] push_back
 	 * [x] pop_back
-	 * [x] insert
+	 * [] insert
 	 * [x] erase
 	 * [x] swap
 	 * [x] clear
@@ -135,9 +135,10 @@ namespace ft
 		void copyConstructRange(iterator first, iterator last,
 		                        const_reference val);
 		pointer allocAndConstruct(const size_type &n);
-		void __destroyEnd(pointer ptr);
-		void __newAlloc(size_type n);
-		void __rotate(size_type n);
+		void _destroyEnd(pointer ptr);
+		void _newAlloc(size_type n);
+		void _rotate(size_type n);
+		void _move_buf(int index);
 		Allocator _alloc;
 		pointer _begin;
 		pointer _end;
@@ -527,7 +528,7 @@ namespace ft
 		}
 	}
 	template <typename T, typename A>
-	void vector<T, A>::__destroyEnd(pointer ptr)
+	void vector<T, A>::_destroyEnd(pointer ptr)
 	{
 		pointer tmp;
 
@@ -546,14 +547,18 @@ namespace ft
 	{
 		size_type dist;
 		typename ft::vector<value_type>::iterator tmp(_begin);
+		size_type curCapacity;
 
-		dist = std::distance(first, last);
+		curCapacity = this->capacity();
+		dist        = std::distance(first, last);
 		if (dist <= this->capacity())
 		{
 			if (this->size() >= dist)
 			{
 				if (this->size() > dist)
-					__destroyEnd(_begin + dist);
+				{
+					_destroyEnd(_begin + dist);
+				}
 				std::copy(first, last, tmp);
 			}
 			else if (this->size() < dist)
@@ -567,12 +572,12 @@ namespace ft
 		else
 		{
 			this->vectorFree();
-			__newAlloc(dist);
-			copyConstructFromRange(first + this->size(), last, this->begin());
+			_newAlloc(std::max(curCapacity * 2, dist));
+			copyConstructFromRange(first, last, this->begin());
 		}
 	}
 	template <typename T, typename A>
-	void vector<T, A>::__newAlloc(size_type n)
+	void vector<T, A>::_newAlloc(size_type n)
 	{
 		_begin    = _alloc.allocate(n);
 		_end      = _begin + n;
@@ -583,14 +588,16 @@ namespace ft
 	{
 		size_type i;
 		size_type curSize;
+		size_type curCapacity;
 
-		curSize = this->size();
+		curCapacity = this->capacity();
+		curSize     = this->size();
 		if (n <= this->capacity())
 		{
 			if (curSize >= n)
 			{
 				if (curSize > n)
-					__destroyEnd(_begin + n);
+					_destroyEnd(_begin + n);
 				i = 0;
 				while (i < n)
 				{
@@ -614,12 +621,12 @@ namespace ft
 		else
 		{
 			this->vectorFree();
-			__newAlloc(n);
+			_newAlloc(std::max(curCapacity * 2, n));
 			copyConstructRange(this->begin(), this->end(), val);
 		}
 	}
 	template <typename T, typename A>
-	void vector<T, A>::__rotate(size_type n)
+	void vector<T, A>::_rotate(size_type n)
 	{
 		iterator first = this->begin();
 		size_type i;
@@ -645,46 +652,58 @@ namespace ft
 			}
 		}
 	}
+	/*
+	 * check if there's enough capacity, if not reserve
+	 * then insert elements
+	 */
 	template <typename T, typename A>
 	typename vector<T, A>::iterator vector<T, A>::insert(iterator position,
 	                                                     const_reference val)
 	{
-		size_type nextSize;
 		size_type index;
+		pointer ptr;
+		size_type curCapacity;
 
-		index = (position).base() - (this->begin()).base();
-		if (index >= this->size())
-			return (position);
-		if (this->size() + 1 > this->capacity())
-		{
-			this->reserve(this->size() * 2);
-		}
-		nextSize = this->size();
-		copyConstructRange(this->begin() + nextSize,
-		                   this->begin() + nextSize + 1, val);
+		curCapacity = this->capacity();
+		ptr         = position.base();
+		index       = ptr - _begin;
+		if (_end + 1 > _endAlloc)
+			this->reserve(std::max(curCapacity * 2, 1 + this->size()));
+		_alloc.construct(_end);
+		std::copy_backward(_begin + index, _end, _end + 1);
+		_begin[index] = val;
 		_end++;
-		this->__rotate(1 + index);
-		return (position);
+		return (iterator(_begin + index));
 	}
 	template <typename T, typename A>
 	void vector<T, A>::insert(iterator position, size_type n,
 	                          const_reference val)
 	{
-		size_type nextSize;
 		size_type index;
+		pointer ptr;
+		size_type curCapacity;
+		int i;
 
-		index = (position).base() - (this->begin()).base();
-		if (index >= this->size())
-			return;
-		if (this->size() + n > this->capacity())
+		curCapacity = this->capacity();
+		ptr         = position.base();
+		index       = ptr - _begin;
+		if (_end + n > _endAlloc)
+			this->reserve(std::max(curCapacity * 2, n + this->size()));
+		i = 0;
+		while (i < n)
 		{
-			this->reserve(std::max(this->size() * 2, this->size() + n));
+			_alloc.construct(_end + i);
+			i++;
 		}
-		nextSize = this->size();
-		copyConstructRange(this->begin() + nextSize,
-		                   this->begin() + nextSize + n, val);
+		std::copy_backward(_begin + index, _end, _end + n);
+		i = 0;
+		while (i < n)
+		{
+			_begin[index] = val;
+			index++;
+			i++;
+		}
 		_end += n;
-		this->__rotate(n + index);
 	}
 	template <typename T, typename A>
 	template <typename II>
@@ -692,22 +711,32 @@ namespace ft
 	    iterator position,
 	    typename enable_if<!is_integral<II>::value, II>::type first, II last)
 	{
-		size_type dist;
-		size_type nextSize;
 		size_type index;
+		pointer ptr;
+		size_type curCapacity;
+		size_type n;
+		int i;
 
-		index = (position).base() - (this->begin()).base();
-		if (index >= this->size())
-			return;
-		dist = std::distance(first, last);
-		if (this->size() + dist > this->capacity())
+		n           = std::distance(first, last);
+		curCapacity = this->capacity();
+		ptr         = position.base();
+		index       = ptr - _begin;
+		if (_end + n > _endAlloc)
+			this->reserve(std::max(curCapacity * 2, n + this->size()));
+		i = 0;
+		while (i < n)
 		{
-			this->reserve(std::max(this->size() * 2, this->size() + dist));
+			_alloc.construct(_end + i);
+			i++;
 		}
-		nextSize = this->size();
-		copyConstructFromRange(first, last, this->end());
-		_end += dist;
-		this->__rotate(dist + 1);
+		std::copy_backward(_begin + index, _end, _end + n);
+		while (first != last)
+		{
+			_begin[index] = *first;
+			index++;
+			first++;
+		}
+		_end += n;
 	}
 	template <typename T, typename A>
 	typename vector<T, A>::iterator vector<T, A>::erase(const iterator position)
@@ -716,7 +745,7 @@ namespace ft
 
 		std::copy(position + 1, this->end(), position);
 		new_end = _end - 1;
-		__destroyEnd(new_end);
+		_destroyEnd(new_end);
 		return (position);
 	}
 	template <typename T, typename A>
@@ -727,7 +756,7 @@ namespace ft
 
 		std::copy(last, this->end(), first);
 		new_end = _end - std::distance(first, last);
-		__destroyEnd(new_end);
+		_destroyEnd(new_end);
 		return (first);
 	}
 	template <typename T, typename A>
