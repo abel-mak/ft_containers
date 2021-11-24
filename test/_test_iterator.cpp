@@ -1,116 +1,162 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _test_iterator.cpp                                 :+:      :+:    :+:   */
+/*   test_iterator.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 14:10:11 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/05 12:49:09 by abel-mak         ###   ########.fr       */
+/*   Created: 2021/09/30 14:17:28 by abel-mak          #+#    #+#             */
+/*   Updated: 2021/11/24 17:16:00 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <map>
+#include <typeinfo>
 
-#include "../src/tree.hpp"
+#include "../src/iterator.hpp"
+
+int sum(int a, int b)
+{
+	return (a + b);
+}
+struct test
+{
+	int a;
+	test()
+	{
+		a = 3;
+	}
+	test(int z)
+	{
+		a = z;
+	}
+};
 
 void test_iterator(void)
 {
 	{
-		ft::tree<int, int, std::less<int>,
-		         std::allocator<ft::pair<const int, int> > >
-		    t;
-		ft::tree<int, int, std::less<int>,
-		         std::allocator<ft::pair<const int, int> > >::iterator it;
-		ft::tree<int, int, std::less<int>,
-		         std::allocator<ft::pair<const int, int> > >::iterator prev;
-
-		ft::pair<const int, int> a(77, 0);
-		ft::pair<const int, int> b(82, 0);
-		ft::pair<const int, int> c(2, 0);
-		ft::pair<const int, int> d(25, 0);
-		ft::pair<const int, int> e(54, 0);
-		ft::pair<const int, int> f(27, 0);
-		ft::pair<const int, int> g(21, 0);
-		ft::pair<const int, int> h(95, 0);
-		ft::pair<const int, int> ii(65, 0);
-
-		t.insert(a);
-		t.insert(b);
-		t.insert(c);
-		t.insert(d);
-		t.insert(e);
-		t.insert(f);
-		t.insert(g);
-		t.insert(h);
-		t.insert(ii);
-
-		it   = t.begin();
-		prev = t.begin();
-		while (it != t.end())
 		{
-			if ((*it).first < (*prev).first)
-				assert(1 == 0);
-			// std::cout << (*it).first << std::endl;
-			prev = it;
-			++it;
+			std::__wrap_iter<char *> std_i1;
+			ft::normal_iterator<char *> ft_i1(std_i1.base());
+
+			assert(ft_i1.base() == std_i1.base());
+			assert((ft_i1++).base() == (std_i1++).base());
+			assert((++ft_i1).base() == (++std_i1).base());
+			assert((ft_i1--).base() == (std_i1--).base());
+			assert((--ft_i1).base() == (--std_i1).base());
+			assert((ft_i1 += 5).base() == (std_i1 += 5).base());
+			assert((ft_i1 -= 5).base() == (std_i1 -= 5).base());
+			assert((ft_i1 + 5).base() == (std_i1 + 5).base());
+			assert((ft_i1 - 5).base() == (std_i1 - 5).base());
+			{} {
+				std::__wrap_iter<char *> std_rev1;
+				ft::normal_iterator<char *> ft_rev1(std_rev1.base());
+
+				std::__wrap_iter<char *> std_rev2;
+				ft::normal_iterator<char *> ft_rev2(std_rev2.base());
+				bool b1, b2;
+
+				std_rev1++;
+				ft_rev1++;
+
+				// std::cout << static_cast<void *>(std_rev1.base()) <<
+				// std::endl; std::cout << static_cast<void *>(ft_rev1.base())
+				// << std::endl;
+				b1 = (std_rev1 == std_rev2);
+				b2 = (ft_rev1 == ft_rev2);
+				assert(b1 == b2);
+				b1 = (std_rev1 > std_rev2);
+				b2 = (ft_rev1 > ft_rev2);
+				assert(b1 == b2);
+				b1 = (std_rev1 < std_rev2);
+				b2 = (ft_rev1 < ft_rev2);
+				assert(b1 == b2);
+				b1 = (std_rev1 >= std_rev2);
+				b2 = (ft_rev1 >= ft_rev2);
+				assert(b1 == b2);
+				b1 = (std_rev1 <= std_rev2);
+				b2 = (ft_rev1 <= ft_rev2);
+				assert(b1 == b2);
+				b1 = (std_rev1 != std_rev2);
+				b2 = (ft_rev1 != ft_rev2);
+				assert(b1 == b2);
+			}
+		}
+
+		{
+			{
+				std::reverse_iterator<ft::normal_iterator<char *> > std_rev1;
+				ft::reverse_iterator<ft::normal_iterator<char *> > ft_rev1(
+				    std_rev1.base());
+
+				assert((static_cast<void *>(std_rev1.base().base()) ==
+				        static_cast<void *>(ft_rev1.base().base())));
+				ft_rev1++;
+				std_rev1++;
+				assert((static_cast<void *>(std_rev1.base().base()) ==
+				        static_cast<void *>(ft_rev1.base().base())));
+
+				assert(ft_rev1.base() == std_rev1.base());
+				assert((ft_rev1++).base() == (std_rev1++).base());
+				assert((++ft_rev1).base() == (++std_rev1).base());
+				assert((ft_rev1--).base() == (std_rev1--).base());
+				assert((--ft_rev1).base() == (--std_rev1).base());
+				assert((ft_rev1 += 5).base() == (std_rev1 += 5).base());
+				assert((ft_rev1 -= 5).base() == (std_rev1 -= 5).base());
+				assert((ft_rev1 + 5).base() == (std_rev1 + 5).base());
+				assert((ft_rev1 - 5).base() == (std_rev1 - 5).base());
+			}
+			{{int arr[] = {1, 2};
+			std::reverse_iterator<int *> std_rev(arr + 3);
+			ft::reverse_iterator<int *> ft_rev(arr + 3);
+
+			assert(std_rev[0] == ft_rev[0]);
+			assert(std_rev[1] == ft_rev[1]);
+			assert(*std_rev == *ft_rev);
+		}
+		{
+			struct test t1;
+			struct test t2(10);
+			struct test tarr[] = {t1, t2};
+			std::reverse_iterator<struct test *> std_rev(tarr + 3);
+			ft::reverse_iterator<struct test *> ft_rev(tarr + 3);
+			assert(std_rev[0].a == ft_rev[0].a);
+			assert(std_rev[1].a == ft_rev[1].a);
+			assert((*std_rev).a == (*ft_rev).a);
+			assert((std_rev)->a == (ft_rev)->a);
 		}
 	}
 	{
-		ft::tree<int, int, std::less<int>,
-		         std::allocator<ft::pair<const int, int> > >
-		    t;
-		ft::tree<int, int, std::less<int>,
-		         std::allocator<ft::pair<const int, int> > >::iterator it;
-		ft::tree<int, int, std::less<int>,
-		         std::allocator<ft::pair<const int, int> > >::iterator prev;
+		std::reverse_iterator<char *> std_rev1;
+		ft::reverse_iterator<char *> ft_rev1(std_rev1.base());
 
-		ft::pair<const int, int> a(77, 0);
-		ft::pair<const int, int> b(82, 0);
-		ft::pair<const int, int> c(2, 0);
-		ft::pair<const int, int> d(25, 0);
-		ft::pair<const int, int> e(54, 0);
-		ft::pair<const int, int> f(27, 0);
-		ft::pair<const int, int> g(21, 0);
-		ft::pair<const int, int> h(95, 0);
-		ft::pair<const int, int> ii(65, 0);
+		std::reverse_iterator<char *> std_rev2;
+		ft::reverse_iterator<char *> ft_rev2(std_rev2.base());
+		bool b1, b2;
 
-		t.insert(a);
-		t.insert(b);
-		t.insert(c);
-		t.insert(d);
-		t.insert(e);
-		t.insert(f);
-		t.insert(g);
-		t.insert(h);
-		t.insert(ii);
+		std_rev1++;
+		ft_rev1++;
 
-		it   = t.end();
-		prev = t.end();
-		--it;
-		--prev;
-			while (1)
-			{
-				if (it->first > prev->first)
-					assert(1 == 0);
-				// std::cout << (*it).first << std::endl;
-				if (it == t.begin())
-					break;
-				prev = it;
-				it--;
-			}
+		//std::cout << static_cast<void *>(std_rev1.base()) << std::endl;
+		//std::cout << static_cast<void *>(ft_rev1.base()) << std::endl;
+		b1 = (std_rev1 == std_rev2);
+		b2 = (ft_rev1 == ft_rev2);
+		assert(b1 == b2);
+		b1 = (std_rev1 > std_rev2);
+		b2 = (ft_rev1 > ft_rev2);
+		assert(b1 == b2);
+		b1 = (std_rev1 < std_rev2);
+		b2 = (ft_rev1 < ft_rev2);
+		assert(b1 == b2);
+		b1 = (std_rev1 >= std_rev2);
+		b2 = (ft_rev1 >= ft_rev2);
+		assert(b1 == b2);
+		b1 = (std_rev1 <= std_rev2);
+		b2 = (ft_rev1 <= ft_rev2);
+		assert(b1 == b2);
+		b1 = (std_rev1 != std_rev2);
+		b2 = (ft_rev1 != ft_rev2);
+		assert(b1 == b2);
 	}
-	{
-		ft::tree<int, int, std::less<int>,
-		         std::allocator<ft::pair<const int, int> > >::iterator it;
-		ft::tree<int, int, std::less<int>,
-		         std::allocator<ft::pair<const int, int> > >::iterator prev;
-		assert(it == prev);
-	}
-	// std::cout << "tree_iterator operator== and operator!= [OK]" << std::endl;
-	// std::cout << "tree_iterator operator-> [OK]" << std::endl;
-	// std::cout << "tree_iterator both operator++ [OK]" << std::endl;
-	// std::cout << "tree_iterator both operator-- [OK]" << std::endl;
-	// std::cout << "tree_iterator operator* [OK]" << std::endl;
-	std::cout << " tree_iterator [OK]" << std::endl;
+}
+}
 }

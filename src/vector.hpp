@@ -6,7 +6,7 @@
 /*   By: abel-mak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 13:31:32 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/23 19:27:45 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/24 18:22:06 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ namespace ft
 	 * [x] assign
 	 * [x] push_back
 	 * [x] pop_back
-	 * [] insert
+	 * [x] insert
 	 * [x] erase
 	 * [x] swap
 	 * [x] clear
@@ -682,7 +682,7 @@ namespace ft
 		size_type index;
 		pointer ptr;
 		size_type curCapacity;
-		int i;
+		size_type i;
 
 		curCapacity = this->capacity();
 		ptr         = position.base();

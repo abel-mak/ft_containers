@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/20 17:40:27 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/24 17:12:45 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ namespace ft
 		    const key_type &k) const;
 		pair<iterator, iterator> equal_range(const key_type &k);
 		tree &operator=(const tree &lhs);
+		size_type max_size(void) const;
 	};
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	typename tree<K, V, Vcomp, Alloc>::node_ptr
@@ -217,25 +218,26 @@ namespace ft
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	void tree<K, V, Vcomp, Alloc>::swap(tree &x)
 	{
-		if (_rootParentNode.left == &_rootParentNode &&
-		    (x._rootParentNode.left != &(x._rootParentNode)))
+		if (this->getRoot() == nullptr && x.getRoot() != nullptr)
 		{
 			_rootParentNode.left   = x._rootParentNode.left;
+			(getRoot())->parent    = &(_rootParentNode);
 			_startNode             = x._startNode;
 			x._rootParentNode.left = &(x._rootParentNode);
 			x._startNode           = &(x._rootParentNode);
 		}
-		else if ((x._rootParentNode.left == &(x._rootParentNode)) &&
-		         _rootParentNode.left != &_rootParentNode)
+		else if (x.getRoot() == nullptr && this->getRoot() != nullptr)
 		{
 			x._rootParentNode.left = _rootParentNode.left;
+			(x.getRoot())->parent  = &(x._rootParentNode);
 			x._startNode           = _startNode;
 			_rootParentNode.left   = &_rootParentNode;
 			_startNode             = &_rootParentNode;
 		}
-		else
+		else if (x.getRoot() != nullptr && this->getRoot() != nullptr)
 		{
 			std::swap(_rootParentNode.left, x._rootParentNode.left);
+			std::swap((this->getRoot())->parent, (x.getRoot())->parent);
 			std::swap(_startNode, x._startNode);
 		}
 		std::swap(_size, x._size);
@@ -267,7 +269,6 @@ namespace ft
 		node_ptr newN;
 
 		newN = _nodeAlloc.allocate(1);
-		// std::cout << "newN: " << newN << std::endl;
 		_nodeAlloc.construct(newN, x);
 		return (newN);
 	}
@@ -882,7 +883,11 @@ namespace ft
 		b_node_ptr x;
 
 		x = this->findOrParent(k);
-		return (pair<iterator, iterator>(iterator(x), iterator(nextNode(x))));
+		if (static_cast<node_ptr>(x)->value.first == k)
+			return (
+			    pair<iterator, iterator>(iterator(x), iterator(nextNode(x))));
+		else
+			return pair<iterator, iterator>(iterator(x), iterator(x));
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	pair<typename tree<K, V, Vcomp, Alloc>::const_iterator,
@@ -892,8 +897,12 @@ namespace ft
 		const_b_node_ptr x;
 
 		x = this->findOrParent(k);
-		return (pair<const_iterator, const_iterator>(const_iterator(x),
-		                                             const_iterator(x)));
+		if (static_cast<const_node_ptr>(x)->value.first == k)
+			return (pair<const_iterator, const_iterator>(
+			    const_iterator(x), const_iterator(nextNode(x))));
+		else
+			return (pair<const_iterator, const_iterator>(
+			    const_iterator(x), const_iterator(x)));
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	tree<K, V, Vcomp, Alloc> &tree<K, V, Vcomp, Alloc>::operator=(
@@ -903,6 +912,12 @@ namespace ft
 		this->copyTree(lhs.getRoot());
 		this->updateStartNode();
 		return (*this);
+	}
+	template <typename K, typename V, typename Vcomp, typename Alloc>
+	typename tree<K, V, Vcomp, Alloc>::size_type
+	tree<K, V, Vcomp, Alloc>::max_size(void) const
+	{
+		return (_nodeAlloc.max_size());
 	}
 }  // namespace ft
 

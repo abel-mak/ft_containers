@@ -6,12 +6,14 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 13:16:50 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/20 19:03:11 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/24 13:18:57 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ALGORITHM_HPP
 #define ALGORITHM_HPP
+
+#include <iostream>
 
 namespace ft
 {
@@ -23,6 +25,8 @@ namespace ft
 		{
 			if (*first2 < *first1)
 				return (false);
+			else if (*first1 < *first2)
+				return (true);
 			first1++;
 			first2++;
 		}
@@ -42,6 +46,8 @@ namespace ft
 		{
 			if (comp(*first2, *first1))
 				return (false);
+			else if (comp(*first1, *first2))
+				return (true);
 			first1++;
 			first2++;
 		}
@@ -49,7 +55,6 @@ namespace ft
 			return (false);
 		return (true);
 	}
-
 	template <typename I1, typename I2>
 	bool equal(I1 first1, I1 last1, I2 first2)
 	{

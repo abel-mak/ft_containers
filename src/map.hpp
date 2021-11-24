@@ -6,14 +6,14 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 15:49:20 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/22 15:23:08 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/24 17:13:09 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include <iostream>
+//#include <iostream>
 
 #include "iterator.hpp"
 #include "tree.hpp"
@@ -245,7 +245,7 @@ namespace ft
 	typename map<K, V, Comp, Alloc>::size_type map<K, V, Comp, Alloc>::max_size(
 	    void) const
 	{
-		return (_alloc.max_size());
+		return (t.max_size());
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	typename map<K, V, Comp, Alloc>::mapped_type &

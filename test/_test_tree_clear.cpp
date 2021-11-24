@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 11:01:07 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/08 11:24:59 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/24 18:16:41 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "../src/tree.hpp"
 
-void test_clear(void)
+void test_tree_clear(void)
 {
 	{
 		ft::tree<int, int, std::less<int>,
