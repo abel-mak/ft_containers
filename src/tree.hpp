@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 16:48:31 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/24 17:12:45 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/25 15:28:39 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ namespace ft
 		tree(void);
 		tree(tree const &src);
 		~tree();
-		tree(const value_type &vcomp,
+		tree(const value_compare &vcomp,
 		     const allocator_type &alloc = allocator_type());
 		template <typename II>
 		tree(II first, II last, const value_compare &vcomp = value_compare(),
@@ -147,7 +147,7 @@ namespace ft
 		_rootParentNode.right  = &_rootParentNode;
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
-	tree<K, V, Vcomp, Alloc>::tree(const value_type &vcomp,
+	tree<K, V, Vcomp, Alloc>::tree(const value_compare &vcomp,
 	                               const allocator_type &alloc)
 	    : _vcomp(vcomp),
 	      _alloc(alloc),
@@ -737,8 +737,7 @@ namespace ft
 	{
 		while (first != last)
 		{
-			erase(first);
-			first++;
+			erase(first++);
 		}
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
@@ -901,8 +900,8 @@ namespace ft
 			return (pair<const_iterator, const_iterator>(
 			    const_iterator(x), const_iterator(nextNode(x))));
 		else
-			return (pair<const_iterator, const_iterator>(
-			    const_iterator(x), const_iterator(x)));
+			return (pair<const_iterator, const_iterator>(const_iterator(x),
+			                                             const_iterator(x)));
 	}
 	template <typename K, typename V, typename Vcomp, typename Alloc>
 	tree<K, V, Vcomp, Alloc> &tree<K, V, Vcomp, Alloc>::operator=(

@@ -6,7 +6,7 @@
 /*   By: abel-mak <abel-mak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 15:49:20 by abel-mak          #+#    #+#             */
-/*   Updated: 2021/11/24 17:13:09 by abel-mak         ###   ########.fr       */
+/*   Updated: 2021/11/25 15:23:32 by abel-mak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ namespace ft
 	 * [x] lower_bound
 	 * [x] upper_bound
 	 * [x] equal_range
-	 * [] get_allocator
+	 * [x] get_allocator
 	 */
 	template <typename K, typename V, typename Comp = std::less<K>,
 	          typename Alloc = std::allocator<ft::pair<const K, V> > >
@@ -251,7 +251,8 @@ namespace ft
 	typename map<K, V, Comp, Alloc>::mapped_type &
 	map<K, V, Comp, Alloc>::operator[](const key_type &k)
 	{
-		return ((*((this->insert(make_pair(k, mapped_type()))).first)).second);
+		return (
+		    (*((this->insert(ft::make_pair(k, mapped_type()))).first)).second);
 	}
 	template <typename K, typename V, typename Comp, typename Alloc>
 	ft::pair<typename map<K, V, Comp, Alloc>::iterator, bool>
