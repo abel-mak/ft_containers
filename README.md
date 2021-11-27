@@ -91,3 +91,7 @@ the imbalanced node , it's sibling and it's ancestors
 - [What is a symbol table?](https://stackoverflow.com/questions/69112/what-is-a-symbol-table)
 - [typename c++ and order of compiling](https://stackoverflow.com/questions/59225508/typename-c-and-order-of-compiling)
 - [Binary Search Tree - Copying one tree into another tree](https://stackoverflow.com/questions/40969075/binary-search-tree-copying-one-tree-into-another-tree)
+- [GNU C++ STL Class Index](http://www.aoc.nrao.edu/php/tjuerges/ALMA/STL/html-4.1.2/classes.html)
+- [AVL Trees](https://www.cs.umd.edu/class/spring2021/cmsc420-0101/Lects/lect05-avl.pdf)
+- [Binary Search Trees](https://www.cs.umd.edu/class/spring2021/cmsc420-0101/Lects/lect04-bst.pdf)
+- [Insert operations on AVL trees](http://www.mathcs.emory.edu/~cheung/Courses/253/Syllabus/Trees/AVL-insert.html)
