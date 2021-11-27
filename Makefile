@@ -20,8 +20,6 @@ TEST2_SRC:=$(wildcard ./test/_test*.cpp)
 
 TEST2_OUT=ft_test2
 
-DOCTEST= ./test/doctest/doctest/
-
 OBJ= $(SRC:.cpp=.o)
 
 FLAGS= -Wall -Wextra -Werror -std=c++98
