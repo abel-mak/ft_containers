@@ -73,6 +73,7 @@ sudo apt-get install libc++-dev
 - check for imbalance going from the new node to the root
 - after imbalance is found do the necessary rotations, at most two rotation
  are sufficient to rebalance the tree
+-left roation, right rotation, left and right rotations, right and left roations)
 
 ## rebalance
 - after doing the rotations, the heigth of some node gets messed up
